@@ -11,8 +11,9 @@ create table usuario(
 	apellido_paterno varchar(30) not null,
 	apellido_materno varchar(30) not null,
 	email varchar(45) not null,
-	rol int not null
+	rol int not null,
+	status int not null
 );
 
-insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1);
-insert into usuario values ("usuario", "usuario", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0);
+insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1, 1);
+insert into usuario values ("usuario", "usuario", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);

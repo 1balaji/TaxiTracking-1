@@ -120,6 +120,7 @@
                         <div class="form-field">
                             <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
                         </div>
+                        <p align="center"><a href="recuperar.jsp">Olvide mi contraseña?</a></p>
                     </form>
 
                     <section>

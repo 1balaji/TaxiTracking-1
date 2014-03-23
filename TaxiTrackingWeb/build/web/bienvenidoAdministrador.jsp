@@ -59,10 +59,11 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <hgroup>
-                    <h1>We serve fresh ideas</h1>
-                    <h2>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie. Sed aliquam sem ut arcu. Phasellus sollicitudin.</h2>
-                </hgroup>
+                    <h1>Bienvenido Administrador</h1>
+                    <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=2" method="POST">
+			<label for="TBBuscarUsuario">Usuario</label><input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
+                        <input id="BTBusquedaUsuario" name="BTBusquedaUsuario" type="submit" value="Buscar" />
+                    </form>
                 <div class="button black"><a href="#">Read more about our fresh ideas</a></div>
             </section>
             <!--end intro-->
@@ -70,7 +71,7 @@
             <!--start holder-->
             <div class="holder_content">
                 <section class="group1">
-                    <h3>Caracter&iacute;sticas</h3>
+                    <h3 class="left">Caracter&iacute;sticas</h3>
                     <p>Taxi Tracking es una aplicaci&oacute;n cuyo objetivo es el de proveer una herramienta, a trav&eacute;s de dispositivos móviles, a los 
                         usuarios que realizan viajes en el sistema de transporte tipo taxi, para monitorear su viaje y proporcionar una opción de ayuda en caso
                         de ser necesario.</p>
@@ -125,21 +126,6 @@
                 </section>
 
                 <aside class="group2">
-                    <p id="login">Login</p>
-                    <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="post">
-                        <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
-                        <div class="form-field">
-                            <label for="TBUsuario">Usuario</label><input type="text" name="TBUsuario" id="TBUsuario" placeholder="Usuario" />
-                        </div>
-                        <div id="downError" class="error"></div>
-                        <div class="form-field">
-                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contraseña"/>
-                        </div>
-                        <div class="form-field">
-                            <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
-                        </div>
-                    </form>
-
                     <section>
                         <h3>Noticias relacionadas</h3>
                         <article class="holder_news">

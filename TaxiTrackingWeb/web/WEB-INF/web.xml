@@ -4,9 +4,25 @@
         <servlet-name>Usuario_Negocio</servlet-name>
         <servlet-class>Negocio.Usuario_Negocio</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EmailServlet</servlet-name>
+        <servlet-class>Negocio.EmailServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletContras</servlet-name>
+        <servlet-class>Negocio.ServletContras</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Usuario_Negocio</servlet-name>
         <url-pattern>/Usuario_Negocio</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmailServlet</servlet-name>
+        <url-pattern>/EmailServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletContras</servlet-name>
+        <url-pattern>/ServletContras</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

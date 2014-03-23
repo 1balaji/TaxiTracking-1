@@ -1,4 +1,21 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String usuario = null;
+    int rol = -1;
+    
+    //Checamos que exista la sesion
+    if(session != null && session.getAttribute("rol") != null)
+    {
+        rol = (Integer)session.getAttribute("rol");
+
+        //Si no es administrador se redirecciona al inicio de un usuario normal
+        if(rol!=1){response.sendRedirect("bienvenido.jsp");}
+
+        usuario = (String)session.getAttribute("nombre_usuario");
+    }
+    else
+        response.sendRedirect("index.jsp");
+%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -15,6 +32,14 @@
         <link rel="stylesheet" type="text/css" href="css/styles.css"/>
     </head>
     <body>
+        <%
+            String[] usuario3 = new String[7];
+            String[] Columnas = {"usuario", "Nombre", "email", "Apellido_Paterno", "Apellido_Materno", "Status"};
+            for (int i = 0; i < 6; i++)
+            {
+                usuario3[i] = (request.getAttribute(Columnas[i])).toString();
+            }
+        %>
         <!--start container-->
         <div id="container">
 
@@ -39,11 +64,41 @@
 
             <!--start intro-->
             <div id="intro">
-                <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
                 <hgroup>
-                    <h1>We serve fresh ideas</h1>
+                    <h1>Nombre <%= usuario3[0]%></h1>
+                    <TABLE BORDER=1 WIDTH=300>
+                        <TR>
+                            <TD WIDTH=100>Nombre(completo)</TD>
+                            <TD WIDTH=100>Correo Electronico</TD>
+                            <TD WIDTH=100>Status</TD>
+                            <TD WIDTH=100>Bloquear/Desbloquear</TD>
+                            <TD WIDTH=100>Eliminar</TD>
+                        </TR>
+                        <TR>
+                            <TD WIDTH=100><%= usuario3[1] +"  "+usuario3[4]+"  "+usuario3[2] %></TD>
+                            <TD WIDTH=100><%=usuario3[3]%></TD>
+                            <TD WIDTH=100><%=usuario3[5]%></TD>
+                            <TD WIDTH=100><%if(usuario3[5].equals("Desbloqueado")) {%>
+                                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&&usuario=<%= usuario3[0]%>&&BT=Bloquear"  method="post">
+                                                <center><input type="submit" name="BTBloquear" id="BTDesbloquear_Bloquear" value="Bloquear" /></center>
+                                            </form>
+                                            <% } 
+                                               else {
+                                            %>
+                                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&&usuario=<%= usuario3[0]%>&&BT=Desbloquear" method="post">
+                                                <center><input type="submit" name="BTDesbloquear" id="BTDesbloquear_Bloquear" value="Desbloquear" /></center>
+                                            </form>
+                                            <% } %>
+                            </TD>
+                            <TD WIDTH=100>
+                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=4" method="post">
+                                    <input type="submit" name="BTEliminar" id="BTEliminar" value="Eliminar" />
+                                </form>
+                            </TD>
+                        </TR>
+                    </TABLE>
                     <h2>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie. Sed aliquam sem ut arcu. Phasellus sollicitudin.</h2>
                 </hgroup>
                 <div class="button black"><a href="#">Read more about our fresh ideas</a></div>
@@ -53,6 +108,8 @@
             <!--start holder-->
             <div class="holder_content">
                 <section class="group1">
+				
+				
                     <h3>Caracter&iacute;sticas</h3>
                     <p>Taxi Tracking es una aplicaci&oacute;n cuyo objetivo es el de proveer una herramienta, a trav&eacute;s de dispositivos móviles, a los 
                         usuarios que realizan viajes en el sistema de transporte tipo taxi, para monitorear su viaje y proporcionar una opción de ayuda en caso
@@ -108,21 +165,7 @@
                 </section>
 
                 <aside class="group2">
-                    <p id="login">Login</p>
-                    <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="post">
-                        <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
-                        <div class="form-field">
-                            <label for="TBUsuario">Usuario</label><input type="text" name="TBUsuario" id="TBUsuario" placeholder="Usuario" />
-                        </div>
-                        <div id="downError" class="error"></div>
-                        <div class="form-field">
-                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contraseña"/>
-                        </div>
-                        <div class="form-field">
-                            <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
-                        </div>
-                        <p align="center"><a href="recuperar.jsp">Olvide mi contraseña?</a></p>
-                    </form>
+                    
 
                     <section>
                         <h3>Noticias relacionadas</h3>
