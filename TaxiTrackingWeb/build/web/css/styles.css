@@ -63,6 +63,7 @@ h2 {
 	font-size: 18px;
 	line-height:1.7;
 	padding-top:8px;
+	width:430px;
 }
 
 h3 {
@@ -71,6 +72,10 @@ h3 {
 	padding-top:12px;
 	margin-bottom:9px;
 	border-bottom:1px dotted black;
+}
+
+h3.left{
+	width:613px;
 }
 
 h4 {
@@ -273,7 +278,6 @@ footer {
 	left:0px;
 	width:250px;
 	height:100px;
-	z-index:1;
 }
 
 .readmore {

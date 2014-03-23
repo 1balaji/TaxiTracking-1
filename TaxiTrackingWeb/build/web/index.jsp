@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -53,7 +52,7 @@
             <!--start holder-->
             <div class="holder_content">
                 <section class="group1">
-                    <h3>Caracter&iacute;sticas</h3>
+                    <h3 class="left">Caracter&iacute;sticas</h3>
                     <p>Taxi Tracking es una aplicaci&oacute;n cuyo objetivo es el de proveer una herramienta, a trav&eacute;s de dispositivos móviles, a los 
                         usuarios que realizan viajes en el sistema de transporte tipo taxi, para monitorear su viaje y proporcionar una opción de ayuda en caso
                         de ser necesario.</p>
@@ -116,12 +115,12 @@
                         </div>
                         <div id="downError" class="error"></div>
                         <div class="form-field">
-                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contraseña"/>
+                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
                         </div>
                         <div class="form-field">
                             <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
                         </div>
-                        <p align="center"><a href="recuperar.jsp">Olvide mi contraseña?</a></p>
+                        <p align="center"><a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a></p>
                     </form>
 
                     <section>

@@ -115,12 +115,12 @@
                         </div>
                         <div id="downError" class="error"></div>
                         <div class="form-field">
-                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contraseña"/>
+                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
                         </div>
                         <div class="form-field">
                             <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
                         </div>
-                        <p align="center"><a href="recuperar.jsp">Olvide mi contraseña?</a></p>
+                        <p align="center"><a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a></p>
                     </form>
 
                     <section>
