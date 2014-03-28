@@ -1,5 +1,6 @@
 package Negocio;
 
+import Beans.Usuario;
 import ConexionSQL.Conexion;
 import ConexionSQL.Metodos;
 import com.google.gson.Gson;
@@ -21,15 +22,26 @@ import javax.servlet.http.HttpSession;
 public class Usuario_Negocio extends HttpServlet 
 {
     //Variables para la conexion con la base de datos
-    private Statement Sentencias = null;
+    private Statement sentencias = null;
     private Connection con;
     private ResultSet rs = null;
     private PreparedStatement pst = null;
+    
+    //Beans
+    Usuario objUsuario;
+    
+    //Salida
     PrintWriter out;
+    
+    //Sesion
+    HttpSession session = null;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        response.setContentType("text/html;charset=UTF-8");
+        out = response.getWriter();
+        
         //Variable para redireccionar a la pagina correspondiente
         int respuesta;
         
@@ -53,15 +65,11 @@ public class Usuario_Negocio extends HttpServlet
                 }
                 break;
             case 2:
-                String[] usuario1 = buscar(request);
-                request.setAttribute("usuario", usuario1[0]);
-                request.setAttribute("Nombre", usuario1[1]);
-                request.setAttribute("Apellido_Paterno", usuario1[2]);
-                request.setAttribute("Apellido_Materno", usuario1[3]);
-                request.setAttribute("email", usuario1[4]);
-                request.setAttribute("Status", usuario1[5]);
-
-                request.getRequestDispatcher("/busqueda.jsp").forward(request, response);
+                objUsuario = new Usuario();
+                objUsuario = buscar(request);
+                session = request.getSession();
+                session.setAttribute("objUsuario", objUsuario);
+                response.sendRedirect("busqueda.jsp");
                 break;
             case 3:
                 //Botón de bloquear y desbloquear
@@ -70,12 +78,17 @@ public class Usuario_Negocio extends HttpServlet
                 if (Boton.equals("Bloquear")) 
                 {
                     boolean dd = bloqueaUsuario(Usuario);
+                    
+//                    out.println("<script>alert('El Usuario se ha bloqueado  correctamente')</script>");
+//                    out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'");
                 } 
                 else 
                 {
                     boolean ff = desbloqueaUsuario(Usuario);
+//                   out.println("<script>alert('El Usuario se ha Desbloqueado  correctamente')</script>");
+//                   out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'");
                 }
-                response.sendRedirect("bienvenidoAdministrador.jsp");
+                //response.sendRedirect("bienvenidoAdministrador.jsp");
                 break;
             case 4:
                 Usuario = request.getParameter("usuario").toString();
@@ -114,7 +127,7 @@ public class Usuario_Negocio extends HttpServlet
                 int rol = rs.getInt("rol");
 
                 //Se crea la sesion y se suben los atributos
-                HttpSession session = request.getSession();
+                session = request.getSession();
                 session.setAttribute("usuario", usuario);
                 session.setAttribute("rol", rol);
 
@@ -138,64 +151,50 @@ public class Usuario_Negocio extends HttpServlet
     private void getLogin(HttpServletRequest request, HttpServletResponse response)
     {
         response.setContentType("application/json");
-        try
-        { 
-            out = response.getWriter(); 
-            Gson gson = new Gson();
-            List<Respuesta> respuesta = new ArrayList<Respuesta>();
-        
-            String user = request.getParameter("TBUsuario");
-            String pwd = request.getParameter("TBContrasena");
-        
-            Metodos m = new Metodos();
-            
-            //Si es correcto el login
-            if(m.getLogin(user, pwd))
-                respuesta.add(new Respuesta("1"));
-            else
-                respuesta.add(new Respuesta("0"));
-            
-            out.println(gson.toJson(respuesta));
-        }
-        catch (IOException e) { System.out.println("Error en el login movil D:\n" + e); }
-        finally { out.close(); }
+        Gson gson = new Gson();
+        List<Respuesta> respuesta = new ArrayList<Respuesta>();
+
+        String user = request.getParameter("TBUsuario");
+        String pwd = request.getParameter("TBContrasena");
+
+        Metodos m = new Metodos();
+
+        //Si es correcto el login
+        if (m.getLogin(user, pwd)) 
+            respuesta.add(new Respuesta("1"));
+        else
+            respuesta.add(new Respuesta("0"));
+
+        out.println(gson.toJson(respuesta));
+        out.close();
     }
     
-    private String[] buscar(HttpServletRequest request) 
+    private Usuario buscar(HttpServletRequest request)
     {
-        String[] usuario = new String[7];
+        Usuario buscado = new Usuario();
         String user = request.getParameter("TBBuscarUsuario");
         String consulta = "Select Nombre_usuario,Nombre,email,Apellido_Paterno,Apellido_Materno,status from usuario where Nombre_usuario = ? ";
 
-        try 
+        try
         {
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
             pst.setString(1, user);
-
-            String[] Columnas = {"Nombre_usuario", "Nombre", "email", "Apellido_Paterno", "Apellido_Materno"};
             rs = pst.executeQuery();
-            if (rs.next()) 
+            if (rs.next())
             {
-                for (int i = 0; i < 5; i++) 
-                {
-                    usuario[i] = rs.getString("" + Columnas[i] + "");
-                }
-                int a = rs.getInt("status");
-                if (a == 1) 
-                {
-                    usuario[5] = "Desbloqueado";
-                }
-                if (a == 0) 
-                {
-                    usuario[5] = "Bloqueado";
-                }
+                buscado.setNombreUsuario(rs.getString("nombre_usuario"));
+                buscado.setNombre(rs.getString("Nombre"));
+                buscado.setEmail(rs.getString("email"));
+                buscado.setApellidoPaterno(rs.getString("Apellido_Paterno"));
+                buscado.setApellidoMaterno(rs.getString("Apellido_Materno"));
+                buscado.setStatus(rs.getInt("status"));
             }
-            pst.close();
-        } 
+            pst.close();            
+        }
         catch (SQLException e) { System.out.println("Error en la busqueda D:\n" + e); }
         finally { Conexion.closeConexion(); }
-        return usuario;
+        return buscado;
     }
 
     private boolean bloqueaUsuario(String usuario) 
@@ -204,13 +203,13 @@ public class Usuario_Negocio extends HttpServlet
         {
             con = Conexion.getConexion();
             String consulta = "UPDATE  usuario SET status=0 where Nombre_usuario='" + usuario + "' ";
-            Sentencias = con.createStatement();
-            int res = Sentencias.executeUpdate(consulta);
+            sentencias = con.createStatement();
+            int res = sentencias.executeUpdate(consulta);
 
             if (res == 1) 
-            {
-                //out.println("<script>alert('El Usuario se ha bloqueado  correctamente')</script>");
-                //out.println("<meta http-equiv='refresh' content='0;url=index.jsp'");
+            {   
+                out.println("<script>alert('El Usuario se ha bloqueado  correctamente')</script>");
+                out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'>");                
                 return true;
             } 
             else
@@ -220,24 +219,6 @@ public class Usuario_Negocio extends HttpServlet
         } 
         catch (SQLException ex) { System.out.println("Error al bloquear usuario D:\n" +ex); }
         return false;
-        /*
-         try {
-         con = Conexion.getConexion();
-         pst = con.prepareStatement(consulta);
-         pst.setString(1, usuario);
-         rs = pst.executeQuery();
-           
-         if (rs!=null){
-         out.println("<script>alert('El registro se modifico correctamente')</script>");
-         out.println("<meta http-equiv='refresh' content='0;url=index.jsp'");
-           
-         return true;
-         }else {
-         out.println("<script>alert('NOOOOOOOOOO')</script>");
-         out.println("<meta http-equiv='refresh' content='0;url=index.jsp'");
-         }
-         }catch(Exception e){}
-         return false;*/
     }
 
     private boolean desbloqueaUsuario(String usuario) 
@@ -246,13 +227,13 @@ public class Usuario_Negocio extends HttpServlet
         {
             String consulta = "UPDATE  usuario SET status=1 where Nombre_usuario= '" + usuario + "' ";
             con = Conexion.getConexion();
-            Sentencias = con.createStatement();
-            int res = Sentencias.executeUpdate(consulta);
+            sentencias = con.createStatement();
+            int res = sentencias.executeUpdate(consulta);
 
             if (res == 1) 
             {
-                //out.println("<script>alert('El Usuario se ha desbloqueado  correctamente')</script>");
-                //out.println("<meta http-equiv='refresh' content='0;url=index.jsp'");
+               out.println("<script>alert('El Usuario se ha desbloqueado  correctamente')</script>");
+               out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'>");
                 return true;
             } 
             else 
@@ -270,13 +251,13 @@ public class Usuario_Negocio extends HttpServlet
         {
             String consulta = "DELETE FROM usuario WHERE Nombre_usuario= '" + usuario + "' ";
             con = Conexion.getConexion();
-            Sentencias = con.createStatement();
-            int res = Sentencias.executeUpdate(consulta);
+            sentencias = con.createStatement();
+            int res = sentencias.executeUpdate(consulta);
 
             if (res == 1) 
             {
-                out.println("<script>alert('El Usuario se ha eliminado   correctamente')</script>");
-                out.println("<meta http-equiv='refresh' content='0;url=index.jsp'");
+                out.println("<script>alert('El Usuario se ha eliminado correctamente')</script>");
+                out.println("<meta http-equiv='refresh' content='0;url=index.jsp'>");
                 return true;
             } 
             else

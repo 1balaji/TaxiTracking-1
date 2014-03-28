@@ -1,3 +1,19 @@
+<%
+    String usuario = null;
+    int rol = -1;
+    
+    //Checamos si existe una sesion
+    if(session != null && session.getAttribute("rol") != null)
+    {
+        rol = (Integer)session.getAttribute("rol");
+
+        //Si no es administrador se redirecciona al inicio de un usuario normal
+        if(rol!=1){response.sendRedirect("bienvenido.jsp");}
+
+        //Si es administrador se redirecciona al inicio del administrador
+        response.sendRedirect("bienvenidoAdministrador.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -28,8 +44,8 @@
                 <nav>
                     <ul>
                         <li><a href="#" class="current">Inicio</a></li>
-                        <li><a href="#">Acerca de</a></li>
-                        <li><a href="#">Contacto</a></li>
+                        <li><a href="acercaDe.jsp">Acerca de</a></li>
+                        <li><a href="contacto.jsp">Contacto</a></li>
                     </ul>
                 </nav>
                 <!--end menu-->
@@ -53,15 +69,15 @@
             <div class="holder_content">
                 <section class="group1">
                     <h3 class="left">Caracter&iacute;sticas</h3>
-                    <p>Taxi Tracking es una aplicaci&oacute;n cuyo objetivo es el de proveer una herramienta, a trav&eacute;s de dispositivos móviles, a los 
-                        usuarios que realizan viajes en el sistema de transporte tipo taxi, para monitorear su viaje y proporcionar una opción de ayuda en caso
+                    <p>Taxi Tracking es una aplicaci&oacute;n cuyo objetivo es el de proveer una herramienta, a trav&eacute;s de dispositivos m&oacute;viles, a los 
+                        usuarios que realizan viajes en el sistema de transporte tipo taxi, para monitorear su viaje y proporcionar una opci&oacute;n de ayuda en caso
                         de ser necesario.</p>
-                    <p>A continuación se enlistan las caracter&iacute;sticas que permiten a Taxi Tracking llevar a cabo su prop&oacute;sito.</p>
+                    <p>A continuaci&oacute;n se enlistan las caracter&iacute;sticas que permiten a Taxi Tracking llevar a cabo su prop&oacute;sito.</p>
 
                     <article class="holder_gallery">
                         <a class="photo_hover" href="#"><img src="images/picture2.jpg" width="150" height="115" alt="picture1"/></a>
                         <h2>Seguimiento</h2>
-                        <p>Taxi Tracking da seguimiento al viaje del usuario mediante la tecnología GPS y API's de Google.</p>
+                        <p>Taxi Tracking da seguimiento al viaje del usuario mediante la tecnolog&iacute;a GPS y API's de Google.</p>
                         <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
 
@@ -111,16 +127,20 @@
                     <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="post">
                         <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
                         <div class="form-field">
-                            <label for="TBUsuario">Usuario</label><input type="text" name="TBUsuario" id="TBUsuario" placeholder="Usuario" />
+                            <span><i class="fa fa-user fa-fw"></i></span>
+                            <input type="text" name="TBUsuario" id="TBUsuario" placeholder="Usuario" />
                         </div>
                         <div id="downError" class="error"></div>
                         <div class="form-field">
-                            <label for="TBContrasena">Contrase&ntilde;a</label><input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
+                            <span><i class="fa fa-key fa-fw"></i></span>
+                            <input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
                         </div>
                         <div class="form-field">
                             <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
                         </div>
-                        <p align="center"><a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a></p>
+                        <div class="form-field">
+                            <a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a>
+                        </div>
                     </form>
 
                     <section>

@@ -1,7 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Beans.Usuario;"%>
 <%
     String usuario = null;
     int rol = -1;
+    Usuario objUsuario = new Usuario();
     
     //Checamos que exista la sesion
     if(session != null && session.getAttribute("rol") != null)
@@ -12,6 +14,16 @@
         if(rol!=1){response.sendRedirect("bienvenido.jsp");}
 
         usuario = (String)session.getAttribute("nombre_usuario");
+        
+        if(session.getAttribute("objUsuario") != null)
+        {
+            objUsuario = new Usuario();
+            objUsuario = (Usuario)session.getAttribute("objUsuario");
+            //Quitamos el usuario de la sesion
+            session.removeAttribute("objUsuario");
+        }
+        else
+            response.sendRedirect("bienvenidoAdministrador.jsp");
     }
     else
         response.sendRedirect("index.jsp");
@@ -32,14 +44,6 @@
         <link rel="stylesheet" type="text/css" href="css/styles.css"/>
     </head>
     <body>
-        <%
-            String[] usuario3 = new String[7];
-            String[] Columnas = {"usuario", "Nombre", "email", "Apellido_Paterno", "Apellido_Materno", "Status"};
-            for (int i = 0; i < 6; i++)
-            {
-                usuario3[i] = (request.getAttribute(Columnas[i])).toString();
-            }
-        %>
         <!--start container-->
         <div id="container">
 
@@ -66,42 +70,45 @@
             <div id="intro">
             </div>
             <section class="group_bannner_left">
-                <hgroup>
-                    <h1>Nombre <%= usuario3[0]%></h1>
-                    <TABLE BORDER=1 WIDTH=300>
-                        <TR>
-                            <TD WIDTH=100>Nombre(completo)</TD>
-                            <TD WIDTH=100>Correo Electronico</TD>
-                            <TD WIDTH=100>Status</TD>
-                            <TD WIDTH=100>Bloquear/Desbloquear</TD>
-                            <TD WIDTH=100>Eliminar</TD>
-                        </TR>
-                        <TR>
-                            <TD WIDTH=100><%= usuario3[1] +"  "+usuario3[4]+"  "+usuario3[2] %></TD>
-                            <TD WIDTH=100><%=usuario3[3]%></TD>
-                            <TD WIDTH=100><%=usuario3[5]%></TD>
-                            <TD WIDTH=100><%if(usuario3[5].equals("Desbloqueado")) {%>
-                                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&&usuario=<%= usuario3[0]%>&&BT=Bloquear"  method="post">
-                                                <center><input type="submit" name="BTBloquear" id="BTDesbloquear_Bloquear" value="Bloquear" /></center>
-                                            </form>
-                                            <% } 
-                                               else {
-                                            %>
-                                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&&usuario=<%= usuario3[0]%>&&BT=Desbloquear" method="post">
-                                                <center><input type="submit" name="BTDesbloquear" id="BTDesbloquear_Bloquear" value="Desbloquear" /></center>
-                                            </form>
-                                            <% } %>
-                            </TD>
-                            <TD WIDTH=100>
-                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=4" method="post">
-                                    <input type="submit" name="BTEliminar" id="BTEliminar" value="Eliminar" />
+                <h1>Nombre: <%=objUsuario.getNombreUsuario()%> </h1>
+                <table BORDER=1 WIDTH=300>
+                    <tr>
+                        <td WIDTH=100>Nombre(completo)</td>
+                        <td WIDTH=100>Correo Electronico</td>
+                        <td WIDTH=100>Status</td>
+                        <td WIDTH=100>Bloquear/Desbloquear</td>
+                        <td WIDTH=100>Eliminar</td>
+                    </tr>
+                    <tr>
+                        <td WIDTH=100><%= objUsuario.getNombre() + "  " + objUsuario.getApellidoPaterno() + "  " + objUsuario.getApellidoMaterno()%></td>
+                        <td WIDTH=100><%=objUsuario.getEmail()%></td>
+                        <td WIDTH=100>
+                            <% if(objUsuario.getStatus() == 1)
+                                   out.print("Desbloqueado");
+                               else
+                                    out.print("Bloqueado");%>
+                        </td>
+                        <td WIDTH=100>
+                            <% if(objUsuario.getStatus() == 1) 
+                            { %>
+                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Bloquear"  method="post">
+                                    <center><input type="submit" name="BTBloquear" id="BTBloquear" value="Bloquear" /></center>
                                 </form>
-                            </TD>
-                        </TR>
-                    </TABLE>
-                    <h2>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie. Sed aliquam sem ut arcu. Phasellus sollicitudin.</h2>
-                </hgroup>
-                <div class="button black"><a href="#">Read more about our fresh ideas</a></div>
+                            <% } 
+                            else 
+                            { %>
+                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Desbloquear" method="post">
+                                    <center><input type="submit" name="BTDesbloquear" id="BTDesbloquear" value="Desbloquear" /></center>
+                                </form>
+                            <% }%>
+                        </td>
+                        <td WIDTH=100>
+                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=4&amp;usuario=<%= objUsuario.getNombreUsuario()%>" method="post">
+                                <input type="submit" name="BTEliminar" id="BTEliminar" value="Eliminar" />
+                            </form>
+                        </td>
+                    </tr>
+                </table>
             </section>
             <!--end intro-->
 

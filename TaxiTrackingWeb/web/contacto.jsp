@@ -1,25 +1,9 @@
-<%
-    String usuario = null;
-    int rol = -1;
-    
-    //Checamos si existe una sesion
-    if(session != null && session.getAttribute("rol") != null)
-    {
-        rol = (Integer)session.getAttribute("rol");
-
-        //Si no es administrador se redirecciona al inicio de un usuario normal
-        if(rol!=1){response.sendRedirect("bienvenido.jsp");}
-
-        //Si es administrador se redirecciona al inicio del administrador
-        response.sendRedirect("bienvenidoAdministrador.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Inicio</title>
+        <title>Taxi Tracking - Contacto</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -43,9 +27,9 @@
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="#" class="current">Inicio</a></li>
+                        <li><a href="index.jsp">Inicio</a></li>
                         <li><a href="acercaDe.jsp">Acerca de</a></li>
-                        <li><a href="contacto.jsp">Contacto</a></li>
+                        <li><a href="#" class="current">Contacto</a></li>
                     </ul>
                 </nav>
                 <!--end menu-->
@@ -58,10 +42,9 @@
             </div>
             <section class="group_bannner_left">
                 <hgroup>
-                    <h1>We serve fresh ideas</h1>
-                    <h2>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie. Sed aliquam sem ut arcu. Phasellus sollicitudin.</h2>
+                    <h1>Contacto</h1>
+                    <h2>Manera de contacto.</h2>
                 </hgroup>
-                <div class="button black"><a href="#">Read more about our fresh ideas</a></div>
             </section>
             <!--end intro-->
 
@@ -123,26 +106,6 @@
                 </section>
 
                 <aside class="group2">
-                    <p id="login">Login</p>
-                    <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="post">
-                        <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
-                        <div class="form-field">
-                            <span><i class="fa fa-user fa-fw"></i></span>
-                            <input type="text" name="TBUsuario" id="TBUsuario" placeholder="Usuario" />
-                        </div>
-                        <div id="downError" class="error"></div>
-                        <div class="form-field">
-                            <span><i class="fa fa-key fa-fw"></i></span>
-                            <input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
-                        </div>
-                        <div class="form-field">
-                            <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
-                        </div>
-                        <div class="form-field">
-                            <a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a>
-                        </div>
-                    </form>
-
                     <section>
                         <h3>Noticias relacionadas</h3>
                         <article class="holder_news">
