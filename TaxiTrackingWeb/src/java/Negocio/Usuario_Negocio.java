@@ -39,6 +39,10 @@ public class Usuario_Negocio extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        //Para que no se pueda llamar al servlet con la URL
+        if(request.getSession(false) == null)
+            response.sendRedirect("index.jsp");
+        
         response.setContentType("text/html;charset=UTF-8");
         out = response.getWriter();
         
@@ -95,6 +99,8 @@ public class Usuario_Negocio extends HttpServlet
                 Elimina_Usuario(Usuario);
                 break;
             case 5:
+                break;
+            case 6:
                 getLogin(request, response);
                 break;
             default:
@@ -128,7 +134,7 @@ public class Usuario_Negocio extends HttpServlet
 
                 //Se crea la sesion y se suben los atributos
                 session = request.getSession();
-                session.setAttribute("usuario", usuario);
+                session.setAttribute("nombre_usuario", usuario);
                 session.setAttribute("rol", rol);
 
                 //Se asigna el tipo de respuesta

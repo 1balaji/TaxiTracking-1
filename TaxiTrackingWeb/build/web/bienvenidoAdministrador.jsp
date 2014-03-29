@@ -48,7 +48,15 @@
                         <li><a href="#" class="current">Inicio</a></li>
                         <li><a href="acercaDe.jsp">Gesti&oacute;n de Taxis</a></li>
                         <li><a href="contacto.jsp">Gesti&oacute;n de Usuarios</a></li>
-                        <li><a href="contacto.jsp">Cerrar Sesi&oacute;n</a></li>
+                        <li>
+                            <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
+                                <ul class="dropdown">
+                                    <li><a href="#"><i class="fa fa-user"></i>Profile</a></li>
+                                    <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+                                    <li><a href="/Usuario_Negocio?q=5"><i class="fa fa-times"></i>Log out</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </nav>
                 <!--end menu-->
@@ -84,5 +92,7 @@
         </footer>
         <!--end footer-->
         <!-- Free template distributed by http://freehtml5templates.com -->
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/toggleMenu.js"></script>
     </body>
 </html>
