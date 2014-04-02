@@ -91,19 +91,19 @@
                         <td WIDTH=100>
                             <% if(objUsuario.getStatus() == 1) 
                             { %>
-                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Bloquear"  method="post">
+                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=2&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Bloquear"  method="post">
                                     <center><input type="submit" name="BTBloquear" id="BTBloquear" value="Bloquear" /></center>
                                 </form>
                             <% } 
                             else 
                             { %>
-                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Desbloquear" method="post">
+                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=2&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Desbloquear" method="post">
                                     <center><input type="submit" name="BTDesbloquear" id="BTDesbloquear" value="Desbloquear" /></center>
                                 </form>
                             <% }%>
                         </td>
                         <td WIDTH=100>
-                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=4&amp;usuario=<%= objUsuario.getNombreUsuario()%>" method="post">
+                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&amp;usuario=<%= objUsuario.getNombreUsuario()%>" method="post">
                                 <input type="submit" name="BTEliminar" id="BTEliminar" value="Eliminar" />
                             </form>
                         </td>

@@ -124,7 +124,7 @@
 
                 <aside class="group2">
                     <p id="login">Login</p>
-                    <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="post">
+                    <form action="<%=request.getContextPath()%>/ManejoSesion?q=1" method="post">
                         <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
                         <div class="form-field">
                             <span><i class="fa fa-user fa-fw"></i></span>
@@ -136,7 +136,9 @@
                             <input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
                         </div>
                         <div class="form-field">
-                            <input type="submit" name="BTEnviar" id="BTEnviar" value="Acceder" />
+                            <button type="submit" name="BTEnviar" id="BTEnviar">
+                                <span><i class="fa fa-sign-in fa-fw"></i></span>Acceder
+                            </button>
                         </div>
                         <div class="form-field">
                             <a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a>

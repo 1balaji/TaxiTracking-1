@@ -12,6 +12,10 @@
         <servlet-name>ServletContras</servlet-name>
         <servlet-class>Negocio.ServletContras</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManejoSesion</servlet-name>
+        <servlet-class>Sesion.ManejoSesion</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Usuario_Negocio</servlet-name>
         <url-pattern>/Usuario_Negocio</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>ServletContras</servlet-name>
         <url-pattern>/ServletContras</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManejoSesion</servlet-name>
+        <url-pattern>/ManejoSesion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

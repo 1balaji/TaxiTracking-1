@@ -53,7 +53,7 @@
                                 <ul class="dropdown">
                                     <li><a href="#"><i class="fa fa-user"></i>Profile</a></li>
                                     <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
-                                    <li><a href="/Usuario_Negocio?q=5"><i class="fa fa-times"></i>Log out</a></li>
+                                    <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -74,7 +74,7 @@
 
             <!--start holder-->
             <div class="holder_content">
-                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=2" method="POST">
+                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
                     <label for="TBBuscarUsuario">Usuario</label><input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
                     <input id="BTBusquedaUsuario" name="BTBusquedaUsuario" type="submit" value="Buscar" />
                 </form>

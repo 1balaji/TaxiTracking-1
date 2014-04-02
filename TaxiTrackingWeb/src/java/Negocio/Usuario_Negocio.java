@@ -2,8 +2,6 @@ package Negocio;
 
 import Beans.Usuario;
 import ConexionSQL.Conexion;
-import ConexionSQL.Metodos;
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -11,8 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,15 +35,14 @@ public class Usuario_Negocio extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        session = request.getSession(false);
+        
         //Para que no se pueda llamar al servlet con la URL
-        if(request.getSession(false) == null)
+        if(session == null)
             response.sendRedirect("index.jsp");
         
         response.setContentType("text/html;charset=UTF-8");
         out = response.getWriter();
-        
-        //Variable para redireccionar a la pagina correspondiente
-        int respuesta;
         
         //Nos dice que metodo hay que invocar
         int query = Integer.parseInt(request.getParameter("q"));
@@ -55,124 +50,28 @@ public class Usuario_Negocio extends HttpServlet
         switch(query)
         {
             case 1:
-                respuesta = getLogin(request);
-                switch(respuesta)
-                {
-                    case 0: 
-                        response.sendRedirect("bienvenido.jsp");
-                        break;
-                    case 1:
-                        response.sendRedirect("bienvenidoAdministrador.jsp");
-                        break;
-                    default:
-                        response.sendRedirect("index.jsp?error=1");
-                }
-                break;
-            case 2:
                 objUsuario = new Usuario();
                 objUsuario = buscar(request);
                 session = request.getSession();
                 session.setAttribute("objUsuario", objUsuario);
                 response.sendRedirect("busqueda.jsp");
                 break;
-            case 3:
+            case 2:
                 //Botón de bloquear y desbloquear
-                String Boton = request.getParameter("BT").toString();
-                String Usuario = request.getParameter("usuario").toString();
-                if (Boton.equals("Bloquear")) 
-                {
-                    boolean dd = bloqueaUsuario(Usuario);
-                    
-//                    out.println("<script>alert('El Usuario se ha bloqueado  correctamente')</script>");
-//                    out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'");
-                } 
-                else 
-                {
-                    boolean ff = desbloqueaUsuario(Usuario);
-//                   out.println("<script>alert('El Usuario se ha Desbloqueado  correctamente')</script>");
-//                   out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'");
-                }
-                //response.sendRedirect("bienvenidoAdministrador.jsp");
+                String Boton = request.getParameter("BT");
+                String Usuario = request.getParameter("usuario");
+                if (Boton.equals("Bloquear"))
+                    bloqueaUsuario(Usuario);
+                else
+                    desbloqueaUsuario(Usuario);
                 break;
-            case 4:
-                Usuario = request.getParameter("usuario").toString();
+            case 3:
+                Usuario = request.getParameter("usuario");
                 Elimina_Usuario(Usuario);
-                break;
-            case 5:
-                break;
-            case 6:
-                getLogin(request, response);
                 break;
             default:
                 response.sendRedirect("index.jsp");
         }
-    }
-    
-    /*
-     * Metodo para accesar al sistema. 
-     * Crea la sesion correspondiente subiendo el rol y nombre del usuario
-     * Retorna -1 en caso de error, 1 si es administrador y 0 si es usuario
-     */
-    private int getLogin(HttpServletRequest request)
-    {
-        int respuesta = -1;
-        String user = request.getParameter("TBUsuario");
-        String pwd = request.getParameter("TBContrasena");
-        String consulta = "Select nombre_usuario, rol from usuario where nombre_usuario = ? && password = ?";
-        
-        try
-        {
-            con = Conexion.getConexion();
-            pst = con.prepareStatement(consulta);
-            pst.setString(1, user);
-            pst.setString(2, pwd);
-            rs = pst.executeQuery();
-            if(rs.next())
-            {
-                String usuario = rs.getString("nombre_usuario");
-                int rol = rs.getInt("rol");
-
-                //Se crea la sesion y se suben los atributos
-                session = request.getSession();
-                session.setAttribute("nombre_usuario", usuario);
-                session.setAttribute("rol", rol);
-
-                //Se asigna el tipo de respuesta
-                respuesta = (rol == 1)? 1: 0;
-            }
-            pst.close();
-        }
-        catch(SQLException e){ System.out.println("Error en el login D:\n" + e); }
-        finally{ Conexion.closeConexion(); }
-        return respuesta;
-    }
-    
-    /*
-     * Metodo para el inicio de sesion desde al app. Si es correcto se guarda en un List que contiene
-     * un solo objeto respuesta, esto se hace para conseguir el formato para el JSON.
-     * Se imprime la respuesta en el siguiente formato
-     * [{"logstatus":"0"}] -> "logueo invalido"
-     * [{"logstatus":"1"}] -> "logueo valido"
-    */
-    private void getLogin(HttpServletRequest request, HttpServletResponse response)
-    {
-        response.setContentType("application/json");
-        Gson gson = new Gson();
-        List<Respuesta> respuesta = new ArrayList<Respuesta>();
-
-        String user = request.getParameter("TBUsuario");
-        String pwd = request.getParameter("TBContrasena");
-
-        Metodos m = new Metodos();
-
-        //Si es correcto el login
-        if (m.getLogin(user, pwd)) 
-            respuesta.add(new Respuesta("1"));
-        else
-            respuesta.add(new Respuesta("0"));
-
-        out.println(gson.toJson(respuesta));
-        out.close();
     }
     
     private Usuario buscar(HttpServletRequest request)
