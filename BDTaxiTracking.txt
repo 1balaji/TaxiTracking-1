@@ -15,6 +15,21 @@ create table usuario(
 	status int not null
 );
 
+create table peticion(
+	idPeticion int not null primary key auto_increment,
+	tipo int not null,
+	descripcion varchar(45) not null,
+	nombre_usuario varchar(30) not null,
+	constraint fkUsuarioPeticion
+		foreign key (nombre_usuario)
+		references usuario(nombre_usuario)
+		on delete cascade
+		on update cascade
+);
+
 insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1, 1);
 insert into usuario values ("usuario", "usuario", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
 insert into usuario values ("carlos", "carlos", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
+
+insert into peticion values (null, 0, "Bloqueame wey orale", "usuario");
+insert into peticion values (null, 2,"Eliminame wey orale", "carlos");

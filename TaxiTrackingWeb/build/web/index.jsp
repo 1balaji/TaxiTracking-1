@@ -137,7 +137,7 @@
                         </div>
                         <div class="form-field">
                             <button type="submit" name="BTEnviar" id="BTEnviar">
-                                <span><i class="fa fa-sign-in fa-fw"></i></span>Acceder
+                                <i class="fa fa-sign-in fa-fw"></i>Acceder
                             </button>
                         </div>
                         <div class="form-field">
@@ -174,7 +174,7 @@
         <footer>
             <div class="container">
                 <div id="FooterLeft">Desarrollado por Carlos Jim&eacute;nez y Francisco Negrete / 2014</div>
-                <div id="FooterRight">Â© TT2013-A022</div>
+                <div id="FooterRight">© TT2013-A022</div>
             </div>
         </footer>
         <!--end footer-->

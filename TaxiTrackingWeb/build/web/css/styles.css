@@ -104,7 +104,10 @@ h4 {
 	box-shadow:0 0 5px 5px #D8D8D8;
 }
 
-.container {	width:980px;}
+.container {
+    width:980px;
+    margin:0 auto;
+}
 
 .group1 {
 	float:left;
@@ -260,14 +263,14 @@ footer {
 }
 
 #FooterLeft, #FooterRight {
-	position:absolute;
+	position:relative;
 	color:white;
 	top:26px;
 }
 
-#FooterLeft {left: 225px;}
+#FooterLeft {float:left;}
 
-#FooterRight {right: 225px;}
+#FooterRight {float:right;}
 
 /***************************************************
 				   SPECIFIC
@@ -366,4 +369,51 @@ footer {
     text-align: center;
     font-size: 90%;
     display: none;
+}
+
+.gestion {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.search {
+	float: right;
+}
+
+div.contenedorTabla {
+	clear:both;
+	text-align:center;
+	padding-top: 10px;
+}
+
+#tabla{
+	border-collapse:collapse;
+	margin: 0 auto;
+}
+
+#tabla td, #tabla th {
+	font-size:1em;
+	border:1px solid #98bf21;
+	padding:3px 7px 2px 7px;
+}
+
+#tabla th {
+	font-size:1.1em;
+	padding-top:5px;
+	padding-bottom:4px;
+	background-color:#A7C942;
+	color:#ffffff;
+}
+
+#tabla th.ajustado {
+	width:200px;
+}
+
+#tabla th.control {
+	width:90px;
+}
+
+#tabla tr.alt td {
+	color:#000000;
+	background-color:#EAF2D3;
 }

@@ -2,6 +2,7 @@ package Negocio;
 
 import Beans.Usuario;
 import ConexionSQL.Conexion;
+import ConexionSQL.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -25,6 +26,10 @@ public class Usuario_Negocio extends HttpServlet
     
     //Beans
     Usuario objUsuario;
+    Usuario objUsuarios[];
+    
+    //Variable para la conexion con la BD
+    private UsuarioDAO usuarioDAO;
     
     //Salida
     PrintWriter out;
@@ -49,10 +54,8 @@ public class Usuario_Negocio extends HttpServlet
         
         switch(query)
         {
-            case 1:
-                objUsuario = new Usuario();
-                objUsuario = buscar(request);
-                session = request.getSession();
+            case 1: //Buscar usuario
+                objUsuario = buscarUsuario(request);
                 session.setAttribute("objUsuario", objUsuario);
                 response.sendRedirect("busqueda.jsp");
                 break;
@@ -69,16 +72,68 @@ public class Usuario_Negocio extends HttpServlet
                 Usuario = request.getParameter("usuario");
                 Elimina_Usuario(Usuario);
                 break;
+            case 4: //GetPeticiones
+                objUsuarios = getPeticiones();
+                
+                //Indice para movernos en el arreglo
+                int i = objUsuarios.length - 1;
+                
+                //Creamos la tabla de salida
+                out.println("<table id=\"tabla\">");
+                out.println("<tr>\n" +
+                                "<th class=\"ajustado\">Nombre</th>\n" +
+                                "<th class=\"ajustado\">Correo Electr&oacute;nico</th>\n" +
+                                "<th>Petici&oacute;n</th>\n" +
+                                "<th class=\"control\">Control</th>\n" +
+                            "</tr>");
+                
+                //Si hay resultados
+                if(i != -1)
+                {
+                    for (;i>=0; i--)
+                    {
+                        //Checamos si es impar la fila a imprimir, para cambiar el color
+                        if((i&1) == 1)
+                            out.println("<tr>");
+                        else
+                            out.println("<tr class=\"alt\">");
+                        
+                        out.println("<td>" + objUsuarios[i].getNombreUsuario() + "</td>");
+                        out.println("<td>" + objUsuarios[i].getEmail() + "</td>");
+                        out.println("<td>" + objUsuarios[i].getPeticion().getComentario()+ "</td>");
+                        
+                        //Checamos que tipo de peticion es para poner el control correspondiente
+                        if(objUsuarios[i].getPeticion().getTipo() == 0) //Bloquear
+                            out.println("<td>\n" +
+                                            "<button><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
+                                        "</td>");
+                        else if(objUsuarios[i].getPeticion().getTipo() == 1)    //Desbloquear
+                            out.println("<td>\n" +
+                                            "<button><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
+                                        "</td>");
+                        else    //Eliminar
+                            out.println("<td>\n" +
+                                            "<button><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
+                                        "</td>");
+                        out.println("</tr>");
+                    }
+                }
+                else
+                {
+                    out.println("<tr><td colspan=4>No hay peticiones</td></tr>");
+                }
+                out.println("</table>");
+                break;
             default:
                 response.sendRedirect("index.jsp");
         }
     }
     
-    private Usuario buscar(HttpServletRequest request)
+    private Usuario buscarUsuario(HttpServletRequest request)
     {
         Usuario buscado = new Usuario();
         String user = request.getParameter("TBBuscarUsuario");
-        String consulta = "Select Nombre_usuario,Nombre,email,Apellido_Paterno,Apellido_Materno,status from usuario where Nombre_usuario = ? ";
+        String consulta = "Select nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status from usuario where nombre_usuario = ? ";
 
         try
         {
@@ -174,14 +229,15 @@ public class Usuario_Negocio extends HttpServlet
         return false;
     }
 
-    private boolean registra_Usuario() 
+    private Usuario [] getPeticiones()
     {
-        return false;
-    }
-
-    public boolean edita_Usuario() 
-    {
-        return false;
+        Usuario usuarios[];
+        usuarioDAO = new UsuarioDAO();
+        
+        //Hacemos la consulta a la BD
+        usuarios = usuarioDAO.getPeticiones();
+        
+        return usuarios;
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

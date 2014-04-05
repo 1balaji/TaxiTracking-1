@@ -21,7 +21,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Administrador</title>
+        <title>Taxi Tracking - Inicio</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -45,14 +45,14 @@
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="#" class="current">Inicio</a></li>
-                        <li><a href="acercaDe.jsp">Gesti&oacute;n de Taxis</a></li>
-                        <li><a href="contacto.jsp">Gesti&oacute;n de Usuarios</a></li>
+                        <li><a href="bienvenidoAdministrador.jsp" class="current">Inicio</a></li>
+                        <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
+                        <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
-                                    <li><a href="#"><i class="fa fa-user"></i>Profile</a></li>
-                                    <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+                                    <li><a href="#"><i class="fa fa-user"></i>Perfil</a></li>
+                                    <li><a href="#"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
                                     <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
                                 </ul>
                             </div>
@@ -71,15 +71,6 @@
                     <h1>Bienvenido Administrador</h1>
             </section>
             <!--end intro-->
-
-            <!--start holder-->
-            <div class="holder_content">
-                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
-                    <label for="TBBuscarUsuario">Usuario</label><input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
-                    <input id="BTBusquedaUsuario" name="BTBusquedaUsuario" type="submit" value="Buscar" />
-                </form>
-            </div>
-            <!--end holder-->
         </div>
         <!--end container-->
 

@@ -8,6 +8,7 @@ public class Usuario
     String email;
     String nombre_usuario;
     int status;
+    Peticion peticion;
     
     public Usuario()
     {
@@ -17,6 +18,7 @@ public class Usuario
         email = "";
         nombre_usuario = "";
         status = 0;
+        peticion = null;
     }
     
     public void setNombre(String nombre)
@@ -77,5 +79,15 @@ public class Usuario
     public int getStatus()
     {
         return status;
+    }
+    
+    public void setPeticion(Peticion peticion)
+    {
+        this.peticion = peticion;
+    }
+    
+    public Peticion getPeticion()
+    {
+        return peticion;
     }
 }

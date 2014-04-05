@@ -1,15 +1,10 @@
 package Sesion;
 
-import ConexionSQL.Conexion;
-import ConexionSQL.Metodos;
 import Beans.Respuesta;
+import ConexionSQL.UsuarioDAO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -20,12 +15,10 @@ import javax.servlet.http.HttpSession;
 
 public class ManejoSesion extends HttpServlet 
 {
-    //Variables para la conexion con la base de datos
-    private Connection con;
-    private ResultSet rs = null;
-    private PreparedStatement pst = null;
+    //Variable para la conexion con la BD
+    private UsuarioDAO usuarioDAO;
     
-    //Sesion
+    //Variable para la sesion
     HttpSession session = null;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) 
@@ -71,36 +64,26 @@ public class ManejoSesion extends HttpServlet
      */
     private int getLogin(HttpServletRequest request)
     {
-        int respuesta = -1;
+        int rol;
+        
+        //Recuperamos los valores de los campos
         String user = request.getParameter("TBUsuario");
         String pwd = request.getParameter("TBContrasena");
-        String consulta = "Select nombre_usuario, rol from usuario where nombre_usuario = ? && password = ?";
         
-        try
+        usuarioDAO = new UsuarioDAO();
+        
+        //Se hace la consulta a la BD
+        rol = usuarioDAO.getLogin(user, pwd);
+        
+        //Si el usuario es valido
+        if(rol != -1)
         {
-            con = Conexion.getConexion();
-            pst = con.prepareStatement(consulta);
-            pst.setString(1, user);
-            pst.setString(2, pwd);
-            rs = pst.executeQuery();
-            if(rs.next())
-            {
-                String usuario = rs.getString("nombre_usuario");
-                int rol = rs.getInt("rol");
-
-                //Se crea la sesion y se suben los atributos
-                session = request.getSession();
-                session.setAttribute("nombre_usuario", usuario);
-                session.setAttribute("rol", rol);
-
-                //Se asigna el tipo de respuesta
-                respuesta = (rol == 1)? 1: 0;
-            }
-            pst.close();
+            //Se crea la sesion y se suben los atributos
+            session = request.getSession();
+            session.setAttribute("nombre_usuario", user);
+            session.setAttribute("rol", rol);
         }
-        catch(SQLException e){ System.out.println("Error en el login D:\n" + e); }
-        finally{ Conexion.closeConexion(); }
-        return respuesta;
+        return rol;
     }
     
     /*
@@ -112,7 +95,9 @@ public class ManejoSesion extends HttpServlet
     */
     private void getLogin(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+        //Configuramos el tipo de respuesta
         response.setContentType("application/json");
+        
         PrintWriter out = response.getWriter();
         Gson gson = new Gson();
         List<Respuesta> respuesta = new ArrayList<Respuesta>();
@@ -120,10 +105,10 @@ public class ManejoSesion extends HttpServlet
         String user = request.getParameter("TBUsuario");
         String pwd = request.getParameter("TBContrasena");
 
-        Metodos m = new Metodos();
+        usuarioDAO = new UsuarioDAO();
 
         //Si es correcto el login
-        if (m.getLogin(user, pwd)) 
+        if (usuarioDAO.getLogin(user, pwd) != -1)
             respuesta.add(new Respuesta("1"));
         else
             respuesta.add(new Respuesta("0"));
@@ -131,7 +116,7 @@ public class ManejoSesion extends HttpServlet
         out.println(gson.toJson(respuesta));
         out.close();
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

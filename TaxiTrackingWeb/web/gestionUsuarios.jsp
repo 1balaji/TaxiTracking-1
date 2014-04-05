@@ -21,7 +21,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Inicio</title>
+        <title>Taxi Tracking - Gesti&oacute;n de Usuarios</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -45,9 +45,9 @@
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="bienvenidoAdministrador.jsp" class="current">Inicio</a></li>
+                        <li><a href="bienvenidoAdministrador.jsp">Inicio</a></li>
                         <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
-                        <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
+                        <li><a href="gestionUsuarios.jsp" class="current">Gesti&oacute;n de Usuarios</a></li>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
@@ -68,9 +68,27 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                    <h1>Bienvenido Administrador</h1>
+                <h1>Gesti&oacute;n de Usuarios</h1>
             </section>
             <!--end intro-->
+
+            <!--start holder-->
+            <div class="holder_content">
+                <section class="gestion">
+                    <div class="search">
+                        <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
+                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
+                            <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
+                                <i class="fa fa-search fa-fw"></i>Buscar
+                            </button>
+                        </form>
+                    </div>
+                    <div class="contenedorTabla">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </section>
+            </div>
+            <!--end holder-->
         </div>
         <!--end container-->
 
@@ -85,5 +103,6 @@
         <!-- Free template distributed by http://freehtml5templates.com -->
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/toggleMenu.js"></script>
+        <script type="text/javascript" src="js/gestionUsuarios.js"></script>
     </body>
 </html>
