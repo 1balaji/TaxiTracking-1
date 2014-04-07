@@ -21,6 +21,11 @@ public class Usuario
         peticion = null;
     }
     
+    public Usuario(String nombre_usuario)
+    {
+        this.nombre_usuario = nombre_usuario;
+    }
+    
     public void setNombre(String nombre)
     {
         this.nombre = nombre;

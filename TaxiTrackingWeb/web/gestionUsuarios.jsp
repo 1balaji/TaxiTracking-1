@@ -84,7 +84,7 @@
                         </form>
                     </div>
                     <div class="contenedorTabla">
-                        <i class="fa fa-refresh fa-spin"></i>
+                        <i class="fa fa-refresh fa-spin fa-4x"></i>
                     </div>
                 </section>
             </div>

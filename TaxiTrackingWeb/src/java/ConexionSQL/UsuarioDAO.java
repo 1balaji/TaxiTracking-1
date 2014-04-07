@@ -100,4 +100,32 @@ public class UsuarioDAO
         finally{ Conexion.closeConexion(); }
         return objUsuarios;
     }
+    
+    public boolean bloquearUsuario(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "UPDATE usuario SET status = 0 WHERE nombre_usuario = ?";
+        
+        try
+        {
+            //Primero cambiaremos el status del usuario
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            pst.executeUpdate();
+            pst.close();
+            
+            //Hacemos una segunda consulta para borrar la peticion del usuario
+            consulta = "DELETE FROM peticion WHERE nombre_usuario = ?";
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            pst.execute();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al bloquear al usuario D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return b;
+    }
 }

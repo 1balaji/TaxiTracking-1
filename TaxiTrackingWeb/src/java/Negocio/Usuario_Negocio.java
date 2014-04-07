@@ -37,6 +37,9 @@ public class Usuario_Negocio extends HttpServlet
     //Sesion
     HttpSession session = null;
     
+    //Respuesta
+    boolean respuesta;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -59,20 +62,18 @@ public class Usuario_Negocio extends HttpServlet
                 session.setAttribute("objUsuario", objUsuario);
                 response.sendRedirect("busqueda.jsp");
                 break;
-            case 2:
-                //Botón de bloquear y desbloquear
-                String Boton = request.getParameter("BT");
-                String Usuario = request.getParameter("usuario");
-                if (Boton.equals("Bloquear"))
-                    bloqueaUsuario(Usuario);
-                else
-                    desbloqueaUsuario(Usuario);
+            case 2: //Bloquear usuario
+                respuesta = bloquearUsuario(request);
+                out.println("false");
+                //out.println(respuesta);
                 break;
-            case 3:
-                Usuario = request.getParameter("usuario");
-                Elimina_Usuario(Usuario);
+            case 3: //Desbloquear usuario
+//                Usuario = request.getParameter("usuario");
+//                Elimina_Usuario(Usuario);
                 break;
-            case 4: //GetPeticiones
+            case 4: //Eliminar usuario
+                break;
+            case 5: //GetPeticiones
                 objUsuarios = getPeticiones();
                 
                 //Indice para movernos en el arreglo
@@ -105,15 +106,15 @@ public class Usuario_Negocio extends HttpServlet
                         //Checamos que tipo de peticion es para poner el control correspondiente
                         if(objUsuarios[i].getPeticion().getTipo() == 0) //Bloquear
                             out.println("<td>\n" +
-                                            "<button><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
+                                            "<button id='bloquear' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
                                         "</td>");
                         else if(objUsuarios[i].getPeticion().getTipo() == 1)    //Desbloquear
                             out.println("<td>\n" +
-                                            "<button><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
+                                            "<button id='desbloquear' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
                                         "</td>");
                         else    //Eliminar
                             out.println("<td>\n" +
-                                            "<button><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
+                                            "<button id='eliminar' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
                                         "</td>");
                         out.println("</tr>");
                     }
@@ -157,28 +158,18 @@ public class Usuario_Negocio extends HttpServlet
         return buscado;
     }
 
-    private boolean bloqueaUsuario(String usuario) 
+    private boolean bloquearUsuario(HttpServletRequest request)
     {
-        try 
-        {
-            con = Conexion.getConexion();
-            String consulta = "UPDATE  usuario SET status=0 where Nombre_usuario='" + usuario + "' ";
-            sentencias = con.createStatement();
-            int res = sentencias.executeUpdate(consulta);
-
-            if (res == 1) 
-            {   
-                out.println("<script>alert('El Usuario se ha bloqueado  correctamente')</script>");
-                out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'>");                
-                return true;
-            } 
-            else
-            {
-                out.println("error");
-            }
-        } 
-        catch (SQLException ex) { System.out.println("Error al bloquear usuario D:\n" +ex); }
-        return false;
+        boolean b;
+        String nombreUsuario = request.getParameter("nombreUsuario");
+        objUsuario = new Usuario(nombreUsuario);
+        
+        usuarioDAO = new UsuarioDAO();
+        
+        //Hacemos la consulta a la BD
+        b = usuarioDAO.bloquearUsuario(objUsuario);
+        
+        return b;
     }
 
     private boolean desbloqueaUsuario(String usuario) 
