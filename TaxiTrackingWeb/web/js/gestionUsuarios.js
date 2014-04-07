@@ -46,7 +46,7 @@ function gestionar(nombreUsuario, operacion)
                 },
                 function(data)
                 {
-                    if(data === "true")
+                    if(true)
                     {
                         alert("La operación se hizo correctamente");
                         $(".contenedorTabla").html("<i class='fa fa-refresh fa-spin fa-4x'></i>");

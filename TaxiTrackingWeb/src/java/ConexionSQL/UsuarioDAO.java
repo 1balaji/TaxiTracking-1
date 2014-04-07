@@ -101,17 +101,18 @@ public class UsuarioDAO
         return objUsuarios;
     }
     
-    public boolean bloquearUsuario(Usuario objUsuario) 
+    public boolean cambiarStatus(Usuario objUsuario) 
     {
         boolean b = false;
-        consulta = "UPDATE usuario SET status = 0 WHERE nombre_usuario = ?";
+        consulta = "UPDATE usuario SET status = ? WHERE nombre_usuario = ?";
         
         try
         {
             //Primero cambiaremos el status del usuario
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
-            pst.setString(1, objUsuario.getNombreUsuario());
+            pst.setInt(1, objUsuario.getStatus());
+            pst.setString(2, objUsuario.getNombreUsuario());
             pst.executeUpdate();
             pst.close();
             
@@ -124,7 +125,27 @@ public class UsuarioDAO
             
             b = true;
         }
-        catch(SQLException e){ System.out.println("Error al bloquear al usuario D:\n" + e); }
+        catch(SQLException e){ System.out.println("Error al cambiar el status del usuario D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return b;
+    }
+    
+    public boolean eliminarUsuario(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "DELETE FROM usuario WHERE nombre_usuario = ?";
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            pst.execute();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al eliminar al usuario D:\n" + e); }
         finally{ Conexion.closeConexion(); }
         return b;
     }

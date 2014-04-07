@@ -64,14 +64,15 @@ public class Usuario_Negocio extends HttpServlet
                 break;
             case 2: //Bloquear usuario
                 respuesta = bloquearUsuario(request);
-                out.println("false");
-                //out.println(respuesta);
+                out.println(respuesta);
                 break;
             case 3: //Desbloquear usuario
-//                Usuario = request.getParameter("usuario");
-//                Elimina_Usuario(Usuario);
+                respuesta = desbloquearUsuario(request);
+                out.println(respuesta);
                 break;
             case 4: //Eliminar usuario
+                respuesta = eliminarUsuario(request);
+                out.println(respuesta);
                 break;
             case 5: //GetPeticiones
                 objUsuarios = getPeticiones();
@@ -163,61 +164,40 @@ public class Usuario_Negocio extends HttpServlet
         boolean b;
         String nombreUsuario = request.getParameter("nombreUsuario");
         objUsuario = new Usuario(nombreUsuario);
-        
+        objUsuario.setStatus(0);
         usuarioDAO = new UsuarioDAO();
         
         //Hacemos la consulta a la BD
-        b = usuarioDAO.bloquearUsuario(objUsuario);
+        b = usuarioDAO.cambiarStatus(objUsuario);
         
         return b;
     }
 
-    private boolean desbloqueaUsuario(String usuario) 
+    private boolean desbloquearUsuario(HttpServletRequest request) 
     {
-        try 
-        {
-            String consulta = "UPDATE  usuario SET status=1 where Nombre_usuario= '" + usuario + "' ";
-            con = Conexion.getConexion();
-            sentencias = con.createStatement();
-            int res = sentencias.executeUpdate(consulta);
-
-            if (res == 1) 
-            {
-               out.println("<script>alert('El Usuario se ha desbloqueado  correctamente')</script>");
-               out.println("<meta http-equiv='refresh' content='0;url=bienvenidoAdministrador.jsp'>");
-                return true;
-            } 
-            else 
-            {
-                out.println("error");
-            }
-        } 
-        catch (SQLException ex) { System.out.println("Error al desbloquear usuario D:\n" + ex); }
-        return false;
+        boolean b;
+        String nombreUsuario = request.getParameter("nombreUsuario");
+        objUsuario = new Usuario(nombreUsuario);
+        objUsuario.setStatus(1);
+        usuarioDAO = new UsuarioDAO();
+        
+        //Hacemos la consulta a la BD
+        b = usuarioDAO.cambiarStatus(objUsuario);
+        
+        return b;
     }
 
-    private boolean Elimina_Usuario(String usuario) 
+    private boolean eliminarUsuario(HttpServletRequest request) 
     {
-        try 
-        {
-            String consulta = "DELETE FROM usuario WHERE Nombre_usuario= '" + usuario + "' ";
-            con = Conexion.getConexion();
-            sentencias = con.createStatement();
-            int res = sentencias.executeUpdate(consulta);
-
-            if (res == 1) 
-            {
-                out.println("<script>alert('El Usuario se ha eliminado correctamente')</script>");
-                out.println("<meta http-equiv='refresh' content='0;url=index.jsp'>");
-                return true;
-            } 
-            else
-            {
-                out.println("error");
-            }
-        } 
-        catch (SQLException ex) { System.out.println("Error al eliminar usuario D:\n" + ex); }
-        return false;
+        boolean b;
+        String nombreUsuario = request.getParameter("nombreUsuario");
+        objUsuario = new Usuario(nombreUsuario);
+        usuarioDAO = new UsuarioDAO();
+        
+        //Hacemos la consulta a la BD
+        b = usuarioDAO.eliminarUsuario(objUsuario);
+        
+        return b;
     }
 
     private Usuario [] getPeticiones()
