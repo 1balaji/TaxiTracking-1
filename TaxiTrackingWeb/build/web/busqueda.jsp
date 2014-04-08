@@ -33,7 +33,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Inicio</title>
+        <title>Taxi Tracking - Gesti&oacute;n de Usuarios</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -57,9 +57,18 @@
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="#" class="current">Inicio</a></li>
-                        <li><a href="#">Acerca de</a></li>
-                        <li><a href="#">Contacto</a></li>
+                        <li><a href="bienvenidoAdministrador.jsp">Inicio</a></li>
+                        <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
+                        <li><a href="gestionUsuarios.jsp" class="current">Gesti&oacute;n de Usuarios</a></li>
+                        <li>
+                            <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
+                                <ul class="dropdown">
+                                    <li><a href="#"><i class="fa fa-user"></i>Perfil</a></li>
+                                    <li><a href="#"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
+                                    <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </nav>
                 <!--end menu-->
@@ -68,132 +77,60 @@
 
             <!--start intro-->
             <div id="intro">
+                <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <h1>Nombre: <%=objUsuario.getNombreUsuario()%> </h1>
-                <table BORDER=1 WIDTH=300>
-                    <tr>
-                        <td WIDTH=100>Nombre(completo)</td>
-                        <td WIDTH=100>Correo Electronico</td>
-                        <td WIDTH=100>Status</td>
-                        <td WIDTH=100>Bloquear/Desbloquear</td>
-                        <td WIDTH=100>Eliminar</td>
-                    </tr>
-                    <tr>
-                        <td WIDTH=100><%= objUsuario.getNombre() + "  " + objUsuario.getApellidoPaterno() + "  " + objUsuario.getApellidoMaterno()%></td>
-                        <td WIDTH=100><%=objUsuario.getEmail()%></td>
-                        <td WIDTH=100>
-                            <% if(objUsuario.getStatus() == 1)
-                                   out.print("Desbloqueado");
-                               else
-                                    out.print("Bloqueado");%>
-                        </td>
-                        <td WIDTH=100>
-                            <% if(objUsuario.getStatus() == 1) 
-                            { %>
-                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=2&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Bloquear"  method="post">
-                                    <center><input type="submit" name="BTBloquear" id="BTBloquear" value="Bloquear" /></center>
-                                </form>
-                            <% } 
-                            else 
-                            { %>
-                                <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=2&amp;usuario=<%= objUsuario.getNombreUsuario()%>&amp;BT=Desbloquear" method="post">
-                                    <center><input type="submit" name="BTDesbloquear" id="BTDesbloquear" value="Desbloquear" /></center>
-                                </form>
-                            <% }%>
-                        </td>
-                        <td WIDTH=100>
-                            <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=3&amp;usuario=<%= objUsuario.getNombreUsuario()%>" method="post">
-                                <input type="submit" name="BTEliminar" id="BTEliminar" value="Eliminar" />
-                            </form>
-                        </td>
-                    </tr>
-                </table>
+                <h1>B&uacute;squeda de Usuario</h1>
             </section>
             <!--end intro-->
 
             <!--start holder-->
             <div class="holder_content">
-                <section class="group1">
-				
-				
-                    <h3>Caracter&iacute;sticas</h3>
-                    <p>Taxi Tracking es una aplicaci&oacute;n cuyo objetivo es el de proveer una herramienta, a trav&eacute;s de dispositivos móviles, a los 
-                        usuarios que realizan viajes en el sistema de transporte tipo taxi, para monitorear su viaje y proporcionar una opción de ayuda en caso
-                        de ser necesario.</p>
-                    <p>A continuación se enlistan las caracter&iacute;sticas que permiten a Taxi Tracking llevar a cabo su prop&oacute;sito.</p>
-
-                    <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture2.jpg" width="150" height="115" alt="picture1"/></a>
-                        <h2>Seguimiento</h2>
-                        <p>Taxi Tracking da seguimiento al viaje del usuario mediante la tecnología GPS y API's de Google.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
-                    </article>
-
-                    <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture4.jpg" width="150" height="115" alt="picture1"/></a>
-                        <h2>Env&iacute;o de alertas</h2>
-                        <p>Taxi Tracking realiza denuncias en l&iacute;nea en la red social <a href="https://twitter.com/CASPOLICIA_CDMX">
-                                <i>Twitter</i></a> de el <a href="http://www.ssp.df.gob.mx/Emergencias/Pages/CAS.aspx">Centro de Atenci&oacute;n del Secretario de 
-                                Seguridad P&uacute;blica del D.F.</a> El cual promete una respuesta de patrullas	o elementos en un m&aacute;ximo de 10 minutos.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
-                    </article>
-
-                    <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
-                        <h2>Sugerencia de rutas</h2>
-                        <p>Para un servicio m&aacute;s completo, Taxi Tracking puede sugerir una ruta para el viaje del usuario.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
-                    </article>
-
-                    <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
-                        <h2>Estimaci&oacute;n de costo y distancia</h2>
-                        <p>Con la finalidad de evitar los abusos en el cobro del viaje, Taxi Tracking cuenta con un tax&iacute;metro virtual que te da un
-                            estimado del costo de tu viaje.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
-                    </article>
-
-                    <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
-                        <h2>Identificaci&oacute;n de taxis por QR</h2>
-                        <p>Con la intenci&oacute;n de mantener un control de los taxis leg&iacute;timos y evitar los taxis piratas,
-                            Taxi Tracking genera un c&oacute;digo QR &uacute;nico para cada unidad.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
-                    </article>
-
-                    <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
-                        <h2>Ranking de taxis</h2>
-                        <p>Para una informaci&oacute;n m&aacute;s espec&iacute;fica acerca de la unidad, Taxi Tracking permite a los usuarios evaluar
-                            al taxi y con base en esto se realiza un promedio del servicio brindado.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
-                    </article>
+                <section class="gestion">
+                    <div class="search">
+                        <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
+                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
+                            <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
+                                <i class="fa fa-search fa-fw"></i>Buscar
+                            </button>
+                        </form>
+                    </div>
+                    <div class="contenedorTabla">
+                        <table id="tabla">
+                            <tr>
+                                <th>Usuario</th>
+                                <th class="ajustado">Nombre</th>
+                                <th class="ajustado">Correo Electr&oacute;nico</th>
+                                <th colspan="2">Control</th>
+                            </tr>
+                            <tr>
+                                <%if(objUsuario.getNombreUsuario().compareTo("") == 0)
+                                {%>
+                                    <td colspan=4>No hay resultados</td>
+                               <%}
+                               else
+                                {%>
+                                    <td><%=objUsuario.getNombreUsuario()%></td>
+                                    <td><%=objUsuario.getNombre()%> <%=objUsuario.getApellidoPaterno()%> <%=objUsuario.getApellidoMaterno()%></td>
+                                    <td><%=objUsuario.getEmail()%></td>
+                                    <td>
+                                        <%if(objUsuario.getStatus() == 0)   //Si esta bloqueado
+                                        {
+                                            out.println("<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
+                                        }
+                                        else
+                                        {
+                                            out.println("<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
+                                        }%>
+                                    </td>
+                                    <td>
+                                        <button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick="gestionar('<%=objUsuario.getNombreUsuario()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                    </td>
+                                <%}%>
+                            </tr>
+                        </table>
+                    </div>
                 </section>
-
-                <aside class="group2">
-                    
-
-                    <section>
-                        <h3>Noticias relacionadas</h3>
-                        <article class="holder_news">
-                            <span class="news_span">02.03.2011</span>
-                            <h4>Crecen 139% asaltos en taxis en cinco a&ntilde;os</h4>
-                            <p>Durante 20 horas Karla experiment&oacute; el terror a bordo de un taxi en el centro de la ciudad de M&eacute;xico.
-                                <span class="readmore"><a href="http://www.eluniversal.com.mx/ciudad/105375.html">Leer m&aacute;s...</a></span></p>
-                        </article>
-
-                        <article class="holder_news">
-                            <span class="news_span">19.02.2011</span>
-                            <h4>Taxistas prevendr&aacute;n delitos</h4>
-                            <p>La Procuradur&iacute;a General de Justicia del Distrito Federal (PGJDF), la Secretar&iacute;a de Transportes y Vialidad
-                                (SETRAVI), as&iacute; como 17 organizaciones de taxistas firmaron un convenio para una red de protecci&oacute;n para prevenir
-                                los delitos en taxis.
-                                <span class="readmore"><a href="http://www.eluniversal.com.mx/ciudad/105264.html">Leer m&aacute;s...</a></span></p>
-                        </article>
-                        <a class="photo_hover" href="#"><img src="images/picture3.jpg" width="257" height="295" alt="picture"/></a>
-                    </section>
-                </aside>
             </div>
             <!--end holder-->
         </div>
@@ -208,5 +145,8 @@
         </footer>
         <!--end footer-->
         <!-- Free template distributed by http://freehtml5templates.com -->
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/toggleMenu.js"></script>
+        <script type="text/javascript" src="js/buscarUsuario.js"></script>
     </body>
 </html>

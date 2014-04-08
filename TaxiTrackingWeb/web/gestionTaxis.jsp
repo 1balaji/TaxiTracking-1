@@ -1,9 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Beans.Usuario;"%>
 <%
     String usuario = null;
     int rol = -1;
-    Usuario objUsuario = new Usuario();
     
     //Checamos que exista la sesion
     if(session != null && session.getAttribute("rol") != null)
@@ -14,16 +12,6 @@
         if(rol!=1){response.sendRedirect("bienvenido.jsp");}
 
         usuario = (String)session.getAttribute("nombre_usuario");
-        
-        if(session.getAttribute("objUsuario") != null)
-        {
-            objUsuario = new Usuario();
-            objUsuario = (Usuario)session.getAttribute("objUsuario");
-            //Quitamos el usuario de la sesion
-            session.removeAttribute("objUsuario");
-        }
-        else
-            response.sendRedirect("bienvenidoAdministrador.jsp");
     }
     else
         response.sendRedirect("index.jsp");
@@ -80,7 +68,7 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <h1>B&uacute;squeda de Usuario</h1>
+                <h1>Gesti&oacute;n de Usuarios</h1>
             </section>
             <!--end intro-->
 
@@ -96,39 +84,7 @@
                         </form>
                     </div>
                     <div class="contenedorTabla">
-                        <table id="tabla">
-                            <tr>
-                                <th>Usuario</th>
-                                <th class="ajustado">Nombre</th>
-                                <th class="ajustado">Correo Electr&oacute;nico</th>
-                                <th colspan="2">Control</th>
-                            </tr>
-                            <tr>
-                                <%if(objUsuario.getNombreUsuario().compareTo("") == 0)
-                                {%>
-                                    <td colspan=4>No hay resultados</td>
-                               <%}
-                               else
-                                {%>
-                                    <td><%=objUsuario.getNombreUsuario()%></td>
-                                    <td><%=objUsuario.getNombre()%> <%=objUsuario.getApellidoPaterno()%> <%=objUsuario.getApellidoMaterno()%></td>
-                                    <td><%=objUsuario.getEmail()%></td>
-                                    <td>
-                                        <%if(objUsuario.getStatus() == 0)   //Si esta bloqueado
-                                        {
-                                            out.println("<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
-                                        }
-                                        else
-                                        {
-                                            out.println("<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
-                                        }%>
-                                    </td>
-                                    <td>
-                                        <button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick="gestionar('<%=objUsuario.getNombreUsuario()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
-                                    </td>
-                                <%}%>
-                            </tr>
-                        </table>
+                        <i class="fa fa-refresh fa-spin fa-4x"></i>
                     </div>
                 </section>
             </div>
@@ -147,6 +103,6 @@
         <!-- Free template distributed by http://freehtml5templates.com -->
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/toggleMenu.js"></script>
-        <script type="text/javascript" src="js/buscarUsuario.js"></script>
+        <script type="text/javascript" src="js/gestionUsuarios.js"></script>
     </body>
 </html>

@@ -14,8 +14,7 @@ public class UsuarioDAO
     ResultSet rs;
     PreparedStatement pst;
     
-    //Variables para retornar
-    Usuario objUsuario;
+    //Variable para retornar
     Usuario objUsuarios[];
     
     //Variable que contendra la consulta
@@ -26,7 +25,6 @@ public class UsuarioDAO
         con = null;
         rs = null;
         pst = null;
-        objUsuario = null;
         objUsuarios = null;
         consulta = "";
     }
@@ -59,6 +57,11 @@ public class UsuarioDAO
         return rol;
     }
 
+    /*
+    * Metodo para recuperar las peticiones de los usuarios. 
+    * No recibe nada
+    * Retorna un arreglo de usuarios
+    */
     public Usuario[] getPeticiones() 
     {
         consulta = "SELECT COUNT(*) tipo FROM peticion";
@@ -101,6 +104,11 @@ public class UsuarioDAO
         return objUsuarios;
     }
     
+    /*
+    * Metodo para cambiar el status de un usuario. 
+    * Recibe un objeto usuario con el nuevo status
+    * Retorna true en caso de exito y false en caso de error
+    */
     public boolean cambiarStatus(Usuario objUsuario) 
     {
         boolean b = false;
@@ -108,19 +116,11 @@ public class UsuarioDAO
         
         try
         {
-            //Primero cambiaremos el status del usuario
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
             pst.setInt(1, objUsuario.getStatus());
             pst.setString(2, objUsuario.getNombreUsuario());
             pst.executeUpdate();
-            pst.close();
-            
-            //Hacemos una segunda consulta para borrar la peticion del usuario
-            consulta = "DELETE FROM peticion WHERE nombre_usuario = ?";
-            pst = con.prepareStatement(consulta);
-            pst.setString(1, objUsuario.getNombreUsuario());
-            pst.execute();
             pst.close();
             
             b = true;
@@ -130,6 +130,36 @@ public class UsuarioDAO
         return b;
     }
     
+    /*
+    * Metodo para eliminar la peticion de un usuario. 
+    * Recibe un objeto usuario con el nombre del usuario al que se le eliminara la peticion
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean eliminarPeticion(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "DELETE FROM peticion WHERE nombre_usuario = ?";
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            pst.execute();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al eliminar la peticion D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return b;
+    }
+    
+    /*
+    * Metodo para eliminar un usuario. 
+    * Recibe un objeto usuario con el nombre del usuario que se va a eliminar
+    * Retorna true en caso de exito y false en caso de error
+    */
     public boolean eliminarUsuario(Usuario objUsuario) 
     {
         boolean b = false;
@@ -148,5 +178,41 @@ public class UsuarioDAO
         catch(SQLException e){ System.out.println("Error al eliminar al usuario D:\n" + e); }
         finally{ Conexion.closeConexion(); }
         return b;
+    }
+    
+    /*
+    * Metodo para buscar un usuario. 
+    * Recibe un objeto usuario con el nombre del usuario que se va a buscar
+    * Retorna un objeto usuario lleno con los datos correspondientes o vacio en caso de no haber coincidencias
+    */
+    public Usuario buscarUsuario(Usuario objUsuario) 
+    {        
+        consulta = "Select nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status from usuario where nombre_usuario = ? ";
+
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            rs = pst.executeQuery();
+            
+            //Reiniciamos el objeto
+            objUsuario = new Usuario();
+                    
+            if (rs.next())
+            {
+                objUsuario.setNombreUsuario(rs.getString("nombre_usuario"));
+                objUsuario.setNombre(rs.getString("Nombre"));
+                objUsuario.setEmail(rs.getString("email"));
+                objUsuario.setApellidoPaterno(rs.getString("Apellido_Paterno"));
+                objUsuario.setApellidoMaterno(rs.getString("Apellido_Materno"));
+                objUsuario.setStatus(rs.getInt("status"));
+            }
+            pst.close();            
+        }
+        catch (SQLException e) { System.out.println("Error al buscar un usuario D:\n" + e); }
+        finally { Conexion.closeConexion(); }
+        
+        return objUsuario;
     }
 }

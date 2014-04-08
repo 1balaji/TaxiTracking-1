@@ -19,22 +19,25 @@ function getPeticiones()
 //Funcion que gestiona los eventos de los botones de control
 function gestionar(nombreUsuario, operacion)
 {
-    //Obtenemos la parte del mensaje que corresponde a la accion
+    //Obtenemos el mensaje que corresponde a la accion
     switch(operacion)
     {
         case 2:
-            texto = "bloquear";
+            textoConfirmacion = "¿Desea bloquear al usuario " + nombreUsuario + "?";
+            textoSalida = "El usuario " + nombreUsuario + " se bloqueó correctamente";
             break;
         case 3:
-            texto = "desbloquear";
+            textoConfirmacion = "¿Desea desbloquear al usuario " + nombreUsuario + "?";
+            textoSalida = "El usuario " + nombreUsuario + " se desbloqueó correctamente";
             break;
         case 4:
-            texto = "eliminar";
+            textoConfirmacion = "¿Desea eliminar al usuario " + nombreUsuario + "?";
+            textoSalida = "El usuario " + nombreUsuario + " se eliminó correctamente";
             break;
     }
     
     //Abrimos un cuadro de confirmacion
-    confirmar = confirm("¿Desea " + texto + " a " + nombreUsuario + "?");
+    confirmar = confirm(textoConfirmacion);
     
     //Si acepta se hace la peticion asincrona
     if (confirmar)
@@ -46,9 +49,12 @@ function gestionar(nombreUsuario, operacion)
                 },
                 function(data)
                 {
-                    if(true)
+                    //Si fue correcta la peticion
+                    if(data == 1)
                     {
-                        alert("La operación se hizo correctamente");
+                        alert(textoSalida);
+                        
+                        //Ponemos el simbolo de cargando
                         $(".contenedorTabla").html("<i class='fa fa-refresh fa-spin fa-4x'></i>");
                         getPeticiones();    //Se recargan las peticiones
                     }

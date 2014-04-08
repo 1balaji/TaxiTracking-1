@@ -64,15 +64,24 @@ public class Usuario_Negocio extends HttpServlet
                 break;
             case 2: //Bloquear usuario
                 respuesta = bloquearUsuario(request);
-                out.println(respuesta);
+                if(respuesta)
+                    out.println("1");
+                else
+                    out.println("0");
                 break;
             case 3: //Desbloquear usuario
                 respuesta = desbloquearUsuario(request);
-                out.println(respuesta);
+                if(respuesta)
+                    out.println("1");
+                else
+                    out.println("0");
                 break;
             case 4: //Eliminar usuario
                 respuesta = eliminarUsuario(request);
-                out.println(respuesta);
+                if(respuesta)
+                    out.println("1");
+                else
+                    out.println("0");
                 break;
             case 5: //GetPeticiones
                 objUsuarios = getPeticiones();
@@ -107,15 +116,15 @@ public class Usuario_Negocio extends HttpServlet
                         //Checamos que tipo de peticion es para poner el control correspondiente
                         if(objUsuarios[i].getPeticion().getTipo() == 0) //Bloquear
                             out.println("<td>\n" +
-                                            "<button id='bloquear' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
+                                            "<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
                                         "</td>");
                         else if(objUsuarios[i].getPeticion().getTipo() == 1)    //Desbloquear
                             out.println("<td>\n" +
-                                            "<button id='desbloquear' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
+                                            "<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
                                         "</td>");
                         else    //Eliminar
                             out.println("<td>\n" +
-                                            "<button id='eliminar' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
+                                            "<button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
                                         "</td>");
                         out.println("</tr>");
                     }
@@ -133,30 +142,14 @@ public class Usuario_Negocio extends HttpServlet
     
     private Usuario buscarUsuario(HttpServletRequest request)
     {
-        Usuario buscado = new Usuario();
-        String user = request.getParameter("TBBuscarUsuario");
-        String consulta = "Select nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status from usuario where nombre_usuario = ? ";
-
-        try
-        {
-            con = Conexion.getConexion();
-            pst = con.prepareStatement(consulta);
-            pst.setString(1, user);
-            rs = pst.executeQuery();
-            if (rs.next())
-            {
-                buscado.setNombreUsuario(rs.getString("nombre_usuario"));
-                buscado.setNombre(rs.getString("Nombre"));
-                buscado.setEmail(rs.getString("email"));
-                buscado.setApellidoPaterno(rs.getString("Apellido_Paterno"));
-                buscado.setApellidoMaterno(rs.getString("Apellido_Materno"));
-                buscado.setStatus(rs.getInt("status"));
-            }
-            pst.close();            
-        }
-        catch (SQLException e) { System.out.println("Error en la busqueda D:\n" + e); }
-        finally { Conexion.closeConexion(); }
-        return buscado;
+        String nombreUsuario = request.getParameter("TBBuscarUsuario");
+        objUsuario = new Usuario(nombreUsuario);
+        usuarioDAO = new UsuarioDAO();
+        
+        //Hacemos la consulta a la BD
+        objUsuario = usuarioDAO.buscarUsuario(objUsuario);
+        
+        return objUsuario;
     }
 
     private boolean bloquearUsuario(HttpServletRequest request)
@@ -169,6 +162,10 @@ public class Usuario_Negocio extends HttpServlet
         
         //Hacemos la consulta a la BD
         b = usuarioDAO.cambiarStatus(objUsuario);
+        
+        //Si se bloqueo correctamente, eliminamos la peticion
+        if(b)
+            b = usuarioDAO.eliminarPeticion(objUsuario);
         
         return b;
     }
@@ -184,6 +181,10 @@ public class Usuario_Negocio extends HttpServlet
         //Hacemos la consulta a la BD
         b = usuarioDAO.cambiarStatus(objUsuario);
         
+        //Si se desbloqueo correctamente, eliminamos la peticion
+        if(b)
+            b = usuarioDAO.eliminarPeticion(objUsuario);
+        
         return b;
     }
 
@@ -196,6 +197,10 @@ public class Usuario_Negocio extends HttpServlet
         
         //Hacemos la consulta a la BD
         b = usuarioDAO.eliminarUsuario(objUsuario);
+        
+        //Si se elimino correctamente, eliminamos la peticion
+        if(b)
+            b = usuarioDAO.eliminarPeticion(objUsuario);
         
         return b;
     }

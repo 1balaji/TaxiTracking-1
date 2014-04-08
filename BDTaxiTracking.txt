@@ -27,9 +27,21 @@ create table peticion(
 		on update cascade
 );
 
+create table taxista(
+	idPeticion int not null primary key auto_increment,
+	nombre varchar(30) not null,
+	apellido_paterno varchar(30) not null,
+	apellido_materno varchar(30) not null,
+	RFC varchar(15) not null,
+	matricula int not null,
+	vigencia date not null,
+	folio int not null
+);
+
 insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1, 1);
 insert into usuario values ("usuario", "usuario", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
 insert into usuario values ("carlos", "carlos", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
 
 insert into peticion values (null, 0, "Bloqueame wey orale", "usuario");
+insert into peticion values (null, 1, "Desbloqueame wey orale", "usuario");
 insert into peticion values (null, 2,"Eliminame wey orale", "carlos");
