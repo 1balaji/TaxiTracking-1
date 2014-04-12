@@ -34,7 +34,7 @@ html, body {
 	color:black;
 	margin:0 0 1px;
 	line-height:1.5;
-	background-image:url(../images/bg.png); 
+	background-image:url(../images/bg.png);
 	background-position:left top;
 	background-repeat:repeat;
 }
@@ -305,43 +305,6 @@ footer {
 	border-radius:0.5em;
 }
 
-.button {
-	display:inline-block;
-	zoom:1; /* zoom and *display = ie7 hack for display:inline-block */
-	*display:inline;
-	vertical-align:baseline;
-	margin:8px 41px;
-	outline:none;
-	cursor:pointer;
-	text-align:center;
-	text-decoration:none;
-	font:16px/100% Georgia, "Times New Roman", Times, serif;
-	padding:0.5em 2em 0.55em;
-	-webkit-border-radius:0.5em;
-	-moz-border-radius:0.5em;
-	border-radius:0.5em;
-	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.2);
-	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.2);
-	box-shadow:0 1px 2px rgba(0,0,0,0.2);
-}
-
-.button:hover {text-decoration: underline;}
-
-.button:active {
-	position: relative;
-	top: 1px;
-}
-
-.black {
-	border-radius:0.5em;
-	background:#333;
-	background:-webkit-gradient(linear, left top, left bottom, from(#666), to(#000));
-	background:-moz-linear-gradient(top,  #666,  #000);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
-}
-
-.black a {color: #ffffff;}
-
 #login
 {
 	text-align:center;
@@ -380,6 +343,10 @@ footer {
 	float: right;
 }
 
+.agregar {
+	float: left;
+}
+
 div.contenedorTabla {
 	clear:both;
 	text-align:center;
@@ -416,4 +383,29 @@ div.contenedorTabla {
 #tabla tr.alt td {
 	color:#000000;
 	background-color:#EAF2D3;
+}
+
+#agregarTaxi {
+    display:none;
+    clear:both;
+}
+
+.input-group {
+    /*position: relative;*/
+    display: table;
+    border-collapse: separate;
+}
+
+.input-group-addon {
+    border-radius: 4px 0 0 4px;
+    border-right: 0;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+    display: table-cell;
 }

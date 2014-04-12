@@ -19,6 +19,10 @@ function getPeticiones()
 //Funcion que gestiona los eventos de los botones de control
 function gestionar(nombreUsuario, operacion)
 {
+    //Opacamos la ventana
+    $("#container").fadeTo(0,0.5);
+    $(".container").fadeTo(0,0.5);
+    
     //Obtenemos el mensaje que corresponde a la accion
     switch(operacion)
     {
@@ -63,4 +67,8 @@ function gestionar(nombreUsuario, operacion)
                 }
             );
     }
+    
+    //Restauramos la ventana
+    $("#container").fadeTo(0,1);
+    $(".container").fadeTo(0,1);
 }

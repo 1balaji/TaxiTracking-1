@@ -16,6 +16,10 @@
         <servlet-name>ManejoSesion</servlet-name>
         <servlet-class>Sesion.ManejoSesion</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Taxi_Negocio</servlet-name>
+        <servlet-class>Negocio.Taxi_Negocio</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Usuario_Negocio</servlet-name>
         <url-pattern>/Usuario_Negocio</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>ManejoSesion</servlet-name>
         <url-pattern>/ManejoSesion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Taxi_Negocio</servlet-name>
+        <url-pattern>/Taxi_Negocio</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

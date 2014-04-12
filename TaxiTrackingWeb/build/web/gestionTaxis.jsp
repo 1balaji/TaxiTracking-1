@@ -21,7 +21,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Gesti&oacute;n de Usuarios</title>
+        <title>Taxi Tracking - Gesti&oacute;n de Taxis</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -46,8 +46,8 @@
                 <nav>
                     <ul>
                         <li><a href="bienvenidoAdministrador.jsp">Inicio</a></li>
-                        <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
-                        <li><a href="gestionUsuarios.jsp" class="current">Gesti&oacute;n de Usuarios</a></li>
+                        <li><a href="gestionTaxis.jsp" class="current">Gesti&oacute;n de Taxis</a></li>
+                        <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
@@ -68,23 +68,39 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <h1>Gesti&oacute;n de Usuarios</h1>
+                <h1>Gesti&oacute;n de Taxis</h1>
             </section>
             <!--end intro-->
 
             <!--start holder-->
             <div class="holder_content">
                 <section class="gestion">
+                    <div class="agregar">
+                        <button id="agregarTaxiToggle">
+                            <i class="fa fa-plus-circle fa-fw"></i>Agregar Taxi
+                        </button>
+                    </div>
                     <div class="search">
-                        <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
+                        <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
+                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Placas del taxi" />
                             <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
                         </form>
                     </div>
-                    <div class="contenedorTabla">
-                        <i class="fa fa-refresh fa-spin fa-4x"></i>
+                    <div id="agregarTaxi" class="input-group">
+                        <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=2" method="POST">
+                            <span class="input-group-addon"><label for="TBNombre">Nombre</label></span><input type="text" id="TBNombre" name="TBNombre" placeholder="Nombre" /><br/>
+                            <label for="TBApellidoPaterno">Apellido Paterno</label><input type="text" id="TBApellidoPaterno" name="TBApellidoPaterno" placeholder="Apellido Paterno" /><br/>
+                            <label for="TBApellidoMaterno">Apellido Materno</label><input type="text" id="TBApellidoMaterno" name="TBApellidoMaterno" placeholder="Apellido Materno" /><br/>
+                            <label for="TBRFC">RFC</label><input type="text" id="TBRFC" name="TBRFC" placeholder="RFC" /><br/>
+                            <label for="TBMatricula">Matricula</label><input type="text" id="TBMatricula" name="TBMatricula" placeholder="Matricula" /><br/>
+                            <label for="TBVigencia">Vigencia</label><input type="date" id="TBVigencia" name="TBVigencia" /><br/>
+                            <label for="TBFolio">Folio</label><input type="text" id="TBFolio" name="TBFolio" placeholder="Folio" /><br/>
+                            <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
+                                <i class="fa fa-plus-circle fa-fw"></i>Agregar
+                            </button>
+                        </form>
                     </div>
                 </section>
             </div>
@@ -103,6 +119,6 @@
         <!-- Free template distributed by http://freehtml5templates.com -->
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/toggleMenu.js"></script>
-        <script type="text/javascript" src="js/gestionUsuarios.js"></script>
+        <script type="text/javascript" src="js/gestionTaxis.js"></script>
     </body>
 </html>

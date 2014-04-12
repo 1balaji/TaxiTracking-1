@@ -1,6 +1,10 @@
 //Funcion que gestiona los eventos de los botones de control
 function gestionar(nombreUsuario, operacion)
 {
+    //Opacamos la ventana
+    $("#container").fadeTo(0,0);
+    $(".container").fadeTo(0,0);
+    
     //Obtenemos el mensaje que corresponde a la accion
     switch(operacion)
     {
@@ -35,11 +39,17 @@ function gestionar(nombreUsuario, operacion)
                     if(data == 1)
                     {
                         alert(textoSalida);
-                        window.location = "gestionUsuarios.jsp"
+                        
+                        //Redireccionamos a la pagina
+                        window.location = "gestionUsuarios.jsp";
                     }
                     else
                         alert("Error al realizar la operación");
                 }
             );
     }
+
+    //Restauramos la ventana
+    $("#container").fadeTo(0,1);
+    $(".container").fadeTo(0,1);
 }

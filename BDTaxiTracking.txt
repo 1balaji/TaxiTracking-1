@@ -28,7 +28,7 @@ create table peticion(
 );
 
 create table taxista(
-	idPeticion int not null primary key auto_increment,
+	idTaxista int not null primary key auto_increment,
 	nombre varchar(30) not null,
 	apellido_paterno varchar(30) not null,
 	apellido_materno varchar(30) not null,
@@ -41,7 +41,8 @@ create table taxista(
 insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1, 1);
 insert into usuario values ("usuario", "usuario", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
 insert into usuario values ("carlos", "carlos", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
+insert into usuario values ("otro", "carlos", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
 
-insert into peticion values (null, 0, "Bloqueame wey orale", "usuario");
-insert into peticion values (null, 1, "Desbloqueame wey orale", "usuario");
-insert into peticion values (null, 2,"Eliminame wey orale", "carlos");
+insert into peticion values (null, 0, "Bloqueame", "usuario");
+insert into peticion values (null, 1, "Desbloqueame", "otro");
+insert into peticion values (null, 2,"Eliminame", "carlos");

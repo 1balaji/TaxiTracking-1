@@ -77,7 +77,7 @@
                 <section class="gestion">
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
+                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Nombre de usuario" />
                             <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>

@@ -1,15 +1,9 @@
 package Negocio;
 
 import Beans.Usuario;
-import ConexionSQL.Conexion;
 import ConexionSQL.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +12,6 @@ import javax.servlet.http.HttpSession;
 
 public class Usuario_Negocio extends HttpServlet 
 {
-    //Variables para la conexion con la base de datos
-    private Statement sentencias = null;
-    private Connection con;
-    private ResultSet rs = null;
-    private PreparedStatement pst = null;
-    
     //Beans
     Usuario objUsuario;
     Usuario objUsuarios[];
@@ -60,6 +48,7 @@ public class Usuario_Negocio extends HttpServlet
             case 1: //Buscar usuario
                 objUsuario = buscarUsuario(request);
                 session.setAttribute("objUsuario", objUsuario);
+                out.close();
                 response.sendRedirect("busqueda.jsp");
                 break;
             case 2: //Bloquear usuario
@@ -138,6 +127,7 @@ public class Usuario_Negocio extends HttpServlet
             default:
                 response.sendRedirect("index.jsp");
         }
+        out.close();
     }
     
     private Usuario buscarUsuario(HttpServletRequest request)

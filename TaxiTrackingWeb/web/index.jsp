@@ -43,7 +43,7 @@
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="#" class="current">Inicio</a></li>
+                        <li><a href="index.jsp" class="current">Inicio</a></li>
                         <li><a href="acercaDe.jsp">Acerca de</a></li>
                         <li><a href="contacto.jsp">Contacto</a></li>
                     </ul>
@@ -58,10 +58,9 @@
             </div>
             <section class="group_bannner_left">
                 <hgroup>
-                    <h1>We serve fresh ideas</h1>
-                    <h2>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec molestie. Sed aliquam sem ut arcu. Phasellus sollicitudin.</h2>
+                    <h1>Taxi Tracking</h1>
+                    <h2>TT2013-A022</h2>
                 </hgroup>
-                <div class="button black"><a href="#">Read more about our fresh ideas</a></div>
             </section>
             <!--end intro-->
 

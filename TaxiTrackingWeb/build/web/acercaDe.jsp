@@ -45,7 +45,6 @@
                     <h1>Acerca De</h1>
                     <h2>Acerca de nosotros.</h2>
                 </hgroup>
-                <div class="button black"><a href="#">Read more about our fresh ideas</a></div>
             </section>
             <!--end intro-->
 
