@@ -35,7 +35,8 @@ create table taxista(
 	RFC varchar(15) not null,
 	matricula int not null,
 	vigencia date not null,
-	folio int not null
+	folio int not null,
+	status int not null
 );
 
 insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1, 1);

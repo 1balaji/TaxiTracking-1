@@ -3,12 +3,13 @@ $(document).ready(function()
 {
     $("#agregarTaxiToggle").click(function()
     {
-        $("#agregarTaxi").fadeToggle("slow");
+        $("#agregarTaxiToggle").remove();
+        $("#agregarTaxi").fadeIn("slow");
     });
 });
 
 //Funcion que gestiona los eventos de los botones de control
-function gestionar(nombreUsuario, operacion)
+function gestionar(RFC, operacion)
 {
     //Opacamos la ventana
     $("#container").fadeTo(0,0.5);
@@ -18,16 +19,16 @@ function gestionar(nombreUsuario, operacion)
     switch(operacion)
     {
         case 2:
-            textoConfirmacion = "¿Desea bloquear al usuario " + nombreUsuario + "?";
-            textoSalida = "El usuario " + nombreUsuario + " se bloqueó correctamente";
+            textoConfirmacion = "¿Desea bloquear al usuario " + RFC + "?";
+            textoSalida = "El usuario " + RFC + " se bloqueó correctamente";
             break;
         case 3:
-            textoConfirmacion = "¿Desea desbloquear al usuario " + nombreUsuario + "?";
-            textoSalida = "El usuario " + nombreUsuario + " se desbloqueó correctamente";
+            textoConfirmacion = "¿Desea desbloquear al usuario " + RFC + "?";
+            textoSalida = "El usuario " + RFC + " se desbloqueó correctamente";
             break;
         case 4:
-            textoConfirmacion = "¿Desea eliminar al usuario " + nombreUsuario + "?";
-            textoSalida = "El usuario " + nombreUsuario + " se eliminó correctamente";
+            textoConfirmacion = "¿Desea eliminar al usuario " + RFC + "?";
+            textoSalida = "El usuario " + RFC + " se eliminó correctamente";
             break;
     }
     
@@ -40,7 +41,7 @@ function gestionar(nombreUsuario, operacion)
         $.post("Usuario_Negocio",   //URL del servlet al que se llamara
                 {
                     q:operacion,    //Parametros a enviar
-                    nombreUsuario: nombreUsuario
+                    RFC: RFC
                 },
                 function(data)
                 {

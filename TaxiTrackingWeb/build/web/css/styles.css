@@ -1,7 +1,7 @@
 @import url('font-awesome.css');
 @import url('toggleMenu.css');
 /***************************************************
-			      Reset
+                        Reset
 ***************************************************/
 
 html, body, div, span, h1, h2, h3, h4, p, ul, li, form, label, legend, caption, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
@@ -23,7 +23,7 @@ a img {border:none;}
 aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display:block}
 
 /**************************************************
-			      Global Styles
+                    Global Styles
 ***************************************************/
 
 html, body {
@@ -88,7 +88,7 @@ h4 {
 }
 
 /***************************************************
-			    Main containers
+                Main containers
 ***************************************************/
 
 #container{
@@ -129,10 +129,10 @@ h4 {
 }
 
 .group_bannner_left {
-	width:380px;
+	width:450px;
 	position:absolute;
-	top:140px;
-	left:50px;
+	top:200px;
+	left:40px;
 	background:transparent;
 	margin-top:50px;
 }
@@ -145,7 +145,7 @@ header {
 }
 
 /***************************************************
-				       MENU
+                        MENU
 ***************************************************/
 
 nav {
@@ -191,7 +191,7 @@ nav ul li a.current {
 }
 
 /**************************************************
-				INTRO
+                        INTRO
 ***************************************************/
 
 #intro {
@@ -208,7 +208,7 @@ nav ul li a.current {
 }
 
 /***************************************************
-				   HOLDERS
+                        HOLDERS
 ***************************************************/
 
 .holder_content {
@@ -235,7 +235,7 @@ nav ul li a.current {
 }
 
 /***************************************************
-			        GALLERY
+                        GALLERY
 ***************************************************/
 
 a.photo_hover {
@@ -251,7 +251,7 @@ a.photo_hover {
 }
 
 /**************************************************
-			        FOOTER
+                        FOOTER
 ***************************************************/
 
 footer {
@@ -273,7 +273,7 @@ footer {
 #FooterRight {float:right;}
 
 /***************************************************
-				   SPECIFIC
+                    SPECIFIC
 ***************************************************/
 
 #logo {
@@ -305,8 +305,7 @@ footer {
 	border-radius:0.5em;
 }
 
-#login
-{
+#login {
 	text-align:center;
 	border-radius:0.5em;
 	padding:5px 0;
@@ -318,44 +317,29 @@ footer {
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
 }
 
-.form-field {text-align:center;}
-
-.form-field label
-{
-	display:inline-block;
-	font-style: italic;
-	width:90px;
-}
+.centrado {text-align:center;}
 
 .error {
-    color: #C85305;
-    text-align: center;
-    font-size: 90%;
-    display: none;
+    color:#C85305;
+    text-align:center;
+    font-size:90%;
+    display:none;
 }
 
-.gestion {
-    text-align: center;
-    margin-top: 10px;
-}
+.gestion {margin-top:10px;}
 
-.search {
-	float: right;
-}
+.search {float:right;}
 
-.agregar {
-	float: left;
-}
+.agregar {float:left;}
 
 div.contenedorTabla {
 	clear:both;
-	text-align:center;
-	padding-top: 10px;
+	padding-top:10px;
 }
 
 #tabla{
 	border-collapse:collapse;
-	margin: 0 auto;
+	margin:0 auto;
 }
 
 #tabla td, #tabla th {
@@ -372,13 +356,9 @@ div.contenedorTabla {
 	color:#ffffff;
 }
 
-#tabla th.ajustado {
-	width:200px;
-}
+#tabla th.ajustado {width:200px;}
 
-#tabla th.control {
-	width:110px;
-}
+#tabla th.control {width:110px;}
 
 #tabla tr.alt td {
 	color:#000000;
@@ -391,21 +371,33 @@ div.contenedorTabla {
 }
 
 .input-group {
-    /*position: relative;*/
     display: table;
-    border-collapse: separate;
+    margin: 0 auto 5px;
 }
 
-.input-group-addon {
+label.input-group-label {
     border-radius: 4px 0 0 4px;
-    border-right: 0;
     padding: 6px 12px;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1;
-    text-align: center;
     background-color: #eee;
     border: 1px solid #ccc;
     vertical-align: middle;
     display: table-cell;
 }
+
+.form-control {
+    border-radius: 0 4px 4px 0;
+    padding: 6px 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    vertical-align: middle;    
+    border-left: 0;
+    display: table-cell;
+    height:25px;
+    margin: 0;
+}
+
+.corto {width: 60px;}
+
+.mediano {width: 110px;}
+
+.largo {width: 250px;}

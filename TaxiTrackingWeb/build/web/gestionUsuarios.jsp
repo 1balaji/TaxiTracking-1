@@ -74,7 +74,7 @@
 
             <!--start holder-->
             <div class="holder_content">
-                <section class="gestion">
+                <section class="gestion centrado">
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
                             <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Nombre de usuario" />
@@ -83,7 +83,7 @@
                             </button>
                         </form>
                     </div>
-                    <div class="contenedorTabla">
+                    <div class="contenedorTabla centrado">
                         <i class="fa fa-refresh fa-spin fa-4x"></i>
                     </div>
                 </section>

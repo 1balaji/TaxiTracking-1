@@ -82,24 +82,47 @@
                     </div>
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Placas del taxi" />
-                            <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
+                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="RFC" />
+                            <button type="submit" id="BTBusquedaTaxi" name="BTBusquedaTaxi">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
                         </form>
                     </div>
-                    <div id="agregarTaxi" class="input-group">
+                    <div id="agregarTaxi" class="centrado">
                         <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=2" method="POST">
-                            <span class="input-group-addon"><label for="TBNombre">Nombre</label></span><input type="text" id="TBNombre" name="TBNombre" placeholder="Nombre" /><br/>
-                            <label for="TBApellidoPaterno">Apellido Paterno</label><input type="text" id="TBApellidoPaterno" name="TBApellidoPaterno" placeholder="Apellido Paterno" /><br/>
-                            <label for="TBApellidoMaterno">Apellido Materno</label><input type="text" id="TBApellidoMaterno" name="TBApellidoMaterno" placeholder="Apellido Materno" /><br/>
-                            <label for="TBRFC">RFC</label><input type="text" id="TBRFC" name="TBRFC" placeholder="RFC" /><br/>
-                            <label for="TBMatricula">Matricula</label><input type="text" id="TBMatricula" name="TBMatricula" placeholder="Matricula" /><br/>
-                            <label for="TBVigencia">Vigencia</label><input type="date" id="TBVigencia" name="TBVigencia" /><br/>
-                            <label for="TBFolio">Folio</label><input type="text" id="TBFolio" name="TBFolio" placeholder="Folio" /><br/>
-                            <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
-                                <i class="fa fa-plus-circle fa-fw"></i>Agregar
-                            </button>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBNombre">Nombre</label>
+                                <input type="text" id="TBNombre" name="TBNombre" class="form-control largo" placeholder="Nombre" required="required" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBApellidoPaterno">Apellido Paterno</label>
+                                <input type="text" id="TBApellidoPaterno" name="TBApellidoPaterno" class="form-control largo" placeholder="Apellido Paterno" required="required" />
+                            </div>  
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBApellidoMaterno">Apellido Materno</label>
+                                <input type="text" id="TBApellidoMaterno" name="TBApellidoMaterno" class="form-control largo" placeholder="Apellido Materno" required="required" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBRFC">RFC</label>
+                                <input type="text" id="TBRFC" name="TBRFC" class="form-control largo" placeholder="RFC" required="required" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBMatricula">Matricula</label>
+                                <input type="text" id="TBMatricula" name="TBMatricula" class="form-control largo" placeholder="Matricula" required="required" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBVigencia">Vigencia</label>
+                                <input type="date" id="TBVigencia" name="TBVigencia" class="form-control largo" required="required" />
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBFolio">Folio</label>
+                                <input type="text" id="TBFolio" name="TBFolio" class="form-control largo" placeholder="Folio" required="required" />
+                            </div>
+                            <div class="centrado">
+                                <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi" class="centrado">
+                                    <i class="fa fa-plus-circle fa-fw"></i>Agregar
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </section>

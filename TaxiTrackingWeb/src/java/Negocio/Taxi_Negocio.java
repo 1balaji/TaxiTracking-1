@@ -60,14 +60,26 @@ public class Taxi_Negocio extends HttpServlet
                 break;
             case 2: //Agregar taxi
                 respuesta = agregarTaxi(request);
-                out.close();
                 break;
             case 3:
+                out.close();
                 generarCodigoQR(largoQR, altoQR, request, response);
                 break;
             default:
                 response.sendRedirect("index.jsp");
         }
+    }
+    
+    private Taxi buscarTaxi(HttpServletRequest request)
+    {
+        String RFC = request.getParameter("TBRFC");
+        objTaxi = new Taxi(RFC);
+        taxiDAO = new TaxiDAO();
+        
+        //Hacemos la consulta a la BD
+        objTaxi = taxiDAO.buscarTaxi(objTaxi);
+        
+        return objTaxi;
     }
     
     private boolean agregarTaxi(HttpServletRequest request)

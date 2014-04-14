@@ -1,9 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Beans.Usuario;"%>
+<%@page import="Beans.Taxi;"%>
 <%
     String usuario = null;
     int rol = -1;
-    Usuario objUsuario = new Usuario();
+    Taxi objTaxi = new Taxi();
     
     //Checamos que exista la sesion
     if(session != null && session.getAttribute("rol") != null)
@@ -15,12 +15,12 @@
 
         usuario = (String)session.getAttribute("nombre_usuario");
         
-        if(session.getAttribute("objUsuario") != null)
+        if(session.getAttribute("objTaxi") != null)
         {
-            objUsuario = new Usuario();
-            objUsuario = (Usuario)session.getAttribute("objUsuario");
+            objTaxi = (Taxi)session.getAttribute("objTaxi");
+            
             //Quitamos el usuario de la sesion
-            session.removeAttribute("objUsuario");
+            session.removeAttribute("objTaxi");
         }
         else
             response.sendRedirect("bienvenidoAdministrador.jsp");
@@ -33,7 +33,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Gesti&oacute;n de Usuarios</title>
+        <title>Taxi Tracking - Gesti&oacute;n de Taxis</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -58,8 +58,8 @@
                 <nav>
                     <ul>
                         <li><a href="bienvenidoAdministrador.jsp">Inicio</a></li>
-                        <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
-                        <li><a href="gestionUsuarios.jsp" class="current">Gesti&oacute;n de Usuarios</a></li>
+                        <li><a href="gestionTaxis.jsp" class="current">Gesti&oacute;n de Taxis</a></li>
+                        <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
@@ -80,7 +80,7 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <h1>B&uacute;squeda de Usuario</h1>
+                <h1>B&uacute;squeda de Taxi</h1>
             </section>
             <!--end intro-->
 
@@ -88,14 +88,14 @@
             <div class="holder_content">
                 <section class="gestion">
                     <div class="search">
-                        <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
+                        <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
                             <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
                             <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
                         </form>
                     </div>
-                    <div class="contenedorTabla">
+                    <div class="contenedorTabla centrado">
                         <table id="tabla">
                             <tr>
                                 <th>Usuario</th>
@@ -104,27 +104,27 @@
                                 <th colspan="2">Control</th>
                             </tr>
                             <tr>
-                                <%if(objUsuario.getNombreUsuario().compareTo("") == 0)
+                                <%if(objTaxi.getRFC().compareTo("") == 0)
                                 {%>
                                     <td colspan=4>No hay resultados</td>
                                <%}
                                else
                                 {%>
-                                    <td><%=objUsuario.getNombreUsuario()%></td>
-                                    <td><%=objUsuario.getNombre()%> <%=objUsuario.getApellidoPaterno()%> <%=objUsuario.getApellidoMaterno()%></td>
-                                    <td><%=objUsuario.getEmail()%></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
-                                        <%if(objUsuario.getStatus() == 0)   //Si esta bloqueado
+                                        <%if(objTaxi.getStatus() == 0)   //Si esta bloqueado
                                         {
-                                            out.println("<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
+                                            out.println("<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objTaxi.getRFC()+ "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
                                         }
                                         else
                                         {
-                                            out.println("<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
+                                            out.println("<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objTaxi.getRFC() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
                                         }%>
                                     </td>
                                     <td>
-                                        <button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick="gestionar('<%=objUsuario.getNombreUsuario()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                        <button id='BTEliminarTaxi' name='BTEliminarUsuario' onClick="gestionar('<%=objTaxi.getRFC()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
                                     </td>
                                 <%}%>
                             </tr>

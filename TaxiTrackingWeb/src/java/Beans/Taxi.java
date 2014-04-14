@@ -12,6 +12,7 @@ public class Taxi
     int matricula;
     Date vigencia;
     int folio;
+    int status;
     
     public Taxi()
     {
@@ -23,11 +24,12 @@ public class Taxi
         matricula = 0;
         vigencia = null;
         folio = 0;
+        status = 0;
     }
     
-    public Taxi(int matricula)
+    public Taxi(String rfc)
     {
-        this.matricula = matricula;
+        this.rfc = rfc;
     }
     
     public void setNombre(String nombre)
@@ -98,5 +100,15 @@ public class Taxi
     public int getFolio()
     {
         return folio;
+    }
+    
+    public void setStatus(int status)
+    {
+        this.status = status;
+    }
+    
+    public int getStatus()
+    {
+        return status;
     }
 }

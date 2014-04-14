@@ -1,5 +1,4 @@
 <%
-    String usuario = null;
     int rol = -1;
     
     //Checamos si existe una sesion
@@ -125,21 +124,21 @@
                     <p id="login">Login</p>
                     <form action="<%=request.getContextPath()%>/ManejoSesion?q=1" method="post">
                         <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
-                        <div class="form-field">
-                            <span><i class="fa fa-user fa-fw"></i></span>
-                            <input type="text" name="TBUsuario" id="TBUsuario" placeholder="Usuario" />
+                        <div class="input-group">
+                                <label class="input-group-label" for="TBUsuario"><i class="fa fa-user fa-fw"></i></label>
+                                <input type="text" name="TBUsuario" id="TBUsuario" class="form-control" placeholder="Usuario" required="required" />
                         </div>
                         <div id="downError" class="error"></div>
-                        <div class="form-field">
-                            <span><i class="fa fa-key fa-fw"></i></span>
-                            <input type="password" name="TBContrasena" id="TBContrasena" placeholder="Contrase&ntilde;a"/>
+                        <div class="input-group">
+                            <label class="input-group-label" for="TBContrasena"><i class="fa fa-key fa-fw"></i></label>
+                            <input type="password" name="TBContrasena" id="TBContrasena" class="form-control" placeholder="Contrase&ntilde;a" required="required"/>
                         </div>
-                        <div class="form-field">
+                        <div class="centrado">
                             <button type="submit" name="BTEnviar" id="BTEnviar">
                                 <i class="fa fa-sign-in fa-fw"></i>Acceder
                             </button>
                         </div>
-                        <div class="form-field">
+                        <div class="centrado">
                             <a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a>
                         </div>
                     </form>

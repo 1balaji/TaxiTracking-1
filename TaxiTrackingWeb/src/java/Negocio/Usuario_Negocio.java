@@ -48,8 +48,8 @@ public class Usuario_Negocio extends HttpServlet
             case 1: //Buscar usuario
                 objUsuario = buscarUsuario(request);
                 session.setAttribute("objUsuario", objUsuario);
+                response.sendRedirect("busquedaUsuario.jsp");
                 out.close();
-                response.sendRedirect("busqueda.jsp");
                 break;
             case 2: //Bloquear usuario
                 respuesta = bloquearUsuario(request);
