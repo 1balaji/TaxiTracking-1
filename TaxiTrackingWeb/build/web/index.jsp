@@ -123,12 +123,11 @@
                 <aside class="group2">
                     <p id="login">Login</p>
                     <form action="<%=request.getContextPath()%>/ManejoSesion?q=1" method="post">
-                        <div id="upError" class="error" <%if(request.getParameter("error")!=null){out.print("style='display:block;'");}%>></div>
+                        <%if(request.getParameter("error")!=null){out.print("<div id='error' class='error centrado'>Error al iniciar sesi&oacute;n</div>");}%>
                         <div class="input-group">
                                 <label class="input-group-label" for="TBUsuario"><i class="fa fa-user fa-fw"></i></label>
                                 <input type="text" name="TBUsuario" id="TBUsuario" class="form-control" placeholder="Usuario" required="required" />
                         </div>
-                        <div id="downError" class="error"></div>
                         <div class="input-group">
                             <label class="input-group-label" for="TBContrasena"><i class="fa fa-key fa-fw"></i></label>
                             <input type="password" name="TBContrasena" id="TBContrasena" class="form-control" placeholder="Contrase&ntilde;a" required="required"/>

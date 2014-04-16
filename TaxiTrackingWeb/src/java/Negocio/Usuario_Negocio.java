@@ -19,7 +19,7 @@ public class Usuario_Negocio extends HttpServlet
     //Variable para la conexion con la BD
     private UsuarioDAO usuarioDAO;
     
-    //Salida
+    //Salida html
     PrintWriter out;
     
     //Sesion
@@ -27,6 +27,9 @@ public class Usuario_Negocio extends HttpServlet
     
     //Respuesta
     boolean respuesta;
+    
+    //Nos dice que metodo hay que invocar
+    int query;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
@@ -37,11 +40,15 @@ public class Usuario_Negocio extends HttpServlet
         if(session == null)
             response.sendRedirect("index.jsp");
         
+        //Para que el usuario normal no pueda llamar el servlet
+        else if((Integer)session.getAttribute("rol") != 1)
+            response.sendRedirect("index.jsp");
+        
         response.setContentType("text/html;charset=UTF-8");
         out = response.getWriter();
         
-        //Nos dice que metodo hay que invocar
-        int query = Integer.parseInt(request.getParameter("q"));
+        try {query = Integer.parseInt(request.getParameter("q"));}
+        catch (NumberFormatException e) {query = -1;}
         
         switch(query)
         {
@@ -49,7 +56,6 @@ public class Usuario_Negocio extends HttpServlet
                 objUsuario = buscarUsuario(request);
                 session.setAttribute("objUsuario", objUsuario);
                 response.sendRedirect("busquedaUsuario.jsp");
-                out.close();
                 break;
             case 2: //Bloquear usuario
                 respuesta = bloquearUsuario(request);
@@ -125,7 +131,7 @@ public class Usuario_Negocio extends HttpServlet
                 out.println("</table>");
                 break;
             default:
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("bienvenidoAdministrador.jsp");
         }
         out.close();
     }

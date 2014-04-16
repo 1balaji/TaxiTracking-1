@@ -2,13 +2,14 @@ package Negocio;
 
 import Beans.Taxi;
 import ConexionSQL.TaxiDAO;
+import Serializacion.Serializacion;
+import Validacion.Validacion;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.sql.Date;
 import javax.imageio.ImageIO;
 import javax.media.jai.operator.AWTImageDescriptor;
 import javax.servlet.ServletException;
@@ -26,14 +27,20 @@ public class Taxi_Negocio extends HttpServlet
     //Variable para la conexion con la BD
     private TaxiDAO taxiDAO;
     
-    //Salida
+    //Salida html
     PrintWriter out;
+    
+    //Salida png
+    OutputStream outQR;
     
     //Sesion
     HttpSession session = null;
     
     //Respuesta
     boolean respuesta;
+    
+    //Nos dice que metodo hay que invocar
+    int query;
     
     //Medidas del codigoQR
     int largoQR = 300;
@@ -48,32 +55,204 @@ public class Taxi_Negocio extends HttpServlet
         if(session == null)
             response.sendRedirect("index.jsp");
         
-        response.setContentType("text/html;charset=UTF-8");
-        out = response.getWriter();
+        //Para que el usuario normal no pueda llamar el servlet
+        else if((Integer)session.getAttribute("rol") != 1)
+            response.sendRedirect("index.jsp");
         
-        //Nos dice que metodo hay que invocar
-        int query = Integer.parseInt(request.getParameter("q"));
+        try {query = Integer.parseInt(request.getParameter("q"));}
+        catch (NumberFormatException e) {query = -1;}
+        
+        if(query == 3)
+        {
+            outQR = response.getOutputStream();
+            response.setContentType("image/png");
+        }
+        else
+        {
+            out = response.getWriter();
+            response.setContentType("text/html;charset=UTF-8");
+        }
         
         switch(query)
         {
             case 1: //Buscar taxi
+                objTaxi = buscarTaxi(request);
+                session.setAttribute("objTaxi", objTaxi);
+                response.sendRedirect("busquedaTaxi.jsp");
                 break;
             case 2: //Agregar taxi
                 respuesta = agregarTaxi(request);
+                
+                //Si el registro fue correcto
+                if(respuesta)
+                {
+                    session.setAttribute("objTaxi", objTaxi);
+                    response.sendRedirect("busquedaTaxista.jsp");
+                }
+                else
+                    response.sendRedirect("gestionTaxis.jsp");
                 break;
-            case 3:
-                out.close();
-                generarCodigoQR(largoQR, altoQR, request, response);
+            case 3: //Generar QR                
+                Image imagenQR = generarCodigoQR(largoQR, altoQR, request);
+            
+                //Pintamos el QR
+                ImageIO.write(AWTImageDescriptor.create(imagenQR, null), "png", outQR);                
                 break;
             default:
                 response.sendRedirect("index.jsp");
         }
+        if(query == 3)
+            outQR.close();
+        else
+            out.close();
+    }
+    
+    private boolean agregarTaxi(HttpServletRequest request)
+    {
+        //Variable de respuesta
+        boolean b = true;
+        
+        //Obtenemos los datos del formulario
+        String idTaxista = request.getParameter("TBIdTaxista").trim();
+        
+        //Validamos cada entrada con una expresion regular
+        if(!Validacion.esAlfanumerico(idTaxista))
+        {
+            //En caso de que no sea valida la entrada, subimos a sesion un mensaje indicando el error
+            session.setAttribute("errorIdTaxista", "Error la clave de operador es incorrecta");
+            b = false;
+        }
+        
+        String nombre = request.getParameter("TBNombre").trim();
+        if(!Validacion.esCadena(nombre))
+        {
+            session.setAttribute("errorNombre", "Error el nombre es incorrecto");
+            b = false;
+        }
+        
+        String apellido_paterno = request.getParameter("TBApellidoPaterno").trim();
+        if(!Validacion.esCadena(apellido_paterno))
+        {
+            session.setAttribute("errorApellidoPaterno", "Error el apellido paterno es incorrecto");
+            b = false;
+        }
+        
+        String apellido_materno = request.getParameter("TBApellidoMaterno").trim();
+        if(!Validacion.esCadena(apellido_materno))
+        {
+            session.setAttribute("errorApellidoMaterno", "Error el apellido materno es incorrecto");
+            b = false;
+        }
+        
+        String curp = request.getParameter("TBCURP").trim();
+        if(!Validacion.esCURP(curp))
+        {
+            session.setAttribute("errorCurp", "Error el curp es incorrecto");
+            b = false;
+        }
+        
+        String matricula = request.getParameter("TBMatricula").trim();
+        if(!Validacion.esMatricula(matricula))
+        {
+            session.setAttribute("errorMatricula", "Error la matricula es incorrecta");
+            b = false;
+        }
+        
+        int folio = 0;
+        try {folio = Integer.parseInt(request.getParameter("TBFolio").trim());}
+        catch(NumberFormatException e)
+        {
+            session.setAttribute("errorFolio", "Error el folio es incorrecto");
+            b = false;
+        }
+        
+        int numeroLicencia = 0;
+        try {numeroLicencia = Integer.parseInt(request.getParameter("TBNumeroLicencia").trim());}
+        catch(NumberFormatException e)
+        {
+            session.setAttribute("errorNumeroLicencia", "Error el numero de licencia es incorrecto");
+            b = false;
+        }
+        
+        String vigencia = request.getParameter("TBVigencia").trim();
+        if(!Validacion.esFecha(vigencia))
+        {
+            session.setAttribute("errorVigencia", "Error la vigencia es incorrecta");
+            b = false;
+        }
+        
+        String fechaExpedicion = request.getParameter("TBFechaExpedicion").trim();
+        if(!Validacion.esFecha(fechaExpedicion))
+        {
+            session.setAttribute("errorFechaExpedicion", "Error la fecha de expedición es incorrecta");
+            b = false;
+        }
+        
+        String horaExpedicion = request.getParameter("TBHoraExpedicion").trim();
+        if(!Validacion.esHora(horaExpedicion))
+        {
+            session.setAttribute("errorHoraExpedicion", "Error la hora de expedición es incorrecta");
+            b = false;
+        }
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            taxiDAO = new TaxiDAO();
+            
+            //Llenamos el objeto solo con los datos que no se deben duplicar
+            objTaxi = new Taxi();
+            objTaxi.setIdTaxista(idTaxista);
+            objTaxi.setCURP(curp);
+            objTaxi.setFolio(folio);
+            objTaxi.setNumeroLicencia(numeroLicencia);
+            
+            //Buscamos el taxi para ver si ya esta registrado algun dato
+            objTaxi = taxiDAO.buscarTaxi(objTaxi);
+
+            //No hay datos repetidos
+            if(objTaxi == null)
+            {
+                //Llenamos el objeto con todos los datos
+                objTaxi = new Taxi();
+                objTaxi.setIdTaxista(idTaxista);
+                objTaxi.setNombre(nombre);
+                objTaxi.setApellidoPaterno(apellido_paterno);
+                objTaxi.setApellidoMaterno(apellido_materno);
+                objTaxi.setCURP(curp);
+                objTaxi.setMatricula(matricula);
+                objTaxi.setFolio(folio);
+                objTaxi.setNumeroLicencia(numeroLicencia);
+                objTaxi.setVigencia(vigencia);
+                objTaxi.setFechaHoraExpedicion(fechaExpedicion + " " + horaExpedicion);
+                objTaxi.setStatus(1);
+                
+                //Hacemos la consulta a la BD
+                b = taxiDAO.agregarTaxi(objTaxi);
+            }
+            //Hay datos repetidos
+            else
+            {
+                //Verificamos que dato esta repetido y subimos el error a sesion
+                if(objTaxi.getIdTaxista().equals(idTaxista))
+                    session.setAttribute("errorIdTaxista", "Error la clave de operador ya esta registrada");
+                if(objTaxi.getCURP().equals(curp))
+                    session.setAttribute("errorCurp", "Error el CURP ya esta registrado");
+                if(objTaxi.getFolio() == folio)
+                    session.setAttribute("errorFolio", "Error el folio ya esta registrado");
+                if(objTaxi.getNumeroLicencia() == numeroLicencia)
+                    session.setAttribute("errorNumeroLicencia", "Error el numero de licencia ya esta registrado");
+                
+                b = false;
+            }
+        }
+        return b;
     }
     
     private Taxi buscarTaxi(HttpServletRequest request)
     {
-        String RFC = request.getParameter("TBRFC");
-        objTaxi = new Taxi(RFC);
+        String idTaxista = request.getParameter("TBIdTaxista");
+        objTaxi = new Taxi(idTaxista);
         taxiDAO = new TaxiDAO();
         
         //Hacemos la consulta a la BD
@@ -82,71 +261,19 @@ public class Taxi_Negocio extends HttpServlet
         return objTaxi;
     }
     
-    private boolean agregarTaxi(HttpServletRequest request)
+    private Image generarCodigoQR(int largo, int alto, HttpServletRequest request)
     {
-        //Variable de respuesta
-        boolean b;
+        String idTaxista = request.getParameter("idTaxista");
+        objTaxi = new Taxi(idTaxista);
+        String datos = Serializacion.serialize(objTaxi);
         
-        //Obtenemos los datos del formulario
-        String nombre = request.getParameter("TBNombre");
-        String apellido_paterno = request.getParameter("TBApellidoPaterno");
-        String apellido_materno = request.getParameter("TBApellidoMaterno");
-        String rfc = request.getParameter("TBRFC");
-        int matricula = Integer.parseInt(request.getParameter("TBMatricula"));
+        //Creamos el QR
+        BarcodeQRCode codigoQR = new BarcodeQRCode(datos, largo, alto, null);
         
-        //Obtenemos la fecha en formato yyyy-mm-dd y la spliteamos
-        String date[] = request.getParameter("TBVigencia").split("-");
-        
-        //Creamos un objeto tipo date especial de sql
-        Date vigencia = new Date(Integer.parseInt(date[0]),Integer.parseInt(date[1]), Integer.parseInt(date[2]));
-        
-        int folio = Integer.parseInt(request.getParameter("TBFolio"));
-        
-        //Llenamos el objeto con los datos
-        objTaxi = new Taxi();
-        objTaxi.setNombre(nombre);
-        objTaxi.setApellidoPaterno(apellido_paterno);
-        objTaxi.setApellidoMaterno(apellido_materno);
-        objTaxi.setRFC(rfc);
-        objTaxi.setMatricula(matricula);
-        objTaxi.setVigencia(vigencia);
-        objTaxi.setFolio(folio);
-        
-        taxiDAO = new TaxiDAO();
-        
-        //Hacemos la consulta a la BD
-        b = taxiDAO.agregarTaxi(objTaxi);
-        
-        return b;
+        //Creamos una imagen tipo awt con el color de las barras en negro y el fondo blanco
+        return codigoQR.createAwtImage(Color.BLACK, Color.WHITE);
     }
     
-    private void generarCodigoQR(int largo, int alto, HttpServletRequest request, HttpServletResponse response)
-    {
-        //Objeto para imprimir la salida
-        OutputStream outQR;
-        
-        int idTaxista = Integer.parseInt(request.getParameter("idTaxista"));
-        
-        try
-        {
-            //Creamos el QR
-            BarcodeQRCode codigoQR = new BarcodeQRCode(Integer.toString(idTaxista), largo, alto, null);
-            
-            //Obtenemos y configuramos la salida
-            outQR = response.getOutputStream();
-            response.setContentType("image/png");
-            
-            //Creamos una imagen tipo awt
-            Image imagenQR = codigoQR.createAwtImage(Color.BLACK, Color.WHITE);
-            
-            //Imprimimos la salida
-            ImageIO.write(AWTImageDescriptor.create(imagenQR, null), "png", outQR);
-            
-            outQR.close();
-        }
-        catch (IOException e){ System.out.println("Error al generar el codigo QR D:\n" + e);}
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

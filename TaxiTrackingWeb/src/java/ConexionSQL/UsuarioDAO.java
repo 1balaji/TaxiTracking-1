@@ -187,7 +187,7 @@ public class UsuarioDAO
     */
     public Usuario buscarUsuario(Usuario objUsuario) 
     {        
-        consulta = "Select nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status from usuario where nombre_usuario = ? ";
+        consulta = "SELECT nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status FROM usuario WHERE nombre_usuario = ? ";
 
         try
         {
@@ -202,10 +202,10 @@ public class UsuarioDAO
             if (rs.next())
             {
                 objUsuario.setNombreUsuario(rs.getString("nombre_usuario"));
-                objUsuario.setNombre(rs.getString("Nombre"));
+                objUsuario.setNombre(rs.getString("nombre"));
                 objUsuario.setEmail(rs.getString("email"));
-                objUsuario.setApellidoPaterno(rs.getString("Apellido_Paterno"));
-                objUsuario.setApellidoMaterno(rs.getString("Apellido_Materno"));
+                objUsuario.setApellidoPaterno(rs.getString("apellido_paterno"));
+                objUsuario.setApellidoMaterno(rs.getString("apellido_materno"));
                 objUsuario.setStatus(rs.getInt("status"));
             }
             pst.close();            

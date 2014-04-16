@@ -2,8 +2,8 @@ package Beans;
 
 public class Peticion 
 {
-    int tipo;
-    String comentario;
+    private int tipo;
+    private String comentario;
     
     public Peticion()
     {

@@ -7,7 +7,7 @@ package Beans;
 public class Respuesta 
 {
     //Vale 1 si es valido y 0 si no es valido
-    String logstatus;
+    private String logstatus;
     
     /**
      *

@@ -1,35 +1,49 @@
 package Beans;
 
-import java.sql.Date;
+import java.io.Serializable;
 
-public class Taxi 
+public class Taxi implements Serializable
 {
-    int idTaxista;
-    String nombre;
-    String apellido_paterno;
-    String apellido_materno;
-    String rfc;
-    int matricula;
-    Date vigencia;
-    int folio;
-    int status;
+    private String idTaxista;
+    transient private String nombre;
+    transient private String apellido_paterno;
+    transient private String apellido_materno;
+    transient private String curp;
+    transient private String matricula;
+    transient private int folio;
+    transient private int numeroLicencia;
+    transient private String vigencia;
+    transient private String fechaHoraExpedicion;
+    transient private int status;
     
     public Taxi()
     {
-        idTaxista = 0;
+        idTaxista = "";
         nombre = "";
         apellido_paterno = "";
         apellido_materno = "";
-        rfc = "";
-        matricula = 0;
-        vigencia = null;
+        curp = "";
+        matricula = "";
         folio = 0;
+        numeroLicencia = 0;
+        vigencia = null;
+        fechaHoraExpedicion = null;
         status = 0;
     }
     
-    public Taxi(String rfc)
+    public Taxi(String idTaxista)
     {
-        this.rfc = rfc;
+        this.idTaxista = idTaxista;
+    }
+    
+    public void setIdTaxista(String idTaxista)
+    {
+        this.idTaxista = idTaxista;
+    }
+    
+    public String getIdTaxista()
+    {
+        return idTaxista;
     }
     
     public void setNombre(String nombre)
@@ -62,34 +76,24 @@ public class Taxi
         return apellido_materno;
     }
 
-    public void setRFC(String rfc)
+    public void setCURP(String curp)
     {
-        this.rfc = rfc;
+        this.curp = curp;
     }
     
-    public String getRFC()
+    public String getCURP()
     {
-        return rfc;
+        return curp;
     }
     
-    public void setMatricula(int matricula)
+    public void setMatricula(String matricula)
     {
         this.matricula = matricula;
     }
     
-    public int getMatricula()
+    public String getMatricula()
     {
         return matricula;
-    }
-
-    public void setVigencia(Date vigencia)
-    {
-        this.vigencia = vigencia;
-    }
-    
-    public Date getVigencia()
-    {
-        return vigencia;
     }
 
     public void setFolio(int folio)
@@ -100,6 +104,36 @@ public class Taxi
     public int getFolio()
     {
         return folio;
+    }
+    
+    public void setNumeroLicencia(int numeroLicencia)
+    {
+        this.numeroLicencia = numeroLicencia;
+    }
+    
+    public int getNumeroLicencia()
+    {
+        return numeroLicencia;
+    }
+    
+    public void setVigencia(String vigencia)
+    {
+        this.vigencia = vigencia;
+    }
+    
+    public String getVigencia()
+    {
+        return vigencia;
+    }
+
+    public void setFechaHoraExpedicion(String fechaExpedicion)
+    {
+        this.fechaHoraExpedicion = fechaExpedicion;
+    }
+    
+    public String getFechaHoraExpedicion()
+    {
+        return fechaHoraExpedicion;
     }
     
     public void setStatus(int status)

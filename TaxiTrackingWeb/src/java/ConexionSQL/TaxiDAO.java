@@ -32,19 +32,24 @@ public class TaxiDAO
     public boolean agregarTaxi(Taxi objTaxi) 
     {
         boolean b = false;
-        consulta = "INSERT INTO taxista VALUES (null, ?, ?, ?, ?, ?, ?, ?)";
+        consulta = "INSERT INTO taxista VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try
         {
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
-            pst.setString(1, objTaxi.getNombre());
-            pst.setString(2, objTaxi.getApellidoPaterno());
-            pst.setString(3, objTaxi.getApellidoMaterno());
-            pst.setString(4, objTaxi.getRFC());
-            pst.setInt(5, objTaxi.getMatricula());
-            pst.setDate(6, objTaxi.getVigencia());
+            pst.setString(1, objTaxi.getIdTaxista());
+            pst.setString(2, objTaxi.getNombre());
+            pst.setString(3, objTaxi.getApellidoPaterno());
+            pst.setString(4, objTaxi.getApellidoMaterno());
+            pst.setString(5, objTaxi.getCURP());
+            pst.setString(6, objTaxi.getMatricula());
             pst.setInt(7, objTaxi.getFolio());
+            pst.setInt(8, objTaxi.getNumeroLicencia());            
+            pst.setString(9, objTaxi.getVigencia());
+            pst.setString(10, objTaxi.getFechaHoraExpedicion());
+            pst.setInt(11, objTaxi.getStatus());
+            
             pst.execute();
             pst.close();
             
@@ -56,39 +61,47 @@ public class TaxiDAO
     }
     
     /*
-    * Metodo para buscar un usuario. 
-    * Recibe un objeto usuario con el nombre del usuario que se va a buscar
-    * Retorna un objeto usuario lleno con los datos correspondientes o vacio en caso de no haber coincidencias
+    * Metodo para buscar un taxista. 
+    * Recibe un objeto taxi con el id del taxi, curp, folio o numero de licencia que se va a buscar
+    * Retorna un objeto taxi lleno con los datos correspondientes o null en caso de no haber coincidencias
     */
-    public Taxi buscarTaxi(Taxi objTaxi) 
-    {        
-        consulta = "Select nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status from usuario where nombre_usuario = ? ";
+    public Taxi buscarTaxi(Taxi objTaxi)
+    {
+        consulta = "SELECT * FROM taxista where idTaxista = ? OR curp = ? OR folio = ? OR numeroLicencia = ?";
 
         try
         {
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
-            pst.setString(1, objTaxi.getNombreUsuario());
+            pst.setString(1, objTaxi.getIdTaxista());
+            pst.setString(2, objTaxi.getCURP());
+            pst.setInt(3, objTaxi.getFolio());
+            pst.setInt(4, objTaxi.getNumeroLicencia());
             rs = pst.executeQuery();
             
             //Reiniciamos el objeto
-            objTaxi = new Taxi();
+            objTaxi = null;
                     
             if (rs.next())
             {
-                objTaxi.setNombreUsuario(rs.getString("nombre_usuario"));
-                objTaxi.setNombre(rs.getString("Nombre"));
-                objTaxi.setEmail(rs.getString("email"));
-                objTaxi.setApellidoPaterno(rs.getString("Apellido_Paterno"));
-                objTaxi.setApellidoMaterno(rs.getString("Apellido_Materno"));
+                objTaxi = new Taxi();
+                objTaxi.setIdTaxista(rs.getString("idTaxista"));
+                objTaxi.setNombre(rs.getString("nombre"));
+                objTaxi.setApellidoPaterno(rs.getString("apellido_paterno"));
+                objTaxi.setApellidoMaterno(rs.getString("apellido_materno"));
+                objTaxi.setCURP(rs.getString("curp"));
+                objTaxi.setMatricula(rs.getString("matricula"));
+                objTaxi.setFolio(rs.getInt("folio"));
+                objTaxi.setNumeroLicencia(rs.getInt("numeroLicencia"));
+                objTaxi.setVigencia(rs.getString("vigencia"));
+                objTaxi.setFechaHoraExpedicion(rs.getString("fechaHoraExpedicion"));
                 objTaxi.setStatus(rs.getInt("status"));
             }
             pst.close();            
         }
-        catch (SQLException e) { System.out.println("Error al buscar un usuario D:\n" + e); }
+        catch (SQLException e) { System.out.println("Error al buscar un taxista D:\n" + e); }
         finally { Conexion.closeConexion(); }
         
         return objTaxi;
     }
-
 }

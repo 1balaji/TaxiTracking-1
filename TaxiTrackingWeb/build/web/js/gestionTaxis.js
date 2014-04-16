@@ -6,6 +6,11 @@ $(document).ready(function()
         $("#agregarTaxiToggle").remove();
         $("#agregarTaxi").fadeIn("slow");
     });
+    if($(".error").length > 0)
+    {
+        $("#agregarTaxiToggle").remove();
+        $("#agregarTaxi").fadeIn("slow");
+    }
 });
 
 //Funcion que gestiona los eventos de los botones de control

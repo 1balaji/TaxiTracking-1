@@ -89,8 +89,8 @@
                 <section class="gestion">
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
-                            <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
+                            <input type="text" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
+                            <button type="submit" id="BTBusquedaTaxista" name="BTBusquedaTaxista">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
                         </form>
@@ -98,33 +98,48 @@
                     <div class="contenedorTabla centrado">
                         <table id="tabla">
                             <tr>
-                                <th>Usuario</th>
-                                <th class="ajustado">Nombre</th>
-                                <th class="ajustado">Correo Electr&oacute;nico</th>
-                                <th colspan="2">Control</th>
+                                <th>Clave Operador</th>
+                                <th>Nombre</th>
+                                <th>CURP</th>
+                                <th>Matr&iacute;cula</th>
+                                <th>Folio</th>
+                                <th>No. Licencia</th>
+                                <th>Vigencia</th>
+                                <th>Fecha Expedici&oacute;n</th>
+                                <th colspan="3">Control</th>
                             </tr>
                             <tr>
-                                <%if(objTaxi.getRFC().compareTo("") == 0)
+                                <%if(objTaxi.getIdTaxista().compareTo("") == 0)
                                 {%>
                                     <td colspan=4>No hay resultados</td>
                                <%}
                                else
                                 {%>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><%=objTaxi.getIdTaxista()%></td>
+                                    <td><%=objTaxi.getNombre()%> <%=objTaxi.getApellidoPaterno()%> <%=objTaxi.getApellidoMaterno()%></td>
+                                    <td><%=objTaxi.getCURP()%></td>
+                                    <td><%=objTaxi.getMatricula()%></td>
+                                    <td><%=objTaxi.getFolio()%></td>
+                                    <td><%=objTaxi.getNumeroLicencia()%></td>
+                                    <td><%=objTaxi.getVigencia()%></td>
+                                    <td><%=objTaxi.getFechaHoraExpedicion()%></td>
                                     <td>
                                         <%if(objTaxi.getStatus() == 0)   //Si esta bloqueado
                                         {
-                                            out.println("<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objTaxi.getRFC()+ "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
+                                            out.println("<button id='BTDesbloquearTaxista' name='BTDesbloquearTaxista' onClick='gestionar(\"" + objTaxi.getIdTaxista()+ "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
                                         }
                                         else
                                         {
-                                            out.println("<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objTaxi.getRFC() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
+                                            out.println("<button id='BTBloquearTaxista' name='BTBloquearTaxista' onClick='gestionar(\"" + objTaxi.getIdTaxista()+ "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
                                         }%>
                                     </td>
                                     <td>
-                                        <button id='BTEliminarTaxi' name='BTEliminarUsuario' onClick="gestionar('<%=objTaxi.getRFC()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                        <button id='BTEliminarTaxi' name='BTEliminarUsuario' onClick="gestionar('<%=objTaxi.getIdTaxista()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                    </td>
+                                    <td>
+                                        <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=3&amp;idTaxista=<%=objTaxi.getIdTaxista()%>" method="POST" target="_blank">
+                                            <button id='BTGenerarQR' name='BTGenerarQR' type="submit"><i class="fa fa-qrcode fa-fw"></i>Generar QR</button>
+                                        </form>
                                     </td>
                                 <%}%>
                             </tr>

@@ -2,13 +2,13 @@ package Beans;
 
 public class Usuario 
 {
-    String nombre;
-    String apellido_paterno;
-    String apellido_materno;
-    String email;
-    String nombre_usuario;
-    int status;
-    Peticion peticion;
+    private String nombre;
+    private String apellido_paterno;
+    private String apellido_materno;
+    private String email;
+    private String nombre_usuario;
+    private int status;
+    private Peticion peticion;
     
     public Usuario()
     {
