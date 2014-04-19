@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import javax.imageio.ImageIO;
 import javax.media.jai.operator.AWTImageDescriptor;
 import javax.servlet.ServletException;
@@ -21,32 +22,32 @@ import javax.servlet.http.HttpSession;
 public class Taxi_Negocio extends HttpServlet 
 {
     //Beans
-    Taxi objTaxi;
-    Taxi objTaxis[];
+    private Taxi objTaxi;
+    private Taxi objTaxis[];
     
     //Variable para la conexion con la BD
     private TaxiDAO taxiDAO;
     
     //Salida html
-    PrintWriter out;
+    private PrintWriter out;
     
     //Salida png
-    OutputStream outQR;
+    private OutputStream outQR;
     
     //Sesion
-    HttpSession session = null;
+    private HttpSession session = null;
     
     //Respuesta
-    boolean respuesta;
+    private boolean respuesta;
     
     //Nos dice que metodo hay que invocar
-    int query;
+    private int query;
     
     //Medidas del codigoQR
-    int largoQR = 300;
-    int altoQR = 300;
+    private final int largoQR = 300;
+    private final int altoQR = 300;
     
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
         session = request.getSession(false);
@@ -77,8 +78,12 @@ public class Taxi_Negocio extends HttpServlet
         {
             case 1: //Buscar taxi
                 objTaxi = buscarTaxi(request);
+                
+                //Si no hubo resultados mandamos el objeto vacio
+                if(objTaxi == null)
+                    objTaxi = new Taxi();
                 session.setAttribute("objTaxi", objTaxi);
-                response.sendRedirect("busquedaTaxi.jsp");
+                response.sendRedirect("busquedaTaxista.jsp");
                 break;
             case 2: //Agregar taxi
                 respuesta = agregarTaxi(request);
@@ -98,8 +103,20 @@ public class Taxi_Negocio extends HttpServlet
                 //Pintamos el QR
                 ImageIO.write(AWTImageDescriptor.create(imagenQR, null), "png", outQR);                
                 break;
+            case 4: //Bloquear taxi
+                respuesta = bloquearTaxi(request);
+                response.sendRedirect("gestionTaxis.jsp");
+                break;
+            case 5: //Desbloquear taxi
+                respuesta = desbloquearTaxi(request);
+                response.sendRedirect("gestionTaxis.jsp");
+                break;
+            case 6: //Eliminar taxi
+                respuesta = eliminarTaxi(request);
+                response.sendRedirect("gestionTaxis.jsp");
+                break;
             default:
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("bienvenidoAdministrador.jsp");
         }
         if(query == 3)
             outQR.close();
@@ -107,7 +124,7 @@ public class Taxi_Negocio extends HttpServlet
             out.close();
     }
     
-    private boolean agregarTaxi(HttpServletRequest request)
+    private boolean agregarTaxi(HttpServletRequest request) throws UnsupportedEncodingException
     {
         //Variable de respuesta
         boolean b = true;
@@ -123,21 +140,21 @@ public class Taxi_Negocio extends HttpServlet
             b = false;
         }
         
-        String nombre = request.getParameter("TBNombre").trim();
+        String nombre = new String(request.getParameter("TBNombre").trim().getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(nombre))
         {
             session.setAttribute("errorNombre", "Error el nombre es incorrecto");
             b = false;
         }
         
-        String apellido_paterno = request.getParameter("TBApellidoPaterno").trim();
+        String apellido_paterno = new String(request.getParameter("TBApellidoPaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(apellido_paterno))
         {
             session.setAttribute("errorApellidoPaterno", "Error el apellido paterno es incorrecto");
             b = false;
         }
         
-        String apellido_materno = request.getParameter("TBApellidoMaterno").trim();
+        String apellido_materno = new String(request.getParameter("TBApellidoMaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(apellido_materno))
         {
             session.setAttribute("errorApellidoMaterno", "Error el apellido materno es incorrecto");
@@ -224,7 +241,8 @@ public class Taxi_Negocio extends HttpServlet
                 objTaxi.setFolio(folio);
                 objTaxi.setNumeroLicencia(numeroLicencia);
                 objTaxi.setVigencia(vigencia);
-                objTaxi.setFechaHoraExpedicion(fechaExpedicion + " " + horaExpedicion);
+                objTaxi.setFechaExpedicion(fechaExpedicion);
+                objTaxi.setHoraExpedicion(horaExpedicion);
                 objTaxi.setStatus(1);
                 
                 //Hacemos la consulta a la BD
@@ -251,8 +269,11 @@ public class Taxi_Negocio extends HttpServlet
     
     private Taxi buscarTaxi(HttpServletRequest request)
     {
-        String idTaxista = request.getParameter("TBIdTaxista");
-        objTaxi = new Taxi(idTaxista);
+        String buscarTaxista = request.getParameter("TBBuscarTaxista");
+        objTaxi = new Taxi(buscarTaxista);
+        objTaxi.setCURP(buscarTaxista);
+        try {objTaxi.setFolio(Integer.parseInt(buscarTaxista));} catch(NumberFormatException e){}
+        try {objTaxi.setNumeroLicencia(Integer.parseInt(buscarTaxista));} catch(NumberFormatException e){}
         taxiDAO = new TaxiDAO();
         
         //Hacemos la consulta a la BD
@@ -273,6 +294,48 @@ public class Taxi_Negocio extends HttpServlet
         //Creamos una imagen tipo awt con el color de las barras en negro y el fondo blanco
         return codigoQR.createAwtImage(Color.BLACK, Color.WHITE);
     }
+    
+    private boolean bloquearTaxi(HttpServletRequest request)
+    {
+        boolean b;
+        String idTaxista = request.getParameter("TBIdTaxista");
+        objTaxi = new Taxi(idTaxista);
+        objTaxi.setStatus(0);
+        taxiDAO = new TaxiDAO();
+        
+        //Hacemos la consulta a la BD
+        b = taxiDAO.cambiarStatus(objTaxi);
+        
+        return b;
+    }
+    
+    private boolean desbloquearTaxi(HttpServletRequest request)
+    {
+        boolean b;
+        String idTaxista = request.getParameter("TBIdTaxista");
+        objTaxi = new Taxi(idTaxista);
+        objTaxi.setStatus(1);
+        taxiDAO = new TaxiDAO();
+        
+        //Hacemos la consulta a la BD
+        b = taxiDAO.cambiarStatus(objTaxi);
+        
+        return b;
+    }
+    
+    private boolean eliminarTaxi(HttpServletRequest request) 
+    {
+        boolean b;
+        String idTaxista = request.getParameter("TBIdTaxista");
+        objTaxi = new Taxi(idTaxista);
+        taxiDAO = new TaxiDAO();
+        
+        //Hacemos la consulta a la BD
+        b = taxiDAO.eliminarTaxi(objTaxi);
+        
+        return b;
+    }
+
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

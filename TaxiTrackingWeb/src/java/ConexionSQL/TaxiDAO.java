@@ -9,12 +9,12 @@ import java.sql.SQLException;
 public class TaxiDAO 
 {
     //Variables para la conexion con la base de datos
-    Connection con;
-    ResultSet rs;
-    PreparedStatement pst;
+    private Connection con;
+    private ResultSet rs;
+    private PreparedStatement pst;
     
     //Variable que contendra la consulta
-    String consulta;
+    private String consulta;
     
     public TaxiDAO()
     {
@@ -32,7 +32,7 @@ public class TaxiDAO
     public boolean agregarTaxi(Taxi objTaxi) 
     {
         boolean b = false;
-        consulta = "INSERT INTO taxista VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        consulta = "INSERT INTO taxista VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try
         {
@@ -47,8 +47,9 @@ public class TaxiDAO
             pst.setInt(7, objTaxi.getFolio());
             pst.setInt(8, objTaxi.getNumeroLicencia());            
             pst.setString(9, objTaxi.getVigencia());
-            pst.setString(10, objTaxi.getFechaHoraExpedicion());
-            pst.setInt(11, objTaxi.getStatus());
+            pst.setString(10, objTaxi.getFechaExpedicion());
+            pst.setString(11, objTaxi.getHoraExpedicion());
+            pst.setInt(12, objTaxi.getStatus());
             
             pst.execute();
             pst.close();
@@ -94,7 +95,8 @@ public class TaxiDAO
                 objTaxi.setFolio(rs.getInt("folio"));
                 objTaxi.setNumeroLicencia(rs.getInt("numeroLicencia"));
                 objTaxi.setVigencia(rs.getString("vigencia"));
-                objTaxi.setFechaHoraExpedicion(rs.getString("fechaHoraExpedicion"));
+                objTaxi.setFechaExpedicion(rs.getString("fechaExpedicion"));
+                objTaxi.setHoraExpedicion(rs.getString("horaExpedicion"));
                 objTaxi.setStatus(rs.getInt("status"));
             }
             pst.close();            
@@ -103,5 +105,56 @@ public class TaxiDAO
         finally { Conexion.closeConexion(); }
         
         return objTaxi;
+    }
+    
+    /*
+    * Metodo para cambiar el status de un taxi. 
+    * Recibe un objeto taxi con el nuevo status
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean cambiarStatus(Taxi objUsuario) 
+    {
+        boolean b = false;
+        consulta = "UPDATE taxista SET status = ? WHERE idTaxista = ?";
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setInt(1, objUsuario.getStatus());
+            pst.setString(2, objUsuario.getIdTaxista());
+            pst.executeUpdate();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al cambiar el status del taxista D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return b;
+    }
+    
+    /*
+    * Metodo para eliminar un taxista. 
+    * Recibe un objeto taxi con el id del taxista que se va a eliminar
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean eliminarTaxi(Taxi objTaxi) 
+    {
+        boolean b = false;
+        consulta = "DELETE FROM taxista WHERE idTaxista = ?";
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objTaxi.getIdTaxista());
+            pst.execute();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al eliminar al taxista D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return b;
     }
 }

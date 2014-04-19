@@ -6,6 +6,8 @@ $(document).ready(function()
         $("#agregarTaxiToggle").remove();
         $("#agregarTaxi").fadeIn("slow");
     });
+    
+    //Si hay mensajes de error desplegamos el formulario
     if($(".error").length > 0)
     {
         $("#agregarTaxiToggle").remove();
@@ -14,58 +16,64 @@ $(document).ready(function()
 });
 
 //Funcion que gestiona los eventos de los botones de control
-function gestionar(RFC, operacion)
+function gestionar(operacion)
 {
     //Opacamos la ventana
-    $("#container").fadeTo(0,0.5);
-    $(".container").fadeTo(0,0.5);
+    $("html").fadeTo(0,0.3);
+    
+    idTaxista = $("#TBIdTaxista").val();
+    
+    //Operacion a llamar
+    q = -1;
     
     //Obtenemos el mensaje que corresponde a la accion
     switch(operacion)
     {
-        case 2:
-            textoConfirmacion = "¿Desea bloquear al usuario " + RFC + "?";
-            textoSalida = "El usuario " + RFC + " se bloqueó correctamente";
-            break;
         case 3:
-            textoConfirmacion = "¿Desea desbloquear al usuario " + RFC + "?";
-            textoSalida = "El usuario " + RFC + " se desbloqueó correctamente";
+            textoConfirmacion = "¿Desea generar el QR del taxista " + idTaxista + "?";
+            q = 3;
             break;
         case 4:
-            textoConfirmacion = "¿Desea eliminar al usuario " + RFC + "?";
-            textoSalida = "El usuario " + RFC + " se eliminó correctamente";
+            textoConfirmacion = "¿Desea bloquear al taxista " + idTaxista + "?";
+            q = 4;
+            break;
+        case 5:
+            textoConfirmacion = "¿Desea desbloquear al taxista " + idTaxista + "?";
+            q = 5;
+            break;
+        case 6:
+            textoConfirmacion = "¿Desea eliminar al taxista " + idTaxista + "?";
+            q = 6;
             break;
     }
     
     //Abrimos un cuadro de confirmacion
     confirmar = confirm(textoConfirmacion);
     
-    //Si acepta se hace la peticion asincrona
     if (confirmar)
     {
-        $.post("Usuario_Negocio",   //URL del servlet al que se llamara
-                {
-                    q:operacion,    //Parametros a enviar
-                    RFC: RFC
-                },
-                function(data)
-                {
-                    //Si fue correcta la peticion
-                    if(data == 1)
-                    {
-                        alert(textoSalida);
-                        
-                        //Ponemos el simbolo de cargando
-                        $(".contenedorTabla").html("<i class='fa fa-refresh fa-spin fa-4x'></i>");
-                        getPeticiones();    //Se recargan las peticiones
-                    }
-                    else
-                        alert("Error al realizar la operación");
-                }
-            );
+        //Si es QR hay que generarlo en una nueva pestaña
+        if (q == 3)
+            $("#formBusquedaTaxista").attr("target", "_blank");
+        
+        //Creamos el hidden para la variable q
+        var input = $("<input>").attr("type", "hidden").val(q)
+                                .attr("id", "q")
+                                .attr("name", "q");
+        
+        //Lo agregamos al formulario
+        $("#formBusquedaTaxista").append($(input));
+        
+        //Enviamos el formulario
+        $("#formBusquedaTaxista").submit();
+        
+        //Quitamos el atributo target por si despues clickea otra opcion
+        $("#formBusquedaTaxista").removeAttr("target");
+        
+        //Removemos el hidden
+        $("#q").remove();
     }
     
     //Restauramos la ventana
-    $("#container").fadeTo(0,1);
-    $(".container").fadeTo(0,1);
+    $("html").fadeTo(0,1);
 }

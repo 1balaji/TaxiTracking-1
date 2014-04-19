@@ -11,7 +11,7 @@ function getPeticiones()
             {q:5},              //Parametros a enviar
             function(data)      //Funcion que se ejecuta despues de la respuesta. data es lo que regresa el servlet.
             {
-		$(".contenedorTabla").html(data);   //Se anexa el codigo al div que contendra a la tabla
+		$("#contenedorTabla").html(data);   //Se anexa el codigo al div que contendra a la tabla
             }
         );
 }
@@ -20,8 +20,7 @@ function getPeticiones()
 function gestionar(nombreUsuario, operacion)
 {
     //Opacamos la ventana
-    $("#container").fadeTo(0,0.5);
-    $(".container").fadeTo(0,0.5);
+    $("html").fadeTo(0,0.3);
     
     //Obtenemos el mensaje que corresponde a la accion
     switch(operacion)
@@ -59,7 +58,7 @@ function gestionar(nombreUsuario, operacion)
                         alert(textoSalida);
                         
                         //Ponemos el simbolo de cargando
-                        $(".contenedorTabla").html("<i class='fa fa-refresh fa-spin fa-4x'></i>");
+                        $("#contenedorTabla").html("<i class='fa fa-refresh fa-spin fa-4x'></i>");
                         getPeticiones();    //Se recargan las peticiones
                     }
                     else
@@ -69,6 +68,5 @@ function gestionar(nombreUsuario, operacion)
     }
     
     //Restauramos la ventana
-    $("#container").fadeTo(0,1);
-    $(".container").fadeTo(0,1);
+    $("html").fadeTo(0,1);
 }

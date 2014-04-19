@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Beans.Usuario;"%>
 <%
     String usuario = null;
     int rol = -1;
@@ -7,9 +8,6 @@
     if(session != null && session.getAttribute("rol") != null)
     {
         rol = (Integer)session.getAttribute("rol");
-
-        //Si no es administrador se redirecciona al inicio de un usuario normal
-        if(rol!=1){response.sendRedirect("bienvenido.jsp");}
 
         usuario = (String)session.getAttribute("nombre_usuario");
     }
@@ -21,7 +19,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Agregar Taxi</title>
+        <title>Taxi Tracking - Perfil</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -39,20 +37,27 @@
             <header>
 
                 <!--start logo-->
-                <a href="#" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href="index.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="bienvenidoAdministrador.jsp">Inicio</a></li>
-                        <li><a href="gestionTaxis.jsp" class="current">Gesti&oacute;n de Taxis</a></li>
-                        <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
+                        <%if(rol == 1)  //Si es administrador
+                        {%>
+                            <li><a href="bienvenidoAdministrador.jsp" class="current">Inicio</a></li>
+                            <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
+                            <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
+                        <%}
+                        else
+                        {%>
+                            <li><a href="bienvenido.jsp">Inicio</a></li>
+                        <%}%>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
-                                    <li><a href="#"><i class="fa fa-user"></i>Perfil</a></li>
-                                    <li><a href="#"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
+                                    <li><a href="verPerfil.jsp"><i class="fa fa-user"></i>Perfil</a></li>
+                                    <li><a href="configurarPerfil.jsp"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
                                     <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
                                 </ul>
                             </div>
@@ -68,26 +73,15 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <h1>Agregar Taxi</h1>
+                <h1>Ver Perfil</h1>
             </section>
             <!--end intro-->
 
             <!--start holder-->
             <div class="holder_content">
-                <section class="gestion">
-                    <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=2" method="POST">
-                        <label for="TBNombre">Nombre</label><input type="text" id="TBNombre" name="TBNombre" placeholder="Nombre" /><br/>
-                        <label for="TBApellidoPaterno">Apellido Paterno</label><input type="text" id="TBApellidoPaterno" name="TBApellidoPaterno" placeholder="Apellido Paterno" /><br/>
-                        <label for="TBApellidoMaterno">Apellido Materno</label><input type="text" id="TBApellidoMaterno" name="TBApellidoMaterno" placeholder="Apellido Materno" /><br/>
-                        <label for="TBRFC">RFC</label><input type="text" id="TBRFC" name="TBRFC" placeholder="RFC" /><br/>
-                        <label for="TBMatricula">Matricula</label><input type="text" id="TBMatricula" name="TBMatricula" placeholder="Matricula" /><br/>
-                        <label for="TBVigencia">Vigencia</label><input type="date" id="TBVigencia" name="TBVigencia" /><br/>
-                        <label for="TBFolio">Folio</label><input type="text" id="TBFolio" name="TBFolio" placeholder="Folio" /><br/>
-                        <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
-                                <i class="fa fa-plus-circle fa-fw"></i>Agregar
-                        </button>
-                    </form>
-                </section>
+                <div class="contenedorTabla centrado" id="contenedorTabla">
+                    <i class="fa fa-refresh fa-spin fa-4x"></i>
+                </div>
             </div>
             <!--end holder-->
         </div>
@@ -104,5 +98,6 @@
         <!-- Free template distributed by http://freehtml5templates.com -->
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/toggleMenu.js"></script>
+        <script type="text/javascript" src="js/verPerfil.js"></script>
     </body>
 </html>

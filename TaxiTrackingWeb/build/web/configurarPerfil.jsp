@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Beans.Usuario;"%>
 <%
     String usuario = null;
     int rol = -1;
@@ -7,9 +8,6 @@
     if(session != null && session.getAttribute("rol") != null)
     {
         rol = (Integer)session.getAttribute("rol");
-
-        //Si no es administrador se redirecciona al inicio de un usuario normal
-        if(rol!=1){response.sendRedirect("bienvenido.jsp");}
 
         usuario = (String)session.getAttribute("nombre_usuario");
     }
@@ -21,7 +19,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Taxi Tracking - Gesti&oacute;n de Usuarios</title>
+        <title>Taxi Tracking - Configuraci&oacute;n</title>
         <link rel="icon" href="images/favicon.gif" type="image/x-icon"/>
 
         <!--[if lt IE 9]>
@@ -39,15 +37,22 @@
             <header>
 
                 <!--start logo-->
-                <a href="bienvenidoAdministrador.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href="index.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
                 <nav>
                     <ul>
-                        <li><a href="bienvenidoAdministrador.jsp">Inicio</a></li>
-                        <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
-                        <li><a href="gestionUsuarios.jsp" class="current">Gesti&oacute;n de Usuarios</a></li>
+                        <%if(rol == 1)  //Si es administrador
+                        {%>
+                            <li><a href="bienvenidoAdministrador.jsp" class="current">Inicio</a></li>
+                            <li><a href="gestionTaxis.jsp">Gesti&oacute;n de Taxis</a></li>
+                            <li><a href="gestionUsuarios.jsp">Gesti&oacute;n de Usuarios</a></li>
+                        <%}
+                        else
+                        {%>
+                            <li><a href="bienvenido.jsp">Inicio</a></li>
+                        <%}%>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
@@ -68,25 +73,27 @@
                 <img src="images/banner.png" alt="baner"/>
             </div>
             <section class="group_bannner_left">
-                <h1>Gesti&oacute;n de Usuarios</h1>
+                <h1>Configuraci&oacute;n</h1>
             </section>
             <!--end intro-->
 
             <!--start holder-->
             <div class="holder_content">
-                <section class="gestion centrado">
-                    <div class="search">
-                        <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Nombre de usuario" />
-                            <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
-                                <i class="fa fa-search fa-fw"></i>Buscar
-                            </button>
-                        </form>
-                    </div>
-                    <div class="contenedorTabla centrado" id="contenedorTabla">
-                        <i class="fa fa-refresh fa-spin fa-4x"></i>
-                    </div>
-                </section>
+                <div id="contentEmail" class="centrado configuracion sombreado" onclick="getEmail(1)">
+                    <a id="vinculoEmail">
+                        <span class="izquierdo"><strong>Email</strong></span>
+                        <span id="direccionEmail">&nbsp;</span>
+                        <span class="derecho"><i id="iconoEditarEmail" class="fa fa-fw fa-pencil-square-o"></i>Editar</span>
+                    </a>
+                    <div id="detalleEmail" class="centrado"></div>
+                </div>
+                <div id="contentPassword" class="centrado configuracion sombreado" onclick="editarContrasena()">
+                    <a>
+                        <span class="izquierdo"><strong>Contrase&ntilde;a</strong></span>
+                        <span>&nbsp;</span>
+                        <span class="derecho"><i class="fa fa-fw fa-pencil-square-o"></i>Editar</span>
+                    </a>
+                </div>
             </div>
             <!--end holder-->
         </div>
@@ -103,6 +110,6 @@
         <!-- Free template distributed by http://freehtml5templates.com -->
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/toggleMenu.js"></script>
-        <script type="text/javascript" src="js/gestionUsuarios.js"></script>
+        <script type="text/javascript" src="js/configurarPerfil.js"></script>
     </body>
 </html>

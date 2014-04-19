@@ -1,3 +1,11 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    String usuario = null;
+    
+    //Checamos que exista la sesion
+    if(session != null && session.getAttribute("rol") != null)
+        usuario = (String)session.getAttribute("nombre_usuario");
+%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -21,7 +29,7 @@
             <header>
 
                 <!--start logo-->
-                <a href="#" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href="index.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
@@ -29,7 +37,19 @@
                     <ul>
                         <li><a href="index.jsp">Inicio</a></li>
                         <li><a href="acercaDe.jsp">Acerca de</a></li>
-                        <li><a href="#" class="current">Contacto</a></li>
+                        <li><a href="contacto.jsp" class="current">Contacto</a></li>
+                        <%if(usuario != null)
+                        {%>
+                            <li>
+                                <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
+                                    <ul class="dropdown">
+                                        <li><a href="verPerfil.jsp"><i class="fa fa-user"></i>Perfil</a></li>
+                                        <li><a href="configurarPerfil.jsp"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
+                                        <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        <%}%>
                     </ul>
                 </nav>
                 <!--end menu-->
@@ -135,7 +155,7 @@
         <footer>
             <div class="container">
                 <div id="FooterLeft">Desarrollado por Carlos Jim&eacute;nez y Francisco Negrete / 2014</div>
-                <div id="FooterRight">© TT2013-A022</div>
+                <div id="FooterRight">Â© TT2013-A022</div>
             </div>
         </footer>
         <!--end footer-->

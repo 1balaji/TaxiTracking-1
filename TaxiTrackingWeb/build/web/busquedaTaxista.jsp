@@ -19,7 +19,7 @@
         {
             objTaxi = (Taxi)session.getAttribute("objTaxi");
             
-            //Quitamos el usuario de la sesion
+            //Quitamos el taxi de la sesion
             session.removeAttribute("objTaxi");
         }
         else
@@ -51,7 +51,7 @@
             <header>
 
                 <!--start logo-->
-                <a href="#" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href="bienvenidoAdministrador.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
@@ -63,8 +63,8 @@
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
-                                    <li><a href="#"><i class="fa fa-user"></i>Perfil</a></li>
-                                    <li><a href="#"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
+                                    <li><a href="verPerfil.jsp"><i class="fa fa-user"></i>Perfil</a></li>
+                                    <li><a href="configurarPerfil.jsp"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
                                     <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
                                 </ul>
                             </div>
@@ -96,54 +96,70 @@
                         </form>
                     </div>
                     <div class="contenedorTabla centrado">
-                        <table id="tabla">
-                            <tr>
-                                <th>Clave Operador</th>
-                                <th>Nombre</th>
-                                <th>CURP</th>
-                                <th>Matr&iacute;cula</th>
-                                <th>Folio</th>
-                                <th>No. Licencia</th>
-                                <th>Vigencia</th>
-                                <th>Fecha Expedici&oacute;n</th>
-                                <th colspan="3">Control</th>
-                            </tr>
-                            <tr>
-                                <%if(objTaxi.getIdTaxista().compareTo("") == 0)
-                                {%>
-                                    <td colspan=4>No hay resultados</td>
-                               <%}
-                               else
-                                {%>
-                                    <td><%=objTaxi.getIdTaxista()%></td>
-                                    <td><%=objTaxi.getNombre()%> <%=objTaxi.getApellidoPaterno()%> <%=objTaxi.getApellidoMaterno()%></td>
-                                    <td><%=objTaxi.getCURP()%></td>
-                                    <td><%=objTaxi.getMatricula()%></td>
-                                    <td><%=objTaxi.getFolio()%></td>
-                                    <td><%=objTaxi.getNumeroLicencia()%></td>
-                                    <td><%=objTaxi.getVigencia()%></td>
-                                    <td><%=objTaxi.getFechaHoraExpedicion()%></td>
-                                    <td>
-                                        <%if(objTaxi.getStatus() == 0)   //Si esta bloqueado
-                                        {
-                                            out.println("<button id='BTDesbloquearTaxista' name='BTDesbloquearTaxista' onClick='gestionar(\"" + objTaxi.getIdTaxista()+ "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
-                                        }
-                                        else
-                                        {
-                                            out.println("<button id='BTBloquearTaxista' name='BTBloquearTaxista' onClick='gestionar(\"" + objTaxi.getIdTaxista()+ "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
-                                        }%>
-                                    </td>
-                                    <td>
-                                        <button id='BTEliminarTaxi' name='BTEliminarUsuario' onClick="gestionar('<%=objTaxi.getIdTaxista()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
-                                    </td>
-                                    <td>
-                                        <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=3&amp;idTaxista=<%=objTaxi.getIdTaxista()%>" method="POST" target="_blank">
-                                            <button id='BTGenerarQR' name='BTGenerarQR' type="submit"><i class="fa fa-qrcode fa-fw"></i>Generar QR</button>
-                                        </form>
-                                    </td>
-                                <%}%>
-                            </tr>
-                        </table>
+                        <%if (objTaxi.getIdTaxista().compareTo("") == 0) {%>
+                            <div>No hay resultados</div>
+                        <%} 
+                        else 
+                        {%>
+                            <form action="<%=request.getContextPath()%>/Taxi_Negocio" method="POST" id="formBusquedaTaxista">
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBNombre">Nombre</label>
+                                    <input type="text" id="TBNombre" name="TBNombre" class="form-control largo" value="<%=objTaxi.getNombre()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBApellidoPaterno">Apellido Paterno</label>
+                                    <input type="text" id="TBApellidoPaterno" name="TBApellidoPaterno" class="form-control largo" value="<%=objTaxi.getApellidoPaterno()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBApellidoMaterno">Apellido Materno</label>
+                                    <input type="text" id="TBApellidoMaterno" name="TBApellidoMaterno" class="form-control largo" value="<%=objTaxi.getApellidoMaterno()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBIdTaxista">Clave Operador</label>
+                                    <input type="text" id="TBIdTaxista" name="TBIdTaxista" class="form-control largo" value="<%=objTaxi.getIdTaxista()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBCURP">CURP</label>
+                                    <input type="text" id="TBCURP" name="TBCURP" class="form-control largo" value="<%=objTaxi.getCURP()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBMatricula">Matricula</label>
+                                    <input type="text" id="TBMatricula" name="TBMatricula" class="form-control largo" value="<%=objTaxi.getMatricula()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBFolio">Folio</label>
+                                    <input type="text" id="TBFolio" name="TBFolio" class="form-control largo" value="<%=objTaxi.getFolio()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBNumeroLicencia">No. Licencia</label>
+                                    <input type="text" id="TBNumeroLicencia" name="TBNumeroLicencia" class="form-control largo" value="<%=objTaxi.getNumeroLicencia()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBVigencia">Vigencia</label>
+                                    <input type="text" id="TBVigencia" name="TBVigencia" class="form-control largo" value="<%=objTaxi.getVigencia()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBFechaExpedicion">Fecha Expedici&oacute;n</label>
+                                    <input type="text" id="TBFechaExpedicion" name="TBFechaExpedicion" class="form-control largo" value="<%=objTaxi.getFechaExpedicion()%>" readonly="readonly" />
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBHoraExpedicion">Hora Expedici&oacute;n</label>
+                                    <input type="text" id="TBHoraExpedicion" name="TBHoraExpedicion" class="form-control largo" value="<%=objTaxi.getHoraExpedicion()%>" readonly="readonly" />
+                                </div>
+                                <div class="centrado">
+                                    <%if(objTaxi.getStatus() == 0)   //Si esta bloqueado
+                                    {
+                                        out.println("<button type='button' id='BTDesbloquearTaxista' name='BTDesbloquearTaxista' onClick='gestionar(5)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
+                                    }
+                                    else
+                                    {
+                                        out.println("<button type='button' id='BTBloquearTaxista' name='BTBloquearTaxista' onClick='gestionar(4)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
+                                    }%>
+                                    <button type="button" id="BTEliminarTaxi" name="BTEliminarUsuario" onClick="gestionar(6)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                    <button type="button" id="BTGenerarQR" name="BTGenerarQR" onClick="gestionar(3)"><i class="fa fa-qrcode fa-fw"></i>Generar QR</button>
+                                </div>
+                            </form>
+                        <%}%>
                     </div>
                 </section>
             </div>
@@ -162,6 +178,6 @@
         <!-- Free template distributed by http://freehtml5templates.com -->
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="js/toggleMenu.js"></script>
-        <script type="text/javascript" src="js/buscarUsuario.js"></script>
+        <script type="text/javascript" src="js/gestionTaxis.js"></script>
     </body>
 </html>

@@ -36,7 +36,7 @@
             <header>
 
                 <!--start logo-->
-                <a href="#" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href="index.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->

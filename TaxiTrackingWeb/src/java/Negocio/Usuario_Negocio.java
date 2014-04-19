@@ -2,8 +2,10 @@ package Negocio;
 
 import Beans.Usuario;
 import ConexionSQL.UsuarioDAO;
+import Validacion.Validacion;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,25 +15,25 @@ import javax.servlet.http.HttpSession;
 public class Usuario_Negocio extends HttpServlet 
 {
     //Beans
-    Usuario objUsuario;
-    Usuario objUsuarios[];
+    private Usuario objUsuario;
+    private Usuario objUsuarios[];
     
     //Variable para la conexion con la BD
     private UsuarioDAO usuarioDAO;
     
     //Salida html
-    PrintWriter out;
+    private PrintWriter out;
     
     //Sesion
-    HttpSession session = null;
+    private HttpSession session = null;
     
     //Respuesta
-    boolean respuesta;
+    private boolean respuesta;
     
     //Nos dice que metodo hay que invocar
-    int query;
+    private int query;
     
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         session = request.getSession(false);
@@ -130,6 +132,48 @@ public class Usuario_Negocio extends HttpServlet
                 }
                 out.println("</table>");
                 break;
+            case 6: //Buscar perfil
+                objUsuario = getPerfil(session);
+                out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=7\" method=\"POST\">\n");
+                if(session.getAttribute("errorNombre") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorNombre") + "</div>"); session.removeAttribute("errorNombre");}
+                out.println(
+"                        <div class=\"input-group\">\n" +
+"                            <label class=\"input-group-label mediano centrado\" for=\"TBNombre\">Nombre</label>\n" +
+"                            <input type=\"text\" id=\"TBNombre\" name=\"TBNombre\" class=\"form-control largo\" value=\"" + objUsuario.getNombre() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Nombre\" />\n" +
+"                        </div>\n");
+                if(session.getAttribute("errorApellidoPaterno") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorApellidoPaterno") + "</div>"); session.removeAttribute("errorApellidoPaterno");}
+                out.println(
+"                        <div class=\"input-group\">\n" +
+"                            <label class=\"input-group-label mediano centrado\" for=\"TBApellidoPaterno\">Apellido Paterno</label>\n" +
+"                            <input type=\"text\" id=\"TBApellidoPaterno\" name=\"TBApellidoPaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoPaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Paterno\" />\n" +
+"                        </div>\n");
+                if(session.getAttribute("errorApellidoMaterno") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorApellidoMaterno") + "</div>"); session.removeAttribute("errorApellidoMaterno");}
+                out.println(
+"                        <div class=\"input-group\">\n" +
+"                            <label class=\"input-group-label mediano centrado\" for=\"TBApellidoMaterno\">Apellido Materno</label>\n" +
+"                            <input type=\"text\" id=\"TBApellidoMaterno\" name=\"TBApellidoMaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoMaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Materno\" />\n" +
+"                        </div>\n" +
+"                        <div class=\"centrado\">\n" +
+"                            <button type=\"submit\" id=\"BTEditarPerfil\" name=\"BTEditarPerfil\">\n" +
+"                                <i class=\"fa fa-pencil-square-o\"></i>Actualizar\n" +
+"                            </button>\n" +
+"                        </div>\n" +
+"                    </form>");
+                break;
+            case 7: //Editar perfil
+                respuesta = editarPerfil(request, session);
+                if(respuesta)
+                    session.setAttribute("errorNombre", "Los datos se actualizaron correctamente");
+                response.sendRedirect("verPerfil.jsp");
+                break;
+            case 8: //Buscar email
+                objUsuario = getEmail(session);
+                out.println(objUsuario.getEmail());
+                break;
+            case 9: //Editar email
+                break;
+            case 10:    //Editar contraseña
+                break;
             default:
                 response.sendRedirect("bienvenidoAdministrador.jsp");
         }
@@ -139,6 +183,11 @@ public class Usuario_Negocio extends HttpServlet
     private Usuario buscarUsuario(HttpServletRequest request)
     {
         String nombreUsuario = request.getParameter("TBBuscarUsuario");
+
+        //Para que no se pueda buscar al administrador
+        if(nombreUsuario.equals("admin"))
+            nombreUsuario = null;
+
         objUsuario = new Usuario(nombreUsuario);
         usuarioDAO = new UsuarioDAO();
         
@@ -184,7 +233,7 @@ public class Usuario_Negocio extends HttpServlet
         return b;
     }
 
-    private boolean eliminarUsuario(HttpServletRequest request) 
+    private boolean eliminarUsuario(HttpServletRequest request)
     {
         boolean b;
         String nombreUsuario = request.getParameter("nombreUsuario");
@@ -211,6 +260,70 @@ public class Usuario_Negocio extends HttpServlet
         
         return usuarios;
     }
+    
+    private Usuario getPerfil(HttpSession session) 
+    {
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        objUsuario = new Usuario(nombreUsuario);
+        usuarioDAO = new UsuarioDAO();
+        objUsuario = usuarioDAO.buscarUsuario(objUsuario);
+        
+        return objUsuario;
+    }
+    
+    private boolean editarPerfil(HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException
+    {
+        boolean b = true;
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        
+        String nombre = new String(request.getParameter("TBNombre").trim().getBytes("ISO-8859-1"),"UTF-8");
+        if(!Validacion.esCadena(nombre))
+        {
+            session.setAttribute("errorNombre", "Error el nombre es incorrecto");
+            b = false;
+        }
+        
+        String apellido_paterno = new String(request.getParameter("TBApellidoPaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
+        if(!Validacion.esCadena(apellido_paterno))
+        {
+            session.setAttribute("errorApellidoPaterno", "Error el apellido paterno es incorrecto");
+            b = false;
+        }
+        
+        String apellido_materno = new String(request.getParameter("TBApellidoMaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
+        if(!Validacion.esCadena(apellido_materno))
+        {
+            session.setAttribute("errorApellidoMaterno", "Error el apellido materno es incorrecto");
+            b = false;
+        }
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            objUsuario = new Usuario(nombreUsuario);
+            objUsuario.setNombre(nombre);
+            objUsuario.setApellidoPaterno(apellido_paterno);
+            objUsuario.setApellidoMaterno(apellido_materno);
+            
+            usuarioDAO = new UsuarioDAO();
+        
+            //Hacemos la consulta a la BD
+            b = usuarioDAO.editarPerfil(objUsuario);
+        }
+        
+        return b;
+    }
+    
+    private Usuario getEmail(HttpSession session) 
+    {
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        objUsuario = new Usuario(nombreUsuario);
+        usuarioDAO = new UsuarioDAO();
+        objUsuario = usuarioDAO.buscarUsuario(objUsuario);
+        
+        return objUsuario;
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP

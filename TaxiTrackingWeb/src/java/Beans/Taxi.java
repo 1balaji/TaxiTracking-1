@@ -13,7 +13,8 @@ public class Taxi implements Serializable
     transient private int folio;
     transient private int numeroLicencia;
     transient private String vigencia;
-    transient private String fechaHoraExpedicion;
+    transient private String fechaExpedicion;
+    transient private String horaExpedicion;
     transient private int status;
     
     public Taxi()
@@ -27,7 +28,8 @@ public class Taxi implements Serializable
         folio = 0;
         numeroLicencia = 0;
         vigencia = null;
-        fechaHoraExpedicion = null;
+        fechaExpedicion = "";
+        horaExpedicion = "";
         status = 0;
     }
     
@@ -126,14 +128,24 @@ public class Taxi implements Serializable
         return vigencia;
     }
 
-    public void setFechaHoraExpedicion(String fechaExpedicion)
+    public void setFechaExpedicion(String fechaExpedicion)
     {
-        this.fechaHoraExpedicion = fechaExpedicion;
+        this.fechaExpedicion = fechaExpedicion;
     }
     
-    public String getFechaHoraExpedicion()
+    public String getFechaExpedicion()
     {
-        return fechaHoraExpedicion;
+        return fechaExpedicion;
+    }
+    
+    public void setHoraExpedicion(String horaExpedicion)
+    {
+        this.horaExpedicion = horaExpedicion;
+    }
+    
+    public String getHoraExpedicion()
+    {
+        return horaExpedicion;
     }
     
     public void setStatus(int status)

@@ -39,7 +39,7 @@
             <header>
 
                 <!--start logo-->
-                <a href="#" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href="bienvenidoAdministrador.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
@@ -51,8 +51,8 @@
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
                                 <ul class="dropdown">
-                                    <li><a href="#"><i class="fa fa-user"></i>Perfil</a></li>
-                                    <li><a href="#"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
+                                    <li><a href="verPerfil.jsp"><i class="fa fa-user"></i>Perfil</a></li>
+                                    <li><a href="configurarPerfil.jsp"><i class="fa fa-cog"></i>Configuraci&oacute;n</a></li>
                                     <li><a href="<%=request.getContextPath()%>/ManejoSesion?q=3"><i class="fa fa-sign-out"></i>Log out</a></li>
                                 </ul>
                             </div>
@@ -146,7 +146,7 @@
                                 <input type="text" id="TBHoraExpedicion" name="TBHoraExpedicion" class="form-control largo" placeholder="HH:MM:SS" required="required" maxlength="8" />
                             </div>
                             <div class="centrado">
-                                <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi" class="centrado">
+                                <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
                                     <i class="fa fa-plus-circle fa-fw"></i>Agregar
                                 </button>
                             </div>

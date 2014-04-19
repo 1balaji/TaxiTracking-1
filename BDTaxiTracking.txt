@@ -37,7 +37,8 @@ create table taxista(
 	folio int unsigned not null,
 	numeroLicencia int unsigned not null,
 	vigencia date not null,
-	fechaHoraExpedicion datetime not null,
+	fechaExpedicion date not null,
+	horaExpedicion time not null,
 	status int not null
 );
 
@@ -50,4 +51,4 @@ insert into peticion values (null, 0, "Bloqueame", "usuario");
 insert into peticion values (null, 1, "Desbloqueame", "otro");
 insert into peticion values (null, 2,"Eliminame", "carlos");
 
-insert into taxista values("TX","CA","JI","LO","CA", 1234, 1234, 1234, "2014-04-13", "2013-04-12 16:09", 1);
+insert into taxista values("TX","CA","JI","LO","CA", 1234, 1234, 1234, "2014-04-13", "2013-04-12", "16:09:01", 1);

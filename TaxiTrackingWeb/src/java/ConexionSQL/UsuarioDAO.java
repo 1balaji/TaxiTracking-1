@@ -10,15 +10,15 @@ import java.sql.SQLException;
 public class UsuarioDAO 
 {
     //Variables para la conexion con la base de datos
-    Connection con;
-    ResultSet rs;
-    PreparedStatement pst;
+    private Connection con;
+    private ResultSet rs;
+    private PreparedStatement pst;
     
     //Variable para retornar
-    Usuario objUsuarios[];
+    private Usuario objUsuarios[];
     
     //Variable que contendra la consulta
-    String consulta;
+    private String consulta;
     
     public UsuarioDAO()
     {
@@ -112,7 +112,7 @@ public class UsuarioDAO
     public boolean cambiarStatus(Usuario objUsuario) 
     {
         boolean b = false;
-        consulta = "UPDATE usuario SET status = ? WHERE nombre_usuario = ?";
+        consulta = "UPDATE usuario SET status = ? WHERE nombre_usuario = ? AND rol != 1";
         
         try
         {
@@ -163,7 +163,7 @@ public class UsuarioDAO
     public boolean eliminarUsuario(Usuario objUsuario) 
     {
         boolean b = false;
-        consulta = "DELETE FROM usuario WHERE nombre_usuario = ?";
+        consulta = "DELETE FROM usuario WHERE nombre_usuario = ? AND rol != 1";
         
         try
         {
@@ -187,7 +187,7 @@ public class UsuarioDAO
     */
     public Usuario buscarUsuario(Usuario objUsuario) 
     {        
-        consulta = "SELECT nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status FROM usuario WHERE nombre_usuario = ? ";
+        consulta = "SELECT nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status FROM usuario WHERE nombre_usuario = ?";
 
         try
         {
@@ -214,5 +214,34 @@ public class UsuarioDAO
         finally { Conexion.closeConexion(); }
         
         return objUsuario;
+    }
+    
+    /*
+    * Metodo para editar el perfil un usuario. 
+    * Recibe un objeto usuario con los datos a actualizar
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean editarPerfil(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "UPDATE usuario SET nombre = ?, apellido_paterno = ?, apellido_materno = ? WHERE nombre_usuario = ?";
+
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombre());
+            pst.setString(2, objUsuario.getApellidoPaterno());
+            pst.setString(3, objUsuario.getApellidoMaterno());
+            pst.setString(4, objUsuario.getNombreUsuario());
+            pst.executeUpdate();            
+            pst.close();
+            
+            b = true;
+        }
+        catch (SQLException e) { System.out.println("Error al actualizar el perfil del usuario D:\n" + e); }
+        finally { Conexion.closeConexion(); }
+        
+        return b;
     }
 }

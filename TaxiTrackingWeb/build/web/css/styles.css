@@ -399,3 +399,20 @@ label.input-group-label {
 .mediano {width: 110px;}
 
 .largo {width: 250px;}
+
+.configuracion {
+    width: 600px;
+    padding: 15px;
+    margin: 10px auto;
+}
+
+.configuracion span.izquierdo {float: left;}
+
+.configuracion span.derecho {float:right;}
+
+.configuracion a:hover {text-decoration: none;}
+
+.sombreado:hover {
+    background-color: #E3E8FA;
+    cursor:pointer;
+}
