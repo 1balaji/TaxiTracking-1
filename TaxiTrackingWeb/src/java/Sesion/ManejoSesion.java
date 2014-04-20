@@ -52,6 +52,11 @@ public class ManejoSesion extends HttpServlet
                 session.invalidate();
                 response.sendRedirect("index.jsp");
                 break;
+            case 4: //Recuperar contraseña
+                if(recuperarContrasena(request))
+                    session.setAttribute("errorRecuperarContrasena", "Se ha enviado una nueva contraseña al correo");
+                response.sendRedirect("recuperarContrasena.jsp");
+                break;
             default:
                 response.sendRedirect("index.jsp");
         }
@@ -115,6 +120,43 @@ public class ManejoSesion extends HttpServlet
 
         out.println(gson.toJson(respuesta));
         out.close();
+    }
+    
+    /*
+     * Metodo para recuperar la contraseña de una sesion. 
+     * Manda un correo con una nueva contraseña generada aleatoriamente.
+     * Retorna true en caso de exito y false en caso de error.
+     */
+    private boolean recuperarContrasena(HttpServletRequest request)
+    {
+        boolean b;
+        
+        //Recuperamos los valores de los campos
+        String email = request.getParameter("TBEmail");
+        
+        usuarioDAO = new UsuarioDAO();
+        
+        //Se hace la consulta a la BD
+        b = usuarioDAO.existeEmail(email);
+        
+        //Si el mail es valido
+        if(b)
+        {
+            //Se genera una nueva contraseña
+            String nuevaContrasena = Password.getCadenaAlfanumAleatoria(8);
+            
+            b = usuarioDAO.setNuevaContrasena(email, nuevaContrasena);
+            
+            //Si se cambio correctamente la contraseña
+            if(b)
+            {
+                Email serverEmail = new Email();
+                b = serverEmail.enviar(email, "Su nueva contraseña es " + nuevaContrasena);
+            }
+        }
+        else
+            session.setAttribute("errorRecuperarContrasena", "El email no existe");
+        return b;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

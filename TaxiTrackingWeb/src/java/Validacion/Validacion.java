@@ -5,11 +5,11 @@ import java.util.regex.Pattern;
 
 public class Validacion
 {
-    static Pattern esCadena = Pattern.compile("[a-zA-Záéíóúñ ]+");
+    static Pattern esCadena = Pattern.compile("[a-zA-Záéíóúñ\\s\\.]+");
     static Pattern esNumero = Pattern.compile("\\d+");
     static Pattern esFecha = Pattern.compile("\\d{4}/(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])");
     static Pattern esHora = Pattern.compile("([0-1][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9]");
-    static Pattern esAlfanumerico = Pattern.compile("[a-zA-Z0-9]+");
+    static Pattern esAlfanumerico = Pattern.compile("[a-zA-Z0-9-_]+");
     static Pattern esCURP = Pattern.compile("[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}" + 
                                             "(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])" +
                                             "[HM]{1}" +
@@ -17,6 +17,7 @@ public class Validacion
                                             "[B-DF-HJ-NP-TV-Z]{3}" +
                                             "[0-9A-Z]{1}[0-9]{1}$");
     static Pattern esMatricula = Pattern.compile("[A-Z]-\\d{2}-\\d{3}");
+    static Pattern esEmail = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
     static Matcher matcher;
     
     public static boolean esCadena(String entrada)
@@ -58,6 +59,12 @@ public class Validacion
     public static boolean esMatricula(String entrada)
     {
         matcher = esMatricula.matcher(entrada);
+        return matcher.matches();
+    }
+    
+    public static boolean esEmail(String entrada)
+    {
+        matcher = esEmail.matcher(entrada);
         return matcher.matches();
     }
 }

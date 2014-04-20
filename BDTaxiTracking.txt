@@ -18,7 +18,7 @@ create table usuario(
 create table peticion(
 	idPeticion int not null primary key auto_increment,
 	tipo int not null,
-	descripcion varchar(45) not null,
+	descripcion varchar(150) not null,
 	nombre_usuario varchar(30) not null,
 	constraint fkUsuarioPeticion
 		foreign key (nombre_usuario)

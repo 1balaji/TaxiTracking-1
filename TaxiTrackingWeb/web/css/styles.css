@@ -394,8 +394,6 @@ label.input-group-label {
     margin: 0;
 }
 
-.corto {width: 60px;}
-
 .mediano {width: 110px;}
 
 .largo {width: 250px;}
@@ -410,9 +408,9 @@ label.input-group-label {
 
 .configuracion span.derecho {float:right;}
 
-.configuracion a:hover {text-decoration: none;}
-
 .sombreado:hover {
     background-color: #E3E8FA;
     cursor:pointer;
 }
+
+.select {height: 37px;}

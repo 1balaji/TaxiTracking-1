@@ -37,7 +37,13 @@
             <header>
 
                 <!--start logo-->
-                <a href="index.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href = "
+                <%if(rol == 1)  //Si es administrador
+                    out.println("bienvenidoAdministrador.jsp ");
+                else
+                    out.println("bienvenido.jsp ");
+                %>
+                " id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
@@ -51,7 +57,8 @@
                         <%}
                         else
                         {%>
-                            <li><a href="bienvenido.jsp">Inicio</a></li>
+                            <li><a href="bienvenido.jsp" class="current">Inicio</a></li>
+                            <li><a href="peticiones.jsp">Peticiones</a></li>
                         <%}%>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>

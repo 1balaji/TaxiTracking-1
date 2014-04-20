@@ -244,4 +244,171 @@ public class UsuarioDAO
         
         return b;
     }
+    
+    /*
+    * Metodo para editar el email un usuario. 
+    * Recibe un objeto usuario con el nuevo email y el nombre del usuario
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean editarEmail(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "UPDATE usuario SET email = ? WHERE nombre_usuario = ?";
+
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getEmail());
+            pst.setString(2, objUsuario.getNombreUsuario());
+            pst.executeUpdate();            
+            pst.close();
+            
+            b = true;
+        }
+        catch (SQLException e) { System.out.println("Error al actualizar el email del usuario D:\n" + e); }
+        finally { Conexion.closeConexion(); }
+        
+        return b;
+    }
+    
+    /*
+    * Metodo para editar la contraseña de un usuario. 
+    * Recibe el nombre del usuario, la antigua y nueva contraseña
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean editarContrasena(String nombreUsuario, String contrasena, String nuevaContrasena) 
+    {
+        boolean b = false;
+        
+        //Para verificar que la contraseña es correcta "hacemos" un login
+        if(getLogin(nombreUsuario, contrasena) != -1)
+        {
+            consulta = "UPDATE usuario SET password = ? WHERE nombre_usuario = ?";
+
+            try
+            {
+                con = Conexion.getConexion();
+                pst = con.prepareStatement(consulta);
+                pst.setString(1, nuevaContrasena);
+                pst.setString(2, nombreUsuario);
+                pst.executeUpdate();            
+                pst.close();
+
+                b = true;
+            }
+            catch (SQLException e) { System.out.println("Error al actualizar la contraseña del usuario D:\n" + e); }
+            finally { Conexion.closeConexion(); }
+        }
+        
+        return b;
+    }
+    
+    /*
+    * Metodo para recuperar la peticion de un usuario. 
+    * Recibe un objeto usuario que contiene el nombre del usuario
+    * Retorna un objeto de usuario con la peticion correspondiente o la peticion null
+    */
+    public Usuario getPeticionUsuario(Usuario objUsuario) 
+    {
+        consulta = "SELECT tipo, descripcion FROM peticion WHERE nombre_usuario = ?";
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            rs = pst.executeQuery();
+            if(rs.next())
+                objUsuario.setPeticion(new Peticion(rs.getInt("tipo"), rs.getString("descripcion")));
+            
+            pst.close();            
+        }
+        catch(SQLException e){ System.out.println("Error al obtener la peticion del usuario D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return objUsuario;
+    }
+    
+    /*
+    * Metodo para agregar una nueva peticion de un usuario. 
+    * Recibe un objeto usuario con el nombre del usuario, el tipo y descripcion de la peticion
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean agregarPeticion(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "INSERT INTO peticion VALUES (null, ?, ?, ?)";
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setInt(1, objUsuario.getPeticion().getTipo());
+            pst.setString(2, objUsuario.getPeticion().getComentario());
+            pst.setString(3, objUsuario.getNombreUsuario());
+            pst.execute();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al agregar la peticion D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
+        return b;
+    }
+    
+    /*
+    * Metodo para validar que exista un mail. 
+    * Recibe un objeto usuario con el email a buscar
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean existeEmail(String email) 
+    {
+        boolean b = false;
+        consulta = "SELECT email FROM usuario WHERE email = ?";
+
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, email);
+            rs = pst.executeQuery();
+            
+            if(rs.next())
+                b = true;
+            
+            pst.close();
+        }
+        catch (SQLException e) { System.out.println("Error al validar email D:\n" + e); }
+        finally { Conexion.closeConexion(); }
+        
+        return b;
+    }
+    
+    /*
+    * Metodo para asignar la contraseña de un usuario. 
+    * Recibe la contraseña y el email del usuario al que se le va a asignar
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean setNuevaContrasena(String email, String nuevaContrasena) 
+    {
+        boolean b = false;
+        
+        consulta = "UPDATE usuario SET password = ? WHERE email = ?";
+
+        try 
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, nuevaContrasena);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            pst.close();
+
+            b = true;
+        } 
+        catch (SQLException e) { System.out.println("Error al asignar la nueva contraseña del usuario D:\n" + e); }
+        finally { Conexion.closeConexion(); }
+        
+        return b;
+    }
 }

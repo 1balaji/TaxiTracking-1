@@ -21,10 +21,12 @@ function gestionar(operacion)
     //Opacamos la ventana
     $("html").fadeTo(0,0.3);
     
-    idTaxista = $("#TBIdTaxista").val();
+    var idTaxista = $("#TBIdTaxista").val();
     
     //Operacion a llamar
-    q = -1;
+    var q = -1;
+    
+    var textoConfirmacion;
     
     //Obtenemos el mensaje que corresponde a la accion
     switch(operacion)
@@ -48,7 +50,7 @@ function gestionar(operacion)
     }
     
     //Abrimos un cuadro de confirmacion
-    confirmar = confirm(textoConfirmacion);
+    var confirmar = confirm(textoConfirmacion);
     
     if (confirmar)
     {

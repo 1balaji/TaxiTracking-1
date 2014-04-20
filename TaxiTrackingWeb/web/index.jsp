@@ -7,10 +7,10 @@
         rol = (Integer)session.getAttribute("rol");
 
         //Si no es administrador se redirecciona al inicio de un usuario normal
-        if(rol!=1){response.sendRedirect("bienvenido.jsp");}
+        if(rol == 0){response.sendRedirect("bienvenido.jsp");}
 
         //Si es administrador se redirecciona al inicio del administrador
-        response.sendRedirect("bienvenidoAdministrador.jsp");
+        if(rol == 1){response.sendRedirect("bienvenidoAdministrador.jsp");}
     }
 %>
 <!DOCTYPE html>
@@ -82,8 +82,8 @@
                     <article class="holder_gallery">
                         <a class="photo_hover" href="#"><img src="images/picture4.jpg" width="150" height="115" alt="picture1"/></a>
                         <h2>Env&iacute;o de alertas</h2>
-                        <p>Taxi Tracking realiza denuncias en l&iacute;nea en la red social <a href="https://twitter.com/CASPOLICIA_CDMX">
-                                <i>Twitter</i></a> de el <a href="http://www.ssp.df.gob.mx/Emergencias/Pages/CAS.aspx">Centro de Atenci&oacute;n del Secretario de 
+                        <p>Taxi Tracking realiza denuncias en l&iacute;nea en la red social <a href="https://twitter.com/CASPOLICIA_CDMX" target="_blank">
+                                <i>Twitter</i></a> de el <a href="http://www.ssp.df.gob.mx/Emergencias/Pages/CAS.aspx" target="_blank">Centro de Atenci&oacute;n del Secretario de 
                                 Seguridad P&uacute;blica del D.F.</a> El cual promete una respuesta de patrullas	o elementos en un m&aacute;ximo de 10 minutos.</p>
                         <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
@@ -138,7 +138,7 @@
                             </button>
                         </div>
                         <div class="centrado">
-                            <a href="recuperar.jsp">Olvide mi contrase&ntilde;a?</a>
+                            <a href="recuperarContrasena.jsp">Olvide mi contrase&ntilde;a?</a>
                         </div>
                     </form>
 

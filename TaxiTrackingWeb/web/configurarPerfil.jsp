@@ -37,7 +37,13 @@
             <header>
 
                 <!--start logo-->
-                <a href="index.jsp" id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
+                <a href = "
+                <%if(rol == 1)  //Si es administrador
+                    out.println("bienvenidoAdministrador.jsp ");
+                else
+                    out.println("bienvenido.jsp ");
+                %>
+                " id="logo"><img src="images/logo.png" width="221" height="84" alt="logo"/></a>
                 <!--end logo-->
 
                 <!--start menu-->
@@ -51,7 +57,8 @@
                         <%}
                         else
                         {%>
-                            <li><a href="bienvenido.jsp">Inicio</a></li>
+                            <li><a href="bienvenido.jsp" class="current">Inicio</a></li>
+                            <li><a href="peticiones.jsp">Peticiones</a></li>
                         <%}%>
                         <li>
                             <div id="dd" class="wrapper-dropdown-5"><%=usuario%>
@@ -79,20 +86,25 @@
 
             <!--start holder-->
             <div class="holder_content">
-                <div id="contentEmail" class="centrado configuracion sombreado" onclick="getEmail(1)">
-                    <a id="vinculoEmail">
+                <div id="contentEmail" class="centrado">
+                    <div id="resumenEmail" class="configuracion sombreado" onclick="getEmail(1)">
                         <span class="izquierdo"><strong>Email</strong></span>
                         <span id="direccionEmail">&nbsp;</span>
                         <span class="derecho"><i id="iconoEditarEmail" class="fa fa-fw fa-pencil-square-o"></i>Editar</span>
-                    </a>
-                    <div id="detalleEmail" class="centrado"></div>
+                    </div>
+                    <div id="detalleEmail">
+                        <%if(session.getAttribute("errorEmail") != null) { out.println("<div id = \"errorEmail\" class = \"error\">" + session.getAttribute("errorEmail") + "</div>"); session.removeAttribute("errorEmail");}%>
+                    </div>
                 </div>
-                <div id="contentPassword" class="centrado configuracion sombreado" onclick="editarContrasena()">
-                    <a>
+                <div id="contentContrasena" class="centrado">
+                    <div id="resumenContrasena" class="configuracion sombreado" onclick="editarContrasena()">
                         <span class="izquierdo"><strong>Contrase&ntilde;a</strong></span>
                         <span>&nbsp;</span>
                         <span class="derecho"><i class="fa fa-fw fa-pencil-square-o"></i>Editar</span>
-                    </a>
+                    </div>
+                    <div id="detalleContrasena">
+                        <%if(session.getAttribute("errorContrasena") != null) { out.println("<div id = \"errorContrasena\" class = \"error\">" + session.getAttribute("errorContrasena") + "</div>"); session.removeAttribute("errorContrasena");}%>
+                    </div>
                 </div>
             </div>
             <!--end holder-->

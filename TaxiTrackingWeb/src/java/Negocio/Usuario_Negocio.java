@@ -1,5 +1,6 @@
 package Negocio;
 
+import Beans.Peticion;
 import Beans.Usuario;
 import ConexionSQL.UsuarioDAO;
 import Validacion.Validacion;
@@ -42,15 +43,19 @@ public class Usuario_Negocio extends HttpServlet
         if(session == null)
             response.sendRedirect("index.jsp");
         
-        //Para que el usuario normal no pueda llamar el servlet
-        else if((Integer)session.getAttribute("rol") != 1)
-            response.sendRedirect("index.jsp");
+        try {query = Integer.parseInt(request.getParameter("q"));}
+        catch (NumberFormatException e) {query = -1;}
+        
+        //Para que el usuario normal no pueda llamar las opciones de administrador del servlet
+        if((Integer)session.getAttribute("rol") != 1 && query <= 5)
+            response.sendRedirect("bienvenido.jsp");
+        
+        //Para que el administrador no pueda llamar las opciones de usuario normal del servlet
+        if((Integer)session.getAttribute("rol") != 0 && query >= 11)
+            response.sendRedirect("bienvenidoAdministrador.jsp");
         
         response.setContentType("text/html;charset=UTF-8");
         out = response.getWriter();
-        
-        try {query = Integer.parseInt(request.getParameter("q"));}
-        catch (NumberFormatException e) {query = -1;}
         
         switch(query)
         {
@@ -171,8 +176,90 @@ public class Usuario_Negocio extends HttpServlet
                 out.println(objUsuario.getEmail());
                 break;
             case 9: //Editar email
+                respuesta = editarEmail(request, session);
+                if(respuesta)
+                    session.setAttribute("errorEmail", "Los datos se actualizaron correctamente");
+                response.sendRedirect("configurarPerfil.jsp");
                 break;
             case 10:    //Editar contraseña
+                respuesta = editarContrasena(request, session);
+                if(respuesta)
+                    session.setAttribute("errorContrasena", "Los datos se actualizaron correctamente");
+                else
+                    session.setAttribute("errorContrasena", "La contraseña es incorrecta");
+                
+                response.sendRedirect("configurarPerfil.jsp");
+                break;
+            case 11:    //get peticiones de un usuario normal
+                objUsuario = getPeticion(session);
+                if(objUsuario.getPeticion() != null)
+                {
+                    int tipo = objUsuario.getPeticion().getTipo();
+                    String s;
+                    if (tipo == 0)
+                        s = "Bloqueo de la cuenta";
+                    else if(tipo == 1)
+                        s = "Desloqueo de la cuenta";
+                    else
+                        s = "Eliminaci&oacute;n de la cuenta";
+                    out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=12\" id=\"formCancelarPeticion\">\n" +
+"                            <p><strong>Petici&oacute;n pendiente</strong></p>\n" +
+"                            <div class=\"input-group\">\n" +
+"                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
+"                                <input type=\"text\" id=\"TBTipo\" name=\"TBTipo\" class=\"form-control largo\" readonly=\"readonly\" value=\"" + s + "\" />\n" +
+"                            </div>\n" +
+"                            <div class=\"input-group\">\n" +
+"                                <textarea id=\"TBDescripcion\" readonly=\"readonly\" rows=\"4\" cols=\"50\">" + objUsuario.getPeticion().getComentario() + "</textarea>\n" +
+"                            </div>\n" +
+"                            <div class=\"centrado\">\n" +
+"                                <button type=\"submit\" id=\"BTCancelarPeticion\" name=\"BTCancelarPeticion\" onclick=\"gestionar(12)\">\n" +
+"                                    <i class=\"fa fa-times fa-fw\"></i>Cancelar Peticion\n" +
+"                                </button>\n" +
+"                            </div>\n" +
+"                        </form>");
+                }
+                else
+                {
+                    out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=13\" id=\"formEnviarPeticion\">\n" +
+"                            <p><strong>Hacer una peticion</strong></p>\n");
+                    if(session.getAttribute("errorPeticion") != null)
+                    {
+                        out.print("<div class='error centrado'>" + (String) session.getAttribute("errorPeticion") + "</div>");
+                        session.removeAttribute("errorPeticion");
+                    }
+                    out.println("                            <div class=\"input-group\">\n" +
+"                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
+"                                <select id=\"TBTipo\" name=\"TBTipo\" class=\"form-control largo select\" required=\"required\">\n" +
+"                                    <option value=\"\">Seleccionar</option>\n" +
+"                                    <option value=\"0\">Bloqueo de la cuenta</option>\n" +
+"                                    <option value=\"1\">Desbloqueo de la cuenta</option>\n" +
+"                                    <option value=\"2\">Eliminaci&oacute;n de la cuenta</option>\n" +
+"                                </select>\n" +
+"                            </div>\n" +
+"                            <div class=\"input-group\">\n" +
+"                                <textarea id=\"TBDescripcion\" name=\"TBDescripcion\" placeholder=\"Descripci&oacute;n\" rows=\"4\" cols=\"50\" maxlength=\"150\" wrap=\"hard\" required=\"required\"></textarea>\n" +
+"                            </div>\n" +
+"                            <div class=\"centrado\">\n" +
+"                                <button type=\"submit\" id=\"BTEnviarPeticion\" name=\"BTEnviarPeticion\" onclick=\"gestionar(13)\">\n" +
+"                                    <i class=\"fa fa-plus-circle fa-fw\"></i>Enviar Peticion\n" +
+"                                </button>\n" +
+"                            </div>\n" +
+"                        </form>");
+                }
+                break;
+            case 12:    //Cancelar una peticion
+                respuesta = cancelarPeticion(session);
+                if(respuesta)
+                    session.setAttribute("errorPeticion", "La petición se canceló correctamente");
+                else
+                    session.setAttribute("errorPeticion", "Error al cancelar la petición");
+                response.sendRedirect("peticiones.jsp");
+                break;
+            case 13:    //Enviar una peticion
+                respuesta = agregarPeticion(request, session);
+                if(respuesta)
+                    session.setAttribute("errorPeticion", "La petición se envió correctamente");
+                response.sendRedirect("peticiones.jsp");
                 break;
             default:
                 response.sendRedirect("bienvenidoAdministrador.jsp");
@@ -322,6 +409,138 @@ public class Usuario_Negocio extends HttpServlet
         objUsuario = usuarioDAO.buscarUsuario(objUsuario);
         
         return objUsuario;
+    }
+    
+    private boolean editarEmail(HttpServletRequest request, HttpSession session)
+    {
+        boolean b = true;
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        
+        String email = request.getParameter("TBEmail").trim();
+        if(!Validacion.esEmail(email))
+        {
+            session.setAttribute("errorEmail", "Error el email es incorrecto");
+            b = false;
+        }
+        
+        String emailConfirmacion = request.getParameter("TBConfirmarEmail").trim();
+        if(email.compareTo(emailConfirmacion) != 0)
+        {
+            session.setAttribute("errorEmail", "Error los correos electrónicos no coinciden");
+            b = false;
+        }
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            objUsuario = new Usuario(nombreUsuario);
+            objUsuario.setEmail(email);
+            
+            usuarioDAO = new UsuarioDAO();
+        
+            //Hacemos la consulta a la BD
+            b = usuarioDAO.editarEmail(objUsuario);
+        }
+        
+        return b;
+    }
+    
+    private boolean editarContrasena(HttpServletRequest request, HttpSession session)
+    {
+        boolean b = true;
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        
+        String contrasena = request.getParameter("TBContrasena").trim();
+        if(!Validacion.esAlfanumerico(contrasena))
+        {
+            session.setAttribute("errorContrasena", "Error la contraseña es incorrecta");
+            b = false;
+        }
+        
+        String nuevaContrasena = request.getParameter("TBNuevaContrasena").trim();
+        if(!Validacion.esAlfanumerico(nuevaContrasena))
+        {
+            session.setAttribute("errorContrasena", "Error la nueva contraseña es incorrecta");
+            b = false;
+        }
+        
+        String contrasenaConfirmacion = request.getParameter("TBConfirmarContrasena").trim();
+        if(nuevaContrasena.compareTo(contrasenaConfirmacion) != 0)
+        {
+            session.setAttribute("errorEmail", "Error las contraseñas no coinciden");
+            b = false;
+        }
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            usuarioDAO = new UsuarioDAO();
+        
+            //Hacemos la consulta a la BD
+            b = usuarioDAO.editarContrasena(nombreUsuario, contrasena, nuevaContrasena);
+        }
+        
+        return b;
+    }
+    
+    private Usuario getPeticion(HttpSession session) 
+    {
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        objUsuario = new Usuario(nombreUsuario);
+        usuarioDAO = new UsuarioDAO();
+        objUsuario = usuarioDAO.getPeticionUsuario(objUsuario);
+        
+        return objUsuario;
+    }
+    
+    private boolean cancelarPeticion(HttpSession session) 
+    {
+        boolean b;
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        objUsuario = new Usuario(nombreUsuario);
+        usuarioDAO = new UsuarioDAO();
+        
+        //Hacemos la consulta a la BD
+        b = usuarioDAO.eliminarPeticion(objUsuario);
+        
+        return b;
+    }
+    
+    private boolean agregarPeticion(HttpServletRequest request, HttpSession session) throws UnsupportedEncodingException
+    {
+        boolean b = true;
+        String nombreUsuario = (String) session.getAttribute("nombre_usuario");
+        
+        int tipo = 0;
+        try {tipo = Integer.parseInt(request.getParameter("TBTipo"));}
+        catch(NumberFormatException e)
+        {
+            session.setAttribute("errorPeticion", "Error el tipo de petición es incorrecto");
+            b = false;
+        }
+        
+        //String descripcion = new String(request.getParameter("TBDescripcion").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String descripcion = request.getParameter("TBDescripcion").trim();
+        System.out.println(descripcion);
+        if(!Validacion.esCadena(descripcion))
+        {
+            session.setAttribute("errorPeticion", "Error la descripción es incorrecta");
+            b = false;
+        }
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            objUsuario = new Usuario(nombreUsuario);
+            objUsuario.setPeticion(new Peticion(tipo, descripcion));
+            
+            usuarioDAO = new UsuarioDAO();
+        
+            //Hacemos la consulta a la BD
+            b = usuarioDAO.agregarPeticion(objUsuario);
+        }
+        
+        return b;
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
