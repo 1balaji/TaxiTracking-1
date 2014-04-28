@@ -19,7 +19,7 @@ public class ManejoSesion extends HttpServlet
     private UsuarioDAO usuarioDAO;
     
     //Variable para la sesion
-    HttpSession session = null;
+    private HttpSession session = null;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException 
