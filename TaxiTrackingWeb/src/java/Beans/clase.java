@@ -15,7 +15,7 @@ public class clase
         System.out.println("***********************");
         System.out.println(s);
         System.out.println("***********************");        
-        Taxi objTaxi = Serializacion.deserialize(s, Taxi.class);
+        Taxi objTaxi = Serializacion.deserialize("invalido", Taxi.class);
         System.out.println("Esto es lo recuperado");
         System.out.println(objTaxi.getIdTaxista());
     }

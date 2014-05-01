@@ -12,6 +12,10 @@
         <servlet-name>Taxi_Negocio</servlet-name>
         <servlet-class>Negocio.Taxi_Negocio</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Bitacora_Negocio</servlet-name>
+        <servlet-class>Negocio.Bitacora_Negocio</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Usuario_Negocio</servlet-name>
         <url-pattern>/Usuario_Negocio</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>Taxi_Negocio</servlet-name>
         <url-pattern>/Taxi_Negocio</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Bitacora_Negocio</servlet-name>
+        <url-pattern>/Bitacora_Negocio</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
