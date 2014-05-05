@@ -474,10 +474,13 @@ public class Usuario_Negocio extends HttpServlet
         //Si no hubo error y los datos son validos
         if(b)
         {
+            objUsuario = new Usuario(nombreUsuario);
+            objUsuario.setContrasena(contrasena);
+            
             usuarioDAO = new UsuarioDAO();
         
             //Hacemos la consulta a la BD
-            b = usuarioDAO.editarContrasena(nombreUsuario, contrasena, nuevaContrasena);
+            b = usuarioDAO.editarContrasena(objUsuario, nuevaContrasena);
         }
         
         return b;

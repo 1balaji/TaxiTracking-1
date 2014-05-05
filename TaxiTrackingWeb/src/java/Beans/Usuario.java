@@ -3,6 +3,7 @@ package Beans;
 public class Usuario 
 {
     private String nombre;
+    private String contrasena;
     private String apellido_paterno;
     private String apellido_materno;
     private String email;
@@ -13,6 +14,7 @@ public class Usuario
     public Usuario()
     {
         nombre = "";
+        contrasena = "";
         apellido_paterno = "";
         apellido_materno = "";
         email = "";
@@ -34,6 +36,16 @@ public class Usuario
     public String getNombre()
     {
         return nombre;
+    }
+    
+    public void setContrasena(String contrasena)
+    {
+        this.contrasena = contrasena;
+    }
+    
+    public String getContrasena()
+    {
+        return contrasena;
     }
     
     public void setApellidoPaterno(String apellido_paterno)

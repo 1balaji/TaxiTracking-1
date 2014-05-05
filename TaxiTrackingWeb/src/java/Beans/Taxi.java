@@ -1,21 +1,19 @@
 package Beans;
 
-import java.io.Serializable;
-
-public class Taxi implements Serializable
+public class Taxi
 {
     private String idTaxista;
-    transient private String nombre;
-    transient private String apellido_paterno;
-    transient private String apellido_materno;
-    transient private String curp;
-    transient private String matricula;
-    transient private int folio;
-    transient private int numeroLicencia;
-    transient private String vigencia;
-    transient private String fechaExpedicion;
-    transient private String horaExpedicion;
-    transient private int status;
+    private String nombre;
+    private String apellido_paterno;
+    private String apellido_materno;
+    private String curp;
+    private String matricula;
+    private long folio;
+    private long numeroLicencia;
+    private String vigencia;
+    private String fechaExpedicion;
+    private String horaExpedicion;
+    private int status;
     
     public Taxi()
     {
@@ -98,22 +96,22 @@ public class Taxi implements Serializable
         return matricula;
     }
 
-    public void setFolio(int folio)
+    public void setFolio(long folio)
     {
         this.folio = folio;
     }
     
-    public int getFolio()
+    public long getFolio()
     {
         return folio;
     }
     
-    public void setNumeroLicencia(int numeroLicencia)
+    public void setNumeroLicencia(long numeroLicencia)
     {
         this.numeroLicencia = numeroLicencia;
     }
     
-    public int getNumeroLicencia()
+    public long getNumeroLicencia()
     {
         return numeroLicencia;
     }

@@ -1,5 +1,6 @@
 package Negocio;
 
+import Beans.CodigoQR;
 import Beans.Taxi;
 import ConexionSQL.TaxiDAO;
 import Serializacion.Serializacion;
@@ -23,7 +24,7 @@ public class Taxi_Negocio extends HttpServlet
 {
     //Beans
     private Taxi objTaxi;
-    private Taxi objTaxis[];
+    private CodigoQR objCodigoQR;
     
     //Variable para la conexion con la BD
     private TaxiDAO taxiDAO;
@@ -175,16 +176,16 @@ public class Taxi_Negocio extends HttpServlet
             b = false;
         }
         
-        int folio = 0;
-        try {folio = Integer.parseInt(request.getParameter("TBFolio").trim());}
+        long folio = 0;
+        try {folio = Long.parseLong(request.getParameter("TBFolio").trim());}
         catch(NumberFormatException e)
         {
             session.setAttribute("errorFolio", "Error el folio es incorrecto");
             b = false;
         }
         
-        int numeroLicencia = 0;
-        try {numeroLicencia = Integer.parseInt(request.getParameter("TBNumeroLicencia").trim());}
+        long numeroLicencia = 0;
+        try {numeroLicencia = Long.parseLong(request.getParameter("TBNumeroLicencia").trim());}
         catch(NumberFormatException e)
         {
             session.setAttribute("errorNumeroLicencia", "Error el numero de licencia es incorrecto");
@@ -285,8 +286,8 @@ public class Taxi_Negocio extends HttpServlet
     private Image generarCodigoQR(int largo, int alto, HttpServletRequest request)
     {
         String idTaxista = request.getParameter("idTaxista");
-        objTaxi = new Taxi(idTaxista);
-        String datos = Serializacion.serialize(objTaxi);
+        objCodigoQR = new CodigoQR(idTaxista);
+        String datos = Serializacion.serialize(objCodigoQR);
         
         //Creamos el QR
         BarcodeQRCode codigoQR = new BarcodeQRCode(datos, largo, alto, null);

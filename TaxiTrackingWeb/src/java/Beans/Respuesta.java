@@ -1,7 +1,7 @@
 package Beans;
 
 /*
- * Clase para mandar el json de respuesta a la app movil
+ * Clase para mandar respuesta a la app movil como Nombre:Valor
  */
 
 public class Respuesta 

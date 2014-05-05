@@ -274,15 +274,15 @@ public class UsuarioDAO
     
     /*
     * Metodo para editar la contraseña de un usuario. 
-    * Recibe el nombre del usuario, la antigua y nueva contraseña
+    * Recibe un objeto usuario con el nombre del usuario, la antigua contraseña y un string con la nueva contraseña
     * Retorna true en caso de exito y false en caso de error
     */
-    public boolean editarContrasena(String nombreUsuario, String contrasena, String nuevaContrasena) 
+    public boolean editarContrasena(Usuario objUsuario, String nuevaContrasena) 
     {
         boolean b = false;
         
         //Para verificar que la contraseña es correcta "hacemos" un login
-        if(getLogin(nombreUsuario, contrasena) != -1)
+        if(getLogin(objUsuario.getNombreUsuario(), objUsuario.getContrasena()) != -1)
         {
             consulta = "UPDATE usuario SET password = ? WHERE nombre_usuario = ?";
 
@@ -291,7 +291,7 @@ public class UsuarioDAO
                 con = Conexion.getConexion();
                 pst = con.prepareStatement(consulta);
                 pst.setString(1, nuevaContrasena);
-                pst.setString(2, nombreUsuario);
+                pst.setString(2, objUsuario.getNombreUsuario());
                 pst.executeUpdate();            
                 pst.close();
 
@@ -359,7 +359,7 @@ public class UsuarioDAO
     /*
     * Metodo para validar que exista un mail. 
     * Recibe un objeto usuario con el email a buscar
-    * Retorna true en caso de exito y false en caso de error
+    * Retorna true en caso de que exista y false en caso de que no
     */
     public boolean existeEmail(String email) 
     {
@@ -409,6 +409,37 @@ public class UsuarioDAO
         catch (SQLException e) { System.out.println("Error al asignar la nueva contraseña del usuario D:\n" + e); }
         finally { Conexion.closeConexion(); }
         
+        return b;
+    }
+    
+    /*
+    * Metodo para agregar un usuario normal.
+    * Recibe un objeto usuario con los datos que se van a registrar.
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean agregarUsuario(Usuario objUsuario) 
+    {
+        boolean b = false;
+        consulta = "INSERT INTO usuario VALUES (?, ?, ?, ?, ?, ?, 0, ?)";   //0 porque el tipo de usuario es normal
+        
+        try
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, objUsuario.getNombreUsuario());
+            pst.setString(2, objUsuario.getContrasena());
+            pst.setString(3, objUsuario.getNombre());
+            pst.setString(4, objUsuario.getApellidoPaterno());
+            pst.setString(5, objUsuario.getApellidoMaterno());
+            pst.setString(6, objUsuario.getEmail());
+            pst.setInt(7, objUsuario.getStatus());
+            pst.execute();
+            pst.close();
+            
+            b = true;
+        }
+        catch(SQLException e){ System.out.println("Error al agregar al usuario D:\n" + e); }
+        finally{ Conexion.closeConexion(); }
         return b;
     }
 }

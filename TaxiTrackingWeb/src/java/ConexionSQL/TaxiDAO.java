@@ -44,8 +44,8 @@ public class TaxiDAO
             pst.setString(4, objTaxi.getApellidoMaterno());
             pst.setString(5, objTaxi.getCURP());
             pst.setString(6, objTaxi.getMatricula());
-            pst.setInt(7, objTaxi.getFolio());
-            pst.setInt(8, objTaxi.getNumeroLicencia());            
+            pst.setLong(7, objTaxi.getFolio());
+            pst.setLong(8, objTaxi.getNumeroLicencia());            
             pst.setString(9, objTaxi.getVigencia());
             pst.setString(10, objTaxi.getFechaExpedicion());
             pst.setString(11, objTaxi.getHoraExpedicion());
@@ -76,8 +76,8 @@ public class TaxiDAO
             pst = con.prepareStatement(consulta);
             pst.setString(1, objTaxi.getIdTaxista());
             pst.setString(2, objTaxi.getCURP());
-            pst.setInt(3, objTaxi.getFolio());
-            pst.setInt(4, objTaxi.getNumeroLicencia());
+            pst.setLong(3, objTaxi.getFolio());
+            pst.setLong(4, objTaxi.getNumeroLicencia());
             rs = pst.executeQuery();
             
             //Reiniciamos el objeto
@@ -92,8 +92,8 @@ public class TaxiDAO
                 objTaxi.setApellidoMaterno(rs.getString("apellido_materno"));
                 objTaxi.setCURP(rs.getString("curp"));
                 objTaxi.setMatricula(rs.getString("matricula"));
-                objTaxi.setFolio(rs.getInt("folio"));
-                objTaxi.setNumeroLicencia(rs.getInt("numeroLicencia"));
+                objTaxi.setFolio(rs.getLong("folio"));
+                objTaxi.setNumeroLicencia(rs.getLong("numeroLicencia"));
                 objTaxi.setVigencia(rs.getString("vigencia"));
                 objTaxi.setFechaExpedicion(rs.getString("fechaExpedicion"));
                 objTaxi.setHoraExpedicion(rs.getString("horaExpedicion"));
