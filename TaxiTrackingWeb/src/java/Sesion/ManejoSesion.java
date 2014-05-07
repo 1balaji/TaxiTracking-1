@@ -95,8 +95,8 @@ public class ManejoSesion extends HttpServlet
      * Metodo para el inicio de sesion desde al app. Si es correcto se guarda en un List que contiene
      * un solo objeto respuesta, esto se hace para conseguir el formato para el JSON.
      * Se imprime la respuesta en el siguiente formato
-     * [{"logstatus":"0"}] -> "logueo invalido"
-     * [{"logstatus":"1"}] -> "logueo valido"
+     * [{"respuesta":0}] -> "logueo invalido"
+     * [{"respuesta":1}] -> "logueo valido"
     */
     private void getLogin(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -114,9 +114,9 @@ public class ManejoSesion extends HttpServlet
 
         //Si es correcto el login
         if (usuarioDAO.getLogin(user, pwd) != -1)
-            respuesta.add(new Respuesta("1"));
+            respuesta.add(new Respuesta(1));
         else
-            respuesta.add(new Respuesta("0"));
+            respuesta.add(new Respuesta(0));
 
         out.println(gson.toJson(respuesta));
         out.close();

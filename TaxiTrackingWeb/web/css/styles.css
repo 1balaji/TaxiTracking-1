@@ -413,4 +413,8 @@ label.input-group-label {
     cursor:pointer;
 }
 
-.select {height: 37px;}
+.select 
+{
+    height: 37px;
+    width: 275px;
+}

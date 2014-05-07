@@ -7,10 +7,10 @@ import java.sql.SQLException;
 public class Conexion
 {
     private static Connection con = null;
-    private static String BD = "taxitracking";
-    private static String URL = "jdbc:mysql://localhost:3306/" + BD;
-    private static String usuario = "root";
-    private static String contrasena = "pass";
+    private static final String BD = "taxitracking";
+    private static final String URL = "jdbc:mysql://localhost:3306/" + BD;
+    private static final String usuario = "root";
+    private static final String contrasena = "pass";
 
     public static Connection getConexion()
     {
@@ -25,7 +25,11 @@ public class Conexion
     
     public static void closeConexion()
     {
-        try{ con.close(); }
-        catch(SQLException e){ System.out.println("Error al abrir la conexion D:\n" + e); }
+        try
+        {
+            if(con != null)
+                con.close(); 
+        }
+        catch(SQLException e){ System.out.println("Error al cerrar la conexion D:\n" + e); }
     }
 }

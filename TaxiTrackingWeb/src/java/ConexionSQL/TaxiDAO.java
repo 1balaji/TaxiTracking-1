@@ -32,7 +32,7 @@ public class TaxiDAO
     public boolean agregarTaxi(Taxi objTaxi) 
     {
         boolean b = false;
-        consulta = "INSERT INTO taxista VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        consulta = "INSERT INTO taxista VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try
         {
@@ -50,6 +50,7 @@ public class TaxiDAO
             pst.setString(10, objTaxi.getFechaExpedicion());
             pst.setString(11, objTaxi.getHoraExpedicion());
             pst.setInt(12, objTaxi.getStatus());
+            pst.setInt(13, objTaxi.getTipo());
             
             pst.execute();
             pst.close();

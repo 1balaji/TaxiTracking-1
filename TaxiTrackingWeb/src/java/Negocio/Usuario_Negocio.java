@@ -229,7 +229,7 @@ public class Usuario_Negocio extends HttpServlet
                     }
                     out.println("                            <div class=\"input-group\">\n" +
 "                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
-"                                <select id=\"TBTipo\" name=\"TBTipo\" class=\"form-control largo select\" required=\"required\">\n" +
+"                                <select id=\"TBTipo\" name=\"TBTipo\" class=\"form-control select\" required=\"required\">\n" +
 "                                    <option value=\"\">Seleccionar</option>\n" +
 "                                    <option value=\"0\">Bloqueo de la cuenta</option>\n" +
 "                                    <option value=\"1\">Desbloqueo de la cuenta</option>\n" +

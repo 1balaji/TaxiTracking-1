@@ -11,9 +11,9 @@ public class CodigoQR implements Serializable
         datos = "";
     }
     
-    public CodigoQR(String idTaxista)
+    public CodigoQR(String datos)
     {
-        this.datos = idTaxista;
+        this.datos = datos;
     }
     
     public void setDatos(String datos)

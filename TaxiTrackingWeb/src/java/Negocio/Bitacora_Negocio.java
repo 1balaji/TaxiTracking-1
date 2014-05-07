@@ -76,7 +76,7 @@ public class Bitacora_Negocio extends HttpServlet
                 if(resultado)
                 {
                     //Mandamos un 1 como respuesta
-                    objRespuesta = new Respuesta("1");
+                    objRespuesta = new Respuesta(1);
                     respuestaALaPeticion = new ArrayList<Respuesta>();
                     respuestaALaPeticion.add(objRespuesta);
                     out.println(gson.toJson(respuestaALaPeticion));

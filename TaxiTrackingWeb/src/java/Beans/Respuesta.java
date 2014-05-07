@@ -6,11 +6,10 @@ package Beans;
 
 public class Respuesta 
 {
-    //Vale 1 si es valido y 0 si no es valido
-    private String logstatus;
+    private int respuesta;
     
-    public Respuesta(String logstatus)
+    public Respuesta(int respuesta)
     {
-        this.logstatus = logstatus;
+        this.respuesta = respuesta;
     }
 }

@@ -14,6 +14,7 @@ public class Taxi
     private String fechaExpedicion;
     private String horaExpedicion;
     private int status;
+    private int tipo;
     
     public Taxi()
     {
@@ -154,5 +155,15 @@ public class Taxi
     public int getStatus()
     {
         return status;
+    }
+    
+    public void setTipo(int tipo)
+    {
+        this.tipo = tipo;
+    }
+    
+    public int getTipo()
+    {
+        return tipo;
     }
 }

@@ -145,6 +145,16 @@
                                 <label class="input-group-label mediano centrado" for="TBHoraExpedicion">Hora Expedici&oacute;n</label>
                                 <input type="text" id="TBHoraExpedicion" name="TBHoraExpedicion" class="form-control largo" placeholder="HH:MM:SS" required="required" maxlength="8" />
                             </div>
+                            <%if(session.getAttribute("errorTipo") != null) {out.print("<div class='error centrado'>\n" + (String) session.getAttribute("errorTipo") + "\n</div>");} session.removeAttribute("errorTipo");%>
+                            <div class="input-group">
+                                <label class="input-group-label mediano centrado" for="TBTipo">Tipo de Taxi</label>
+                                <select id="TBTipo" name="TBTipo" class="form-control select" required="required">
+                                    <option value="">Seleccionar</option>
+                                    <option value="0">Taxi Normal</option>
+                                    <option value="1">Radio Taxi</option>
+                                    <option value="2">Taxi de Sitio</option>
+                                </select>
+                            </div>
                             <div class="centrado">
                                 <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
                                     <i class="fa fa-plus-circle fa-fw"></i>Agregar

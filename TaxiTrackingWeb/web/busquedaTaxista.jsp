@@ -146,6 +146,20 @@
                                     <label class="input-group-label mediano centrado" for="TBHoraExpedicion">Hora Expedici&oacute;n</label>
                                     <input type="text" id="TBHoraExpedicion" name="TBHoraExpedicion" class="form-control largo" value="<%=objTaxi.getHoraExpedicion()%>" readonly="readonly" />
                                 </div>
+                                <div class="input-group">
+                                    <label class="input-group-label mediano centrado" for="TBTipo">Tipo de Taxi</label>
+                                    <%
+                                        int tipo = objTaxi.getTipo();
+                                        String s;
+                                        if(tipo == 0)
+                                            s = "Taxi Normal";
+                                        else if(tipo == 1)
+                                            s = "Radio Taxi";
+                                        else
+                                            s = "Taxi de Sitio";
+                                    %>
+                                    <input type="text" id="TBTipo" name="TBTipo" class="form-control largo" value="<%=s%>" readonly="readonly" />
+                                </div>
                                 <div class="centrado">
                                     <%if(objTaxi.getStatus() == 0)   //Si esta bloqueado
                                     {

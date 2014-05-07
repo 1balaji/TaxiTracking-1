@@ -213,6 +213,14 @@ public class Taxi_Negocio extends HttpServlet
             b = false;
         }
         
+        int tipo = 0;
+        try {tipo = Integer.parseInt(request.getParameter("TBTipo"));}
+        catch(NumberFormatException e)
+        {
+            session.setAttribute("errorTipo", "Error el tipo de taxi es incorrecto");
+            b = false;
+        }
+        
         //Si no hubo error y los datos son validos
         if(b)
         {
@@ -245,6 +253,7 @@ public class Taxi_Negocio extends HttpServlet
                 objTaxi.setFechaExpedicion(fechaExpedicion);
                 objTaxi.setHoraExpedicion(horaExpedicion);
                 objTaxi.setStatus(1);
+                objTaxi.setTipo(tipo);
                 
                 //Hacemos la consulta a la BD
                 b = taxiDAO.agregarTaxi(objTaxi);
