@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Validacion
 {
-    private static final Pattern esCadena = Pattern.compile("[a-zA-Záéíóúñ\\s\\.]+");
+    private static final Pattern esCadena = Pattern.compile("[a-zA-Záéíóúñ][a-zA-Záéíóúñ\\s]*");
     private static final Pattern esNumero = Pattern.compile("\\d+");
     private static final Pattern esFecha = Pattern.compile("\\d{4}/(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])");
     private static final Pattern esHora = Pattern.compile("([0-1][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9]");
@@ -22,49 +22,89 @@ public class Validacion
     
     public static boolean esCadena(String entrada)
     {
-        matcher = esCadena.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esCadena.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esNumero(String entrada)
     {
-        matcher = esNumero.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esNumero.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esFecha(String entrada)
     {
-        matcher = esFecha.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esFecha.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esHora(String entrada)
     {
-        matcher = esHora.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esHora.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esAlfanumerico(String entrada)
     {
-        matcher = esAlfanumerico.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esAlfanumerico.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esCURP(String entrada)
     {
-        matcher = esCURP.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esCURP.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esMatricula(String entrada)
     {
-        matcher = esMatricula.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esMatricula.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
     
     public static boolean esEmail(String entrada)
     {
-        matcher = esEmail.matcher(entrada);
-        return matcher.matches();
+        if(entrada != null)
+        {
+            matcher = esEmail.matcher(entrada);
+            return matcher.matches();
+        }
+        else
+            return false;
     }
 }

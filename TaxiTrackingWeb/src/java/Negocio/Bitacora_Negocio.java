@@ -51,6 +51,7 @@ public class Bitacora_Negocio extends HttpServlet
         
         out = response.getWriter();
         Gson gson = new Gson();
+        respuestaALaPeticion = new ArrayList();
         
         try {query = Integer.parseInt(request.getParameter("q"));}
         catch (NumberFormatException e) {query = -1;}
@@ -64,9 +65,10 @@ public class Bitacora_Negocio extends HttpServlet
                 if(objTaxi == null)
                     objTaxi = new Taxi(null);
                 
-                respuestaALaPeticion = new ArrayList<Taxi>();
+                //Agregamos los datos del taxi a la respuesta
                 respuestaALaPeticion.add(objTaxi);
                 
+                //Mandamos la respuesta
                 out.println(gson.toJson(respuestaALaPeticion));
                 break;
             case 2: //Registrar usuario
@@ -77,15 +79,19 @@ public class Bitacora_Negocio extends HttpServlet
                 {
                     //Mandamos un 1 como respuesta
                     objRespuesta = new Respuesta(1);
-                    respuestaALaPeticion = new ArrayList<Respuesta>();
                     respuestaALaPeticion.add(objRespuesta);
                     out.println(gson.toJson(respuestaALaPeticion));
                 }
                 else
                 {
-                    //Mandamos un objeto usuario indicando los errores dentro de los atributos
-                    respuestaALaPeticion = new ArrayList<Usuario>();
+                    //Mandamos un 0 como respuesta
+                    objRespuesta = new Respuesta(0);
+                    respuestaALaPeticion.add(objRespuesta);
+                    
+                    //Agregamos despues los errores
                     respuestaALaPeticion.add(objUsuario);
+                    
+                    //Mandamos la respuesta
                     out.println(gson.toJson(respuestaALaPeticion));
                 }
                 break;
@@ -121,7 +127,7 @@ public class Bitacora_Negocio extends HttpServlet
         objUsuario = new Usuario();
         
         //Obtenemos los datos del formulario
-        String nombreUsuario = request.getParameter("TBNombreUsuario").trim();
+        String nombreUsuario = request.getParameter("TBNombreUsuario");
         
         //Validamos cada entrada con una expresion regular
         if(!Validacion.esAlfanumerico(nombreUsuario))
@@ -131,44 +137,35 @@ public class Bitacora_Negocio extends HttpServlet
             b = false;
         }
         
-        String contrasena = request.getParameter("TBContrasena").trim();
+        String contrasena = request.getParameter("TBContrasena");
         if(!Validacion.esAlfanumerico(contrasena))
         {
             objUsuario.setContrasena("error");
             b = false;
         }
         
-        String confirmarContrasena = request.getParameter("TBConfirmarContrasena").trim();
-        
-        //Comparamos que coincidan las contrasenas
-        if(!contrasena.equals(confirmarContrasena))
-        {
-            objUsuario.setContrasena("noCoinciden");
-            b = false;
-        }
-        
-        String nombre = new String(request.getParameter("TBNombre").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String nombre = new String(request.getParameter("TBNombre").getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(nombre))
         {
             objUsuario.setNombre("error");
             b = false;
         }
         
-        String apellido_paterno = new String(request.getParameter("TBApellidoPaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String apellido_paterno = new String(request.getParameter("TBApellidoPaterno").getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(apellido_paterno))
         {
             objUsuario.setApellidoPaterno("error");
             b = false;
         }
         
-        String apellido_materno = new String(request.getParameter("TBApellidoMaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String apellido_materno = new String(request.getParameter("TBApellidoMaterno").getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(apellido_materno))
         {
             objUsuario.setApellidoMaterno("error");
             b = false;
         }
         
-        String email = request.getParameter("TBEmail").trim();
+        String email = request.getParameter("TBEmail");
         if(!Validacion.esEmail(email))
         {
             objUsuario.setEmail("error");
@@ -206,8 +203,19 @@ public class Bitacora_Negocio extends HttpServlet
                 //Verificamos que dato esta repetido y subimos el error a sesion
                 if(objUsuario.getNombreUsuario().equals(nombreUsuario))
                     objUsuario.setNombreUsuario("repetido");
+                else
+                    objUsuario.setNombreUsuario("");
                 if(objUsuario.getEmail().equals(email))
                     objUsuario.setEmail("repetido");
+                else
+                    objUsuario.setEmail("");
+                
+                //Regresamos el objeto con los valores introducidos
+                objUsuario.setNombre("");
+                objUsuario.setApellidoPaterno("");
+                objUsuario.setApellidoMaterno("");
+                objUsuario.setContrasena("");
+                objUsuario.setStatus(0);
                 
                 b = false;
             }
