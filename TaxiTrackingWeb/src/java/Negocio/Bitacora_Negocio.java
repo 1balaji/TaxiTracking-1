@@ -1,12 +1,15 @@
 package Negocio;
 
+import Alerta.Alerta;
 import Beans.CodigoQR;
 import Beans.Respuesta;
 import Beans.Taxi;
 import Beans.Usuario;
+import ConexionSQL.BitacoraDAO;
 import ConexionSQL.TaxiDAO;
 import ConexionSQL.UsuarioDAO;
 import Serializacion.Serializacion;
+import Sesion.Email;
 import Validacion.Validacion;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -14,10 +17,13 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import twitter4j.TwitterException;
 
 public class Bitacora_Negocio extends HttpServlet 
 {
@@ -30,6 +36,10 @@ public class Bitacora_Negocio extends HttpServlet
     //Variable para la conexion con la BD
     private TaxiDAO taxiDAO;
     private UsuarioDAO usuarioDAO;
+    private BitacoraDAO bitacoraDAO;
+    
+    //Variable para el envio de alertas.
+    private Alerta objAlerta;
     
     //Salida html
     private PrintWriter out;
@@ -44,7 +54,7 @@ public class Bitacora_Negocio extends HttpServlet
     private int query;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException 
+            throws ServletException, IOException
     {
         //Configuramos el tipo de respuesta
         response.setContentType("application/json");
@@ -61,12 +71,31 @@ public class Bitacora_Negocio extends HttpServlet
             case 1: //Consultar QR
                 objTaxi = consultarQR(request);
                 
-                //Si no hubo resultados mandamos el objeto null
+                //Si no hubo resultados
                 if(objTaxi == null)
-                    objTaxi = new Taxi(null);
-                
-                //Agregamos los datos del taxi a la respuesta
-                respuestaALaPeticion.add(objTaxi);
+                {
+                    objRespuesta = new Respuesta(0);
+                    respuestaALaPeticion.add(objRespuesta);
+                }
+                //Si el taxista esta bloqueado
+                else if(objTaxi.getStatus() == 0)
+                {
+                    objRespuesta = new Respuesta(1);
+                    respuestaALaPeticion.add(objRespuesta);
+                }
+                //Busqueda correcta y no esta bloqueado
+                else
+                {
+                    objRespuesta = new Respuesta(2);
+                    respuestaALaPeticion.add(objRespuesta);
+                    
+                    //Agregamos los datos del taxi a la respuesta
+                    respuestaALaPeticion.add(objTaxi);
+                    
+                    //Recuperamos los comentarios asociados al taxista
+                    bitacoraDAO = new BitacoraDAO();
+                    respuestaALaPeticion.add(bitacoraDAO.getComentariosTaxi(objTaxi));
+                }
                 
                 //Mandamos la respuesta
                 out.println(gson.toJson(respuestaALaPeticion));
@@ -95,6 +124,19 @@ public class Bitacora_Negocio extends HttpServlet
                     out.println(gson.toJson(respuestaALaPeticion));
                 }
                 break;
+            case 3: //Mandar alerta
+                resultado = enviarAlerta(request);
+                
+                //Si el envio fue correcto
+                if(resultado)
+                    //Mandamos un 1 como respuesta
+                    objRespuesta = new Respuesta(1);
+                else
+                    //Mandamos un 0 como respuesta
+                    objRespuesta = new Respuesta(0);
+                respuestaALaPeticion.add(objRespuesta);
+                out.println(gson.toJson(respuestaALaPeticion));
+                break;
         }
         out.close();
     }
@@ -105,7 +147,8 @@ public class Bitacora_Negocio extends HttpServlet
         
         if(qrLeido != null)
         {
-            objCodigoQR = Serializacion.deserialize(qrLeido, CodigoQR.class);
+            //objCodigoQR = Serializacion.deserialize(qrLeido, CodigoQR.class);
+            objCodigoQR = new CodigoQR(qrLeido);
 
             if(objCodigoQR != null)
             {
@@ -179,12 +222,13 @@ public class Bitacora_Negocio extends HttpServlet
             
             //Llenamos el objeto solo con los datos que no se deben duplicar
             objUsuario.setNombreUsuario(nombreUsuario);
+            objUsuario.setEmail(email);
             
             //Buscamos el usuario para ver si ya esta registrado el nombre del usuario
             objUsuario = usuarioDAO.buscarUsuario(objUsuario);
 
             //No hay datos repetidos
-            if(objUsuario.getNombreUsuario().equals("") && !usuarioDAO.existeEmail(email))
+            if(objUsuario.getNombreUsuario().equals("") && objUsuario.getEmail().equals(""))
             {
                 //Llenamos el objeto con todos los datos
                 objUsuario.setNombreUsuario(nombreUsuario);
@@ -192,10 +236,17 @@ public class Bitacora_Negocio extends HttpServlet
                 objUsuario.setApellidoPaterno(apellido_paterno);
                 objUsuario.setApellidoMaterno(apellido_materno);
                 objUsuario.setEmail(email);
-                objUsuario.setStatus(1);
+                objUsuario.setStatus(-1);
                 
                 //Hacemos la consulta a la BD
                 b = usuarioDAO.agregarUsuario(objUsuario);
+                
+                //Si se creo correctamente la cuenta enviamos un email para que la active
+                if(b)
+                {
+                    Email serverEmail = new Email();
+                    b = serverEmail.enviar(email, "Activación de cuenta", "Por favor ingrese al siguiente link para activar su cuenta: http://192.168.0.8:8084/TaxiTrackingWeb/ManejoSesion?q=5&nombreUsuario=" + nombreUsuario);
+                }
             }
             //Hay datos repetidos
             else
@@ -220,6 +271,39 @@ public class Bitacora_Negocio extends HttpServlet
                 b = false;
             }
         }
+        return b;
+    }
+    
+    private boolean enviarAlerta(HttpServletRequest request) throws IOException
+    {
+        //Variable de respuesta
+        boolean b = true;
+        
+        objUsuario = new Usuario();
+        
+        //Obtenemos los datos del formulario
+        String nombreUsuario = request.getParameter("TBNombreUsuario");
+        
+        //Validamos cada entrada con una expresion regular
+        if(!Validacion.esAlfanumerico(nombreUsuario))
+        {
+            //En caso de que no sea valida la entrada, asignamos el atributo como error
+            objUsuario.setNombreUsuario("error");
+            b = false;
+        }
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            try { objAlerta = new Alerta(); } 
+            catch (TwitterException e) { /*System.out.println("Error al enviar la alerta D:\n" + e); */}
+            /*
+            //Publicamos el mensaje
+            b = objAlerta.publicarMensajeAlerta("El usuario " + nombreUsuario + "esta en peligro");
+            
+            if(b)
+                b = objAlerta.enviarMensajeAlerta("TaxiTracking", "El usuario " + nombreUsuario + "esta en peligro");
+        */}
         return b;
     }
 

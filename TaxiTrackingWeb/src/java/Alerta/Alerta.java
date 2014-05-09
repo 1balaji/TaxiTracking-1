@@ -18,36 +18,36 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Alerta 
 {
-    final String CONSUMERKEY = "gKRYZvEqq1Zhs2QTW6VPimayc";
-    final String CONSUMERSECRET = "NbXMtvWA0TRujkgn6UgvRgom6dGl07Xn0sFWYsptD8VRZxbPOP";
-    final String AUTHFILE = "auth_file.txt";
+    private final String CONSUMERKEY = "gKRYZvEqq1Zhs2QTW6VPimayc";
+    private final String CONSUMERSECRET = "NbXMtvWA0TRujkgn6UgvRgom6dGl07Xn0sFWYsptD8VRZxbPOP";
+    private final String AUTHFILE = "auth_file.txt";
     
-    ConfigurationBuilder configBuilder;
-    Twitter twitter;
+    private ConfigurationBuilder configBuilder;
+    private Twitter twitter;
     
     //Token para hacer la peticion de un nuevo PIN para la autorizacion del programa
-    RequestToken requestToken = null;
+    private RequestToken requestToken = null;
     
     //Token que tiene la autorizacion del programa para interactuar con la cuenta de twitter
-    AccessToken accessToken = null;
+    private AccessToken accessToken = null;
     
     //URL que se accesa para pedir la autorizacion del programa
-    String url = null;
+    private String url = null;
     
     //Buffer para leer el PIN del teclado o para leer del archivo de autenticacion
-    BufferedReader br;
+    private BufferedReader br;
     
     //Variables para manipular el archivo de autenticacion
-    File archivo;
-    FileReader fileReader;
+    private File archivo;
+    private FileReader fileReader;
     
     //Variable para guardar el OAuthAccessToken que este en el archivo
-    String token;
+    private String token;
     
     //Variable para guardar el OAuthAccessTokenSecret que este en el archivo
-    String tokenSecret;
+    private String tokenSecret;
     
-    Alerta() throws IOException, TwitterException 
+    public Alerta() throws IOException, TwitterException 
     {
         configBuilder = new ConfigurationBuilder();
         configBuilder.setDebugEnabled(true)
@@ -159,7 +159,7 @@ public class Alerta
         }
     }
     
-    boolean enviarMensajeAlerta(String destinatario, String mensaje)
+    public boolean enviarMensajeAlerta(String destinatario, String mensaje)
     {
         boolean b;
         
@@ -176,7 +176,7 @@ public class Alerta
         return b;
     }
     
-    boolean publicarMensajeAlerta(String mensaje)
+    public boolean publicarMensajeAlerta(String mensaje)
     {
         boolean b;
         

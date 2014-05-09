@@ -43,6 +43,23 @@ create table taxista(
 	tipo int not null
 );
 
+create table comentario(
+	idComentario int not null primary key auto_increment,
+	descripcion varchar(150) not null,
+	nombre_usuario varchar(30) not null,
+	idTaxista varchar(15) not null,
+	constraint fkUsuarioComentario
+		foreign key (nombre_usuario)
+		references usuario(nombre_usuario)
+		on delete cascade
+		on update cascade,
+	constraint fkTaxistaComentario
+		foreign key (idTaxista)
+		references taxista(idTaxista)
+		on delete cascade
+		on update cascade
+);
+
 insert into usuario values ("admin", "admin", "Francisco", "Negrete", "Juarez", "fjj.negrete@gmail.com", 1, 1);
 insert into usuario values ("usuario", "usuario", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);
 insert into usuario values ("carlos", "carlos", "Carlos", "Jimenez", "Lopez", "cjimenezl1001@alumno.ipn.mx", 0, 1);

@@ -123,7 +123,18 @@
                 <aside class="group2">
                     <p id="login">Login</p>
                     <form action="<%=request.getContextPath()%>/ManejoSesion?q=1" method="post">
-                        <%if(request.getParameter("error")!=null){out.print("<div id='error' class='error centrado'>Error al iniciar sesi&oacute;n</div>");}%>
+                        <%if(session.getAttribute("error") != null)
+                        {
+                            String error = (String) session.getAttribute("error");
+                            session.removeAttribute("error");
+                            
+                            //Usuario o contraseña incorrectos
+                            if(error.equals("1"))
+                                out.print("<div id='error' class='error centrado'>Error: usuario o contrase&ntilde;a incorrectos</div>");
+                            //Cuenta bloqueada
+                            else if(error.equals("2"))
+                                out.print("<div id='error' class='error centrado'>Error: la cuenta no est&aacute; activada</div>");
+                        }%>
                         <div class="input-group">
                                 <label class="input-group-label" for="TBUsuario"><i class="fa fa-user fa-fw"></i></label>
                                 <input type="text" name="TBUsuario" id="TBUsuario" class="form-control" placeholder="Usuario" required="required" />

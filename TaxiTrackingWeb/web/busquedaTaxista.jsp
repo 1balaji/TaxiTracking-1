@@ -89,7 +89,7 @@
                 <section class="gestion">
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
+                            <input type="search" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
                             <button type="submit" id="BTBusquedaTaxista" name="BTBusquedaTaxista">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>

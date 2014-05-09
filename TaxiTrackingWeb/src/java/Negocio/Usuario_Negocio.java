@@ -40,231 +40,233 @@ public class Usuario_Negocio extends HttpServlet
         session = request.getSession(false);
         
         //Para que no se pueda llamar al servlet con la URL
-        if(session == null)
+        if(session == null || session.getAttribute("rol") == null)
             response.sendRedirect("index.jsp");
-        
-        try {query = Integer.parseInt(request.getParameter("q"));}
-        catch (NumberFormatException e) {query = -1;}
-        
-        //Para que el usuario normal no pueda llamar las opciones de administrador del servlet
-        if((Integer)session.getAttribute("rol") != 1 && query <= 5)
-            response.sendRedirect("bienvenido.jsp");
-        
-        //Para que el administrador no pueda llamar las opciones de usuario normal del servlet
-        if((Integer)session.getAttribute("rol") != 0 && query >= 11)
-            response.sendRedirect("bienvenidoAdministrador.jsp");
-        
-        response.setContentType("text/html;charset=UTF-8");
-        out = response.getWriter();
-        
-        switch(query)
+        else
         {
-            case 1: //Buscar usuario
-                objUsuario = buscarUsuario(request);
-                session.setAttribute("objUsuario", objUsuario);
-                response.sendRedirect("busquedaUsuario.jsp");
-                break;
-            case 2: //Bloquear usuario
-                respuesta = bloquearUsuario(request);
-                if(respuesta)
-                    out.println("1");
-                else
-                    out.println("0");
-                break;
-            case 3: //Desbloquear usuario
-                respuesta = desbloquearUsuario(request);
-                if(respuesta)
-                    out.println("1");
-                else
-                    out.println("0");
-                break;
-            case 4: //Eliminar usuario
-                respuesta = eliminarUsuario(request);
-                if(respuesta)
-                    out.println("1");
-                else
-                    out.println("0");
-                break;
-            case 5: //GetPeticiones
-                objUsuarios = getPeticiones();
-                
-                //Indice para movernos en el arreglo
-                int i = objUsuarios.length - 1;
-                
-                //Creamos la tabla de salida
-                out.println("<table id=\"tabla\">");
-                out.println("<tr>\n" +
-                                "<th class=\"ajustado\">Nombre</th>\n" +
-                                "<th class=\"ajustado\">Correo Electr&oacute;nico</th>\n" +
-                                "<th>Petici&oacute;n</th>\n" +
-                                "<th class=\"control\">Control</th>\n" +
-                            "</tr>");
-                
-                //Si hay resultados
-                if(i != -1)
-                {
-                    for (;i>=0; i--)
-                    {
-                        //Checamos si es impar la fila a imprimir, para cambiar el color
-                        if((i&1) == 1)
-                            out.println("<tr>");
-                        else
-                            out.println("<tr class=\"alt\">");
-                        
-                        out.println("<td>" + objUsuarios[i].getNombreUsuario() + "</td>");
-                        out.println("<td>" + objUsuarios[i].getEmail() + "</td>");
-                        out.println("<td>" + objUsuarios[i].getPeticion().getComentario()+ "</td>");
-                        
-                        //Checamos que tipo de peticion es para poner el control correspondiente
-                        if(objUsuarios[i].getPeticion().getTipo() == 0) //Bloquear
-                            out.println("<td>\n" +
-                                            "<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
-                                        "</td>");
-                        else if(objUsuarios[i].getPeticion().getTipo() == 1)    //Desbloquear
-                            out.println("<td>\n" +
-                                            "<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
-                                        "</td>");
-                        else    //Eliminar
-                            out.println("<td>\n" +
-                                            "<button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
-                                        "</td>");
-                        out.println("</tr>");
-                    }
-                }
-                else
-                {
-                    out.println("<tr><td colspan=4>No hay peticiones</td></tr>");
-                }
-                out.println("</table>");
-                break;
-            case 6: //Buscar perfil
-                objUsuario = getPerfil(session);
-                out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=7\" method=\"POST\">\n");
-                if(session.getAttribute("errorNombre") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorNombre") + "</div>"); session.removeAttribute("errorNombre");}
-                out.println(
-"                        <div class=\"input-group\">\n" +
-"                            <label class=\"input-group-label mediano centrado\" for=\"TBNombre\">Nombre</label>\n" +
-"                            <input type=\"text\" id=\"TBNombre\" name=\"TBNombre\" class=\"form-control largo\" value=\"" + objUsuario.getNombre() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Nombre\" />\n" +
-"                        </div>\n");
-                if(session.getAttribute("errorApellidoPaterno") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorApellidoPaterno") + "</div>"); session.removeAttribute("errorApellidoPaterno");}
-                out.println(
-"                        <div class=\"input-group\">\n" +
-"                            <label class=\"input-group-label mediano centrado\" for=\"TBApellidoPaterno\">Apellido Paterno</label>\n" +
-"                            <input type=\"text\" id=\"TBApellidoPaterno\" name=\"TBApellidoPaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoPaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Paterno\" />\n" +
-"                        </div>\n");
-                if(session.getAttribute("errorApellidoMaterno") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorApellidoMaterno") + "</div>"); session.removeAttribute("errorApellidoMaterno");}
-                out.println(
-"                        <div class=\"input-group\">\n" +
-"                            <label class=\"input-group-label mediano centrado\" for=\"TBApellidoMaterno\">Apellido Materno</label>\n" +
-"                            <input type=\"text\" id=\"TBApellidoMaterno\" name=\"TBApellidoMaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoMaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Materno\" />\n" +
-"                        </div>\n" +
-"                        <div class=\"centrado\">\n" +
-"                            <button type=\"submit\" id=\"BTEditarPerfil\" name=\"BTEditarPerfil\">\n" +
-"                                <i class=\"fa fa-pencil-square-o\"></i>Actualizar\n" +
-"                            </button>\n" +
-"                        </div>\n" +
-"                    </form>");
-                break;
-            case 7: //Editar perfil
-                respuesta = editarPerfil(request, session);
-                if(respuesta)
-                    session.setAttribute("errorNombre", "Los datos se actualizaron correctamente");
-                response.sendRedirect("verPerfil.jsp");
-                break;
-            case 8: //Buscar email
-                objUsuario = getEmail(session);
-                out.println(objUsuario.getEmail());
-                break;
-            case 9: //Editar email
-                respuesta = editarEmail(request, session);
-                if(respuesta)
-                    session.setAttribute("errorEmail", "Los datos se actualizaron correctamente");
-                response.sendRedirect("configurarPerfil.jsp");
-                break;
-            case 10:    //Editar contraseña
-                respuesta = editarContrasena(request, session);
-                if(respuesta)
-                    session.setAttribute("errorContrasena", "Los datos se actualizaron correctamente");
-                else
-                    session.setAttribute("errorContrasena", "La contraseña es incorrecta");
-                
-                response.sendRedirect("configurarPerfil.jsp");
-                break;
-            case 11:    //get peticiones de un usuario normal
-                objUsuario = getPeticion(session);
-                if(objUsuario.getPeticion() != null)
-                {
-                    int tipo = objUsuario.getPeticion().getTipo();
-                    String s;
-                    if (tipo == 0)
-                        s = "Bloqueo de la cuenta";
-                    else if(tipo == 1)
-                        s = "Desloqueo de la cuenta";
-                    else
-                        s = "Eliminaci&oacute;n de la cuenta";
-                    out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=12\" id=\"formCancelarPeticion\">\n" +
-"                            <p><strong>Petici&oacute;n pendiente</strong></p>\n" +
-"                            <div class=\"input-group\">\n" +
-"                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
-"                                <input type=\"text\" id=\"TBTipo\" name=\"TBTipo\" class=\"form-control largo\" readonly=\"readonly\" value=\"" + s + "\" />\n" +
-"                            </div>\n" +
-"                            <div class=\"input-group\">\n" +
-"                                <textarea id=\"TBDescripcion\" readonly=\"readonly\" rows=\"4\" cols=\"50\">" + objUsuario.getPeticion().getComentario() + "</textarea>\n" +
-"                            </div>\n" +
-"                            <div class=\"centrado\">\n" +
-"                                <button type=\"submit\" id=\"BTCancelarPeticion\" name=\"BTCancelarPeticion\" onclick=\"gestionar(12)\">\n" +
-"                                    <i class=\"fa fa-times fa-fw\"></i>Cancelar Peticion\n" +
-"                                </button>\n" +
-"                            </div>\n" +
-"                        </form>");
-                }
-                else
-                {
-                    out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=13\" id=\"formEnviarPeticion\">\n" +
-"                            <p><strong>Hacer una peticion</strong></p>\n");
-                    if(session.getAttribute("errorPeticion") != null)
-                    {
-                        out.print("<div class='error centrado'>" + (String) session.getAttribute("errorPeticion") + "</div>");
-                        session.removeAttribute("errorPeticion");
-                    }
-                    out.println("                            <div class=\"input-group\">\n" +
-"                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
-"                                <select id=\"TBTipo\" name=\"TBTipo\" class=\"form-control select\" required=\"required\">\n" +
-"                                    <option value=\"\">Seleccionar</option>\n" +
-"                                    <option value=\"0\">Bloqueo de la cuenta</option>\n" +
-"                                    <option value=\"1\">Desbloqueo de la cuenta</option>\n" +
-"                                    <option value=\"2\">Eliminaci&oacute;n de la cuenta</option>\n" +
-"                                </select>\n" +
-"                            </div>\n" +
-"                            <div class=\"input-group\">\n" +
-"                                <textarea id=\"TBDescripcion\" name=\"TBDescripcion\" placeholder=\"Descripci&oacute;n\" rows=\"4\" cols=\"50\" maxlength=\"150\" wrap=\"hard\" required=\"required\"></textarea>\n" +
-"                            </div>\n" +
-"                            <div class=\"centrado\">\n" +
-"                                <button type=\"submit\" id=\"BTEnviarPeticion\" name=\"BTEnviarPeticion\" onclick=\"gestionar(13)\">\n" +
-"                                    <i class=\"fa fa-plus-circle fa-fw\"></i>Enviar Peticion\n" +
-"                                </button>\n" +
-"                            </div>\n" +
-"                        </form>");
-                }
-                break;
-            case 12:    //Cancelar una peticion
-                respuesta = cancelarPeticion(session);
-                if(respuesta)
-                    session.setAttribute("errorPeticion", "La petición se canceló correctamente");
-                else
-                    session.setAttribute("errorPeticion", "Error al cancelar la petición");
-                response.sendRedirect("peticiones.jsp");
-                break;
-            case 13:    //Enviar una peticion
-                respuesta = agregarPeticion(request, session);
-                if(respuesta)
-                    session.setAttribute("errorPeticion", "La petición se envió correctamente");
-                response.sendRedirect("peticiones.jsp");
-                break;
-            default:
+            try {query = Integer.parseInt(request.getParameter("q"));}
+            catch (NumberFormatException e) {query = -1;}
+
+            //Para que el usuario normal no pueda llamar las opciones de administrador del servlet
+            if((Integer)session.getAttribute("rol") != 1 && query <= 5)
+                response.sendRedirect("bienvenido.jsp");
+
+            //Para que el administrador no pueda llamar las opciones de usuario normal del servlet
+            if((Integer)session.getAttribute("rol") != 0 && query >= 11)
                 response.sendRedirect("bienvenidoAdministrador.jsp");
+
+            response.setContentType("text/html;charset=UTF-8");
+            out = response.getWriter();
+
+            switch(query)
+            {
+                case 1: //Buscar usuario
+                    objUsuario = buscarUsuario(request);
+                    session.setAttribute("objUsuario", objUsuario);
+                    response.sendRedirect("busquedaUsuario.jsp");
+                    break;
+                case 2: //Bloquear usuario
+                    respuesta = bloquearUsuario(request);
+                    if(respuesta)
+                        out.println("1");
+                    else
+                        out.println("0");
+                    break;
+                case 3: //Desbloquear usuario
+                    respuesta = desbloquearUsuario(request);
+                    if(respuesta)
+                        out.println("1");
+                    else
+                        out.println("0");
+                    break;
+                case 4: //Eliminar usuario
+                    respuesta = eliminarUsuario(request);
+                    if(respuesta)
+                        out.println("1");
+                    else
+                        out.println("0");
+                    break;
+                case 5: //GetPeticiones
+                    objUsuarios = getPeticiones();
+
+                    //Indice para movernos en el arreglo
+                    int i = objUsuarios.length - 1;
+
+                    //Creamos la tabla de salida
+                    out.println("<table id=\"tabla\">");
+                    out.println("<tr>\n" +
+                                    "<th class=\"ajustado\">Nombre</th>\n" +
+                                    "<th class=\"ajustado\">Correo Electr&oacute;nico</th>\n" +
+                                    "<th>Petici&oacute;n</th>\n" +
+                                    "<th class=\"control\">Control</th>\n" +
+                                "</tr>");
+
+                    //Si hay resultados
+                    if(i != -1)
+                    {
+                        for (;i>=0; i--)
+                        {
+                            //Checamos si es impar la fila a imprimir, para cambiar el color
+                            if((i&1) == 1)
+                                out.println("<tr>");
+                            else
+                                out.println("<tr class=\"alt\">");
+
+                            out.println("<td>" + objUsuarios[i].getNombreUsuario() + "</td>");
+                            out.println("<td>" + objUsuarios[i].getEmail() + "</td>");
+                            out.println("<td>" + objUsuarios[i].getPeticion().getComentario()+ "</td>");
+
+                            //Checamos que tipo de peticion es para poner el control correspondiente
+                            if(objUsuarios[i].getPeticion().getTipo() == 0) //Bloquear
+                                out.println("<td>\n" +
+                                                "<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
+                                            "</td>");
+                            else if(objUsuarios[i].getPeticion().getTipo() == 1)    //Desbloquear
+                                out.println("<td>\n" +
+                                                "<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
+                                            "</td>");
+                            else    //Eliminar
+                                out.println("<td>\n" +
+                                                "<button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
+                                            "</td>");
+                            out.println("</tr>");
+                        }
+                    }
+                    else
+                    {
+                        out.println("<tr><td colspan=4>No hay peticiones</td></tr>");
+                    }
+                    out.println("</table>");
+                    break;
+                case 6: //Buscar perfil
+                    objUsuario = getPerfil(session);
+                    out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=7\" method=\"POST\">\n");
+                    if(session.getAttribute("errorNombre") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorNombre") + "</div>"); session.removeAttribute("errorNombre");}
+                    out.println(
+    "                        <div class=\"input-group\">\n" +
+    "                            <label class=\"input-group-label mediano centrado\" for=\"TBNombre\">Nombre</label>\n" +
+    "                            <input type=\"text\" id=\"TBNombre\" name=\"TBNombre\" class=\"form-control largo\" value=\"" + objUsuario.getNombre() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Nombre\" />\n" +
+    "                        </div>\n");
+                    if(session.getAttribute("errorApellidoPaterno") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorApellidoPaterno") + "</div>"); session.removeAttribute("errorApellidoPaterno");}
+                    out.println(
+    "                        <div class=\"input-group\">\n" +
+    "                            <label class=\"input-group-label mediano centrado\" for=\"TBApellidoPaterno\">Apellido Paterno</label>\n" +
+    "                            <input type=\"text\" id=\"TBApellidoPaterno\" name=\"TBApellidoPaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoPaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Paterno\" />\n" +
+    "                        </div>\n");
+                    if(session.getAttribute("errorApellidoMaterno") != null) { out.println("<div class = \"error\">" + session.getAttribute("errorApellidoMaterno") + "</div>"); session.removeAttribute("errorApellidoMaterno");}
+                    out.println(
+    "                        <div class=\"input-group\">\n" +
+    "                            <label class=\"input-group-label mediano centrado\" for=\"TBApellidoMaterno\">Apellido Materno</label>\n" +
+    "                            <input type=\"text\" id=\"TBApellidoMaterno\" name=\"TBApellidoMaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoMaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Materno\" />\n" +
+    "                        </div>\n" +
+    "                        <div class=\"centrado\">\n" +
+    "                            <button type=\"submit\" id=\"BTEditarPerfil\" name=\"BTEditarPerfil\">\n" +
+    "                                <i class=\"fa fa-pencil-square-o\"></i>Actualizar\n" +
+    "                            </button>\n" +
+    "                        </div>\n" +
+    "                    </form>");
+                    break;
+                case 7: //Editar perfil
+                    respuesta = editarPerfil(request, session);
+                    if(respuesta)
+                        session.setAttribute("errorNombre", "Los datos se actualizaron correctamente");
+                    response.sendRedirect("verPerfil.jsp");
+                    break;
+                case 8: //Buscar email
+                    objUsuario = getEmail(session);
+                    out.println(objUsuario.getEmail());
+                    break;
+                case 9: //Editar email
+                    respuesta = editarEmail(request, session);
+                    if(respuesta)
+                        session.setAttribute("errorEmail", "Los datos se actualizaron correctamente");
+                    response.sendRedirect("configurarPerfil.jsp");
+                    break;
+                case 10:    //Editar contraseña
+                    respuesta = editarContrasena(request, session);
+                    if(respuesta)
+                        session.setAttribute("errorContrasena", "Los datos se actualizaron correctamente");
+                    else
+                        session.setAttribute("errorContrasena", "La contraseña es incorrecta");
+
+                    response.sendRedirect("configurarPerfil.jsp");
+                    break;
+                case 11:    //get peticiones de un usuario normal
+                    objUsuario = getPeticion(session);
+                    if(objUsuario.getPeticion() != null)
+                    {
+                        int tipo = objUsuario.getPeticion().getTipo();
+                        String s;
+                        if (tipo == 0)
+                            s = "Bloqueo de la cuenta";
+                        else if(tipo == 1)
+                            s = "Desloqueo de la cuenta";
+                        else
+                            s = "Eliminaci&oacute;n de la cuenta";
+                        out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=12\" id=\"formCancelarPeticion\">\n" +
+    "                            <p><strong>Petici&oacute;n pendiente</strong></p>\n" +
+    "                            <div class=\"input-group\">\n" +
+    "                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
+    "                                <input type=\"text\" id=\"TBTipo\" name=\"TBTipo\" class=\"form-control largo\" readonly=\"readonly\" value=\"" + s + "\" />\n" +
+    "                            </div>\n" +
+    "                            <div class=\"input-group\">\n" +
+    "                                <textarea id=\"TBDescripcion\" readonly=\"readonly\" rows=\"4\" cols=\"50\">" + objUsuario.getPeticion().getComentario() + "</textarea>\n" +
+    "                            </div>\n" +
+    "                            <div class=\"centrado\">\n" +
+    "                                <button type=\"submit\" id=\"BTCancelarPeticion\" name=\"BTCancelarPeticion\" onclick=\"gestionar(12)\">\n" +
+    "                                    <i class=\"fa fa-times fa-fw\"></i>Cancelar Peticion\n" +
+    "                                </button>\n" +
+    "                            </div>\n" +
+    "                        </form>");
+                    }
+                    else
+                    {
+                        out.println("<form action=\"" + request.getContextPath() + "/Usuario_Negocio?q=13\" id=\"formEnviarPeticion\">\n" +
+    "                            <p><strong>Hacer una peticion</strong></p>\n");
+                        if(session.getAttribute("errorPeticion") != null)
+                        {
+                            out.print("<div class='error centrado'>" + (String) session.getAttribute("errorPeticion") + "</div>");
+                            session.removeAttribute("errorPeticion");
+                        }
+                        out.println("                            <div class=\"input-group\">\n" +
+    "                                <label class=\"input-group-label mediano centrado\" for=\"TBTipo\">Petici&oacute;n</label>\n" +
+    "                                <select id=\"TBTipo\" name=\"TBTipo\" class=\"form-control select\" required=\"required\">\n" +
+    "                                    <option value=\"\">Seleccionar</option>\n" +
+    "                                    <option value=\"0\">Bloqueo de la cuenta</option>\n" +
+    "                                    <option value=\"1\">Desbloqueo de la cuenta</option>\n" +
+    "                                    <option value=\"2\">Eliminaci&oacute;n de la cuenta</option>\n" +
+    "                                </select>\n" +
+    "                            </div>\n" +
+    "                            <div class=\"input-group\">\n" +
+    "                                <textarea id=\"TBDescripcion\" name=\"TBDescripcion\" placeholder=\"Descripci&oacute;n\" rows=\"4\" cols=\"50\" maxlength=\"150\" wrap=\"hard\" required=\"required\"></textarea>\n" +
+    "                            </div>\n" +
+    "                            <div class=\"centrado\">\n" +
+    "                                <button type=\"submit\" id=\"BTEnviarPeticion\" name=\"BTEnviarPeticion\" onclick=\"gestionar(13)\">\n" +
+    "                                    <i class=\"fa fa-plus-circle fa-fw\"></i>Enviar Peticion\n" +
+    "                                </button>\n" +
+    "                            </div>\n" +
+    "                        </form>");
+                    }
+                    break;
+                case 12:    //Cancelar una peticion
+                    respuesta = cancelarPeticion(session);
+                    if(respuesta)
+                        session.setAttribute("errorPeticion", "La petición se canceló correctamente");
+                    else
+                        session.setAttribute("errorPeticion", "Error al cancelar la petición");
+                    response.sendRedirect("peticiones.jsp");
+                    break;
+                case 13:    //Enviar una peticion
+                    respuesta = agregarPeticion(request, session);
+                    if(respuesta)
+                        session.setAttribute("errorPeticion", "La petición se envió correctamente");
+                    response.sendRedirect("peticiones.jsp");
+                    break;
+                default:
+                    response.sendRedirect("bienvenidoAdministrador.jsp");
+            }
+            out.close();
         }
-        out.close();
     }
     
     private Usuario buscarUsuario(HttpServletRequest request)

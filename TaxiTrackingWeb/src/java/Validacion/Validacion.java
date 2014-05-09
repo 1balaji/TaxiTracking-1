@@ -16,7 +16,7 @@ public class Validacion
                                             "(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)" +
                                             "[B-DF-HJ-NP-TV-Z]{3}" +
                                             "[0-9A-Z]{1}[0-9]{1}$");
-    private static final Pattern esMatricula = Pattern.compile("[A-Z]-\\d{2}-\\d{3}");
+    private static final Pattern esMatricula = Pattern.compile("[AB]-\\d{2}-\\d{3}");
     private static final Pattern esEmail = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
     static private Matcher matcher;
     

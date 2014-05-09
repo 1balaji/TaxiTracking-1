@@ -12,10 +12,9 @@ import javax.mail.internet.MimeMessage;
 
 public class Email 
 {
-    public final String from = "correopruebaweb1234@gmail.com";
-    public final String subject= "Reestablecimiento de contraseña";
-    public final String login = "correopruebaweb1234@gmail.com";    //cuenta de la que se envia
-    public final String password = "titancho";  //contraseña de la cuenta de la que se envia
+    public final String from = "taxitrackinga022@gmail.com";
+    public final String login = "taxitrackinga022@gmail.com";    //cuenta de la que se envia
+    public final String password = "TT2013-A022";  //contraseña de la cuenta de la que se envia
     
     private class SMTPAuthenticator extends Authenticator 
     {
@@ -31,7 +30,7 @@ public class Email
         }
     }
     
-    public boolean enviar(String toEmail, String message)
+    public boolean enviar(String toEmail, String subject, String message)
     {
         boolean b = false;
         try

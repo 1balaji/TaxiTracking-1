@@ -54,75 +54,77 @@ public class Taxi_Negocio extends HttpServlet
         session = request.getSession(false);
         
         //Para que no se pueda llamar al servlet con la URL
-        if(session == null)
+        if(session == null || session.getAttribute("rol") == null)
             response.sendRedirect("index.jsp");
-        
-        //Para que el usuario normal no pueda llamar el servlet
-        else if((Integer)session.getAttribute("rol") != 1)
-            response.sendRedirect("index.jsp");
-        
-        try {query = Integer.parseInt(request.getParameter("q"));}
-        catch (NumberFormatException e) {query = -1;}
-        
-        if(query == 3)
-        {
-            outQR = response.getOutputStream();
-            response.setContentType("image/png");
-        }
         else
         {
-            out = response.getWriter();
-            response.setContentType("text/html;charset=UTF-8");
-        }
-        
-        switch(query)
-        {
-            case 1: //Buscar taxi
-                objTaxi = buscarTaxi(request);
-                
-                //Si no hubo resultados mandamos el objeto vacio
-                if(objTaxi == null)
-                    objTaxi = new Taxi();
-                session.setAttribute("objTaxi", objTaxi);
-                response.sendRedirect("busquedaTaxista.jsp");
-                break;
-            case 2: //Agregar taxi
-                respuesta = agregarTaxi(request);
-                
-                //Si el registro fue correcto
-                if(respuesta)
-                {
+            //Para que el usuario normal no pueda llamar el servlet
+            if((Integer)session.getAttribute("rol") != 1)
+                response.sendRedirect("index.jsp");
+
+            try {query = Integer.parseInt(request.getParameter("q"));}
+            catch (NumberFormatException e) {query = -1;}
+
+            if(query == 3)
+            {
+                outQR = response.getOutputStream();
+                response.setContentType("image/png");
+            }
+            else
+            {
+                out = response.getWriter();
+                response.setContentType("text/html;charset=UTF-8");
+            }
+
+            switch(query)
+            {
+                case 1: //Buscar taxi
+                    objTaxi = buscarTaxi(request);
+
+                    //Si no hubo resultados mandamos el objeto vacio
+                    if(objTaxi == null)
+                        objTaxi = new Taxi();
                     session.setAttribute("objTaxi", objTaxi);
                     response.sendRedirect("busquedaTaxista.jsp");
-                }
-                else
+                    break;
+                case 2: //Agregar taxi
+                    respuesta = agregarTaxi(request);
+
+                    //Si el registro fue correcto
+                    if(respuesta)
+                    {
+                        session.setAttribute("objTaxi", objTaxi);
+                        response.sendRedirect("busquedaTaxista.jsp");
+                    }
+                    else
+                        response.sendRedirect("gestionTaxis.jsp");
+                    break;
+                case 3: //Generar QR                
+                    Image imagenQR = generarCodigoQR(largoQR, altoQR, request);
+
+                    //Pintamos el QR
+                    ImageIO.write(AWTImageDescriptor.create(imagenQR, null), "png", outQR);                
+                    break;
+                case 4: //Bloquear taxi
+                    respuesta = bloquearTaxi(request);
                     response.sendRedirect("gestionTaxis.jsp");
-                break;
-            case 3: //Generar QR                
-                Image imagenQR = generarCodigoQR(largoQR, altoQR, request);
-            
-                //Pintamos el QR
-                ImageIO.write(AWTImageDescriptor.create(imagenQR, null), "png", outQR);                
-                break;
-            case 4: //Bloquear taxi
-                respuesta = bloquearTaxi(request);
-                response.sendRedirect("gestionTaxis.jsp");
-                break;
-            case 5: //Desbloquear taxi
-                respuesta = desbloquearTaxi(request);
-                response.sendRedirect("gestionTaxis.jsp");
-                break;
-            case 6: //Eliminar taxi
-                respuesta = eliminarTaxi(request);
-                response.sendRedirect("gestionTaxis.jsp");
-                break;
-            default:
-                response.sendRedirect("bienvenidoAdministrador.jsp");
+                    break;
+                case 5: //Desbloquear taxi
+                    respuesta = desbloquearTaxi(request);
+                    response.sendRedirect("gestionTaxis.jsp");
+                    break;
+                case 6: //Eliminar taxi
+                    respuesta = eliminarTaxi(request);
+                    response.sendRedirect("gestionTaxis.jsp");
+                    break;
+                default:
+                    response.sendRedirect("bienvenidoAdministrador.jsp");
+            }
+            if(query == 3)
+                outQR.close();
+            else
+                out.close();
         }
-        if(query == 3)
-            outQR.close();
-        else
-            out.close();
     }
     
     private boolean agregarTaxi(HttpServletRequest request) throws UnsupportedEncodingException
@@ -131,7 +133,7 @@ public class Taxi_Negocio extends HttpServlet
         boolean b = true;
         
         //Obtenemos los datos del formulario
-        String idTaxista = request.getParameter("TBIdTaxista").trim();
+        String idTaxista = request.getParameter("TBIdTaxista");
         
         //Validamos cada entrada con una expresion regular
         if(!Validacion.esAlfanumerico(idTaxista))
@@ -141,35 +143,35 @@ public class Taxi_Negocio extends HttpServlet
             b = false;
         }
         
-        String nombre = new String(request.getParameter("TBNombre").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String nombre = new String(request.getParameter("TBNombre").getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(nombre))
         {
             session.setAttribute("errorNombre", "Error el nombre es incorrecto");
             b = false;
         }
         
-        String apellido_paterno = new String(request.getParameter("TBApellidoPaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String apellido_paterno = new String(request.getParameter("TBApellidoPaterno").getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(apellido_paterno))
         {
             session.setAttribute("errorApellidoPaterno", "Error el apellido paterno es incorrecto");
             b = false;
         }
         
-        String apellido_materno = new String(request.getParameter("TBApellidoMaterno").trim().getBytes("ISO-8859-1"),"UTF-8");
+        String apellido_materno = new String(request.getParameter("TBApellidoMaterno").getBytes("ISO-8859-1"),"UTF-8");
         if(!Validacion.esCadena(apellido_materno))
         {
             session.setAttribute("errorApellidoMaterno", "Error el apellido materno es incorrecto");
             b = false;
         }
         
-        String curp = request.getParameter("TBCURP").trim();
+        String curp = request.getParameter("TBCURP");
         if(!Validacion.esCURP(curp))
         {
             session.setAttribute("errorCurp", "Error el curp es incorrecto");
             b = false;
         }
         
-        String matricula = request.getParameter("TBMatricula").trim();
+        String matricula = request.getParameter("TBMatricula");
         if(!Validacion.esMatricula(matricula))
         {
             session.setAttribute("errorMatricula", "Error la matricula es incorrecta");
@@ -177,7 +179,7 @@ public class Taxi_Negocio extends HttpServlet
         }
         
         long folio = 0;
-        try {folio = Long.parseLong(request.getParameter("TBFolio").trim());}
+        try {folio = Long.parseLong(request.getParameter("TBFolio"));}
         catch(NumberFormatException e)
         {
             session.setAttribute("errorFolio", "Error el folio es incorrecto");
@@ -185,28 +187,28 @@ public class Taxi_Negocio extends HttpServlet
         }
         
         long numeroLicencia = 0;
-        try {numeroLicencia = Long.parseLong(request.getParameter("TBNumeroLicencia").trim());}
+        try {numeroLicencia = Long.parseLong(request.getParameter("TBNumeroLicencia"));}
         catch(NumberFormatException e)
         {
             session.setAttribute("errorNumeroLicencia", "Error el numero de licencia es incorrecto");
             b = false;
         }
         
-        String vigencia = request.getParameter("TBVigencia").trim();
+        String vigencia = request.getParameter("TBVigencia");
         if(!Validacion.esFecha(vigencia))
         {
             session.setAttribute("errorVigencia", "Error la vigencia es incorrecta");
             b = false;
         }
         
-        String fechaExpedicion = request.getParameter("TBFechaExpedicion").trim();
+        String fechaExpedicion = request.getParameter("TBFechaExpedicion");
         if(!Validacion.esFecha(fechaExpedicion))
         {
             session.setAttribute("errorFechaExpedicion", "Error la fecha de expedición es incorrecta");
             b = false;
         }
         
-        String horaExpedicion = request.getParameter("TBHoraExpedicion").trim();
+        String horaExpedicion = request.getParameter("TBHoraExpedicion");
         if(!Validacion.esHora(horaExpedicion))
         {
             session.setAttribute("errorHoraExpedicion", "Error la hora de expedición es incorrecta");
@@ -274,6 +276,21 @@ public class Taxi_Negocio extends HttpServlet
                 b = false;
             }
         }
+        //Regresamos los valores
+        else
+        {
+            session.setAttribute("valorIdTaxista", idTaxista);
+            session.setAttribute("valorNombre", nombre);
+            session.setAttribute("valorApellidoPaterno", apellido_paterno);
+            session.setAttribute("valorApellidoMaterno", apellido_materno);
+            session.setAttribute("valorCurp", curp);
+            session.setAttribute("valorMatricula", matricula);
+            session.setAttribute("valorFolio", request.getParameter("TBFolio"));
+            session.setAttribute("valorNumeroLicencia", request.getParameter("TBNumeroLicencia"));
+            session.setAttribute("valorVigencia", vigencia);
+            session.setAttribute("valorFechaExpedicion", fechaExpedicion);
+            session.setAttribute("valorHoraExpedicion", horaExpedicion);
+        }
         return b;
     }
     
@@ -294,9 +311,10 @@ public class Taxi_Negocio extends HttpServlet
     
     private Image generarCodigoQR(int largo, int alto, HttpServletRequest request)
     {
-        String idTaxista = request.getParameter("idTaxista");
+        String idTaxista = request.getParameter("TBIdTaxista");
         objCodigoQR = new CodigoQR(idTaxista);
-        String datos = Serializacion.serialize(objCodigoQR);
+        //String datos = Serializacion.serialize(objCodigoQR);
+        String datos = objCodigoQR.getDatos();
         
         //Creamos el QR
         BarcodeQRCode codigoQR = new BarcodeQRCode(datos, largo, alto, null);

@@ -31,13 +31,14 @@ public class UsuarioDAO
     
     /*
     * Metodo para accesar al sistema. 
-    * Recibe el usuario y contraseña
-    * Retorna -1 en caso de error, 1 si es administrador y 0 si es usuario
+    * Recibe el usuario, contraseña y un booleano que dira si se verifica el status de la cuenta o no.
+    * Retorna -1 en caso de error, 0 si es usuario, 1 si es administrador y 2 si la cuenta esta bloqueada.
     */
-    public int getLogin(String user, String pwd)
+    public int getLogin(String user, String pwd, boolean verificarStatus)
     {
         int rol = -1;
-        consulta = "SELECT rol FROM usuario WHERE nombre_usuario = ? AND password = ?";
+        int status = 1;
+        consulta = "SELECT rol, status FROM usuario WHERE nombre_usuario = ? AND password = ?";
         
         try
         {
@@ -49,6 +50,15 @@ public class UsuarioDAO
             if(rs.next())
             {
                 rol = rs.getInt("rol");
+                status = rs.getInt("status");
+                
+                //Verificamos si la cuenta esta activada
+                if(status == -1)
+                    rol = 2;
+                
+                //Si es necesario verificar el status
+                if(verificarStatus && (status == -1 || status == 0))
+                    rol = 2;
             }
             pst.close();
         }
@@ -186,14 +196,15 @@ public class UsuarioDAO
     * Retorna un objeto usuario lleno con los datos correspondientes o vacio en caso de no haber coincidencias
     */
     public Usuario buscarUsuario(Usuario objUsuario) 
-    {        
-        consulta = "SELECT nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status FROM usuario WHERE nombre_usuario = ?";
+    {
+        consulta = "SELECT nombre_usuario,nombre,email,apellido_paterno,apellido_materno,status FROM usuario WHERE nombre_usuario = ? OR email = ?";
 
         try
         {
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
             pst.setString(1, objUsuario.getNombreUsuario());
+            pst.setString(2, objUsuario.getEmail());
             rs = pst.executeQuery();
             
             //Reiniciamos el objeto
@@ -282,7 +293,7 @@ public class UsuarioDAO
         boolean b = false;
         
         //Para verificar que la contraseña es correcta "hacemos" un login
-        if(getLogin(objUsuario.getNombreUsuario(), objUsuario.getContrasena()) != -1)
+        if(getLogin(objUsuario.getNombreUsuario(), objUsuario.getContrasena(), false) != -1)
         {
             consulta = "UPDATE usuario SET password = ? WHERE nombre_usuario = ?";
 
@@ -385,7 +396,7 @@ public class UsuarioDAO
     }
     
     /*
-    * Metodo para asignar la contraseña de un usuario. 
+    * Metodo para asignar la nueva contraseña de recuperacion a un usuario. 
     * Recibe la contraseña y el email del usuario al que se le va a asignar
     * Retorna true en caso de exito y false en caso de error
     */
@@ -440,6 +451,41 @@ public class UsuarioDAO
         }
         catch(SQLException e){ System.out.println("Error al agregar al usuario D:\n" + e); }
         finally{ Conexion.closeConexion(); }
+        return b;
+    }
+    
+    /*
+    * Metodo para activar la cuenta de un usuario. 
+    * Recibe el nombre de un usuario para activar su cuenta.
+    * Retorna true en caso de exito y false en caso de error
+    */
+    public boolean activarCuenta(String nombreUsuario) 
+    {
+        boolean b = false;
+        
+        consulta = "SELECT nombre_usuario from usuario WHERE nombre_usuario = ?";
+
+        try 
+        {
+            con = Conexion.getConexion();
+            pst = con.prepareStatement(consulta);
+            pst.setString(1, nombreUsuario);
+            rs = pst.executeQuery();
+            
+            if(rs.next())
+            {
+                consulta = "UPDATE usuario SET status = 1 WHERE nombre_usuario = ?";
+                pst = con.prepareStatement(consulta);
+                pst.setString(1, nombreUsuario);
+                pst.executeUpdate();
+                b = true;
+            }
+            
+            pst.close();
+        } 
+        catch (SQLException e) { System.out.println("Error al activar la cuenta del usuario D:\n" + e); }
+        finally { Conexion.closeConexion(); }
+        
         return b;
     }
 }

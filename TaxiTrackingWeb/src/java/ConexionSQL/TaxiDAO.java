@@ -1,5 +1,6 @@
 package ConexionSQL;
 
+import Beans.Comentario;
 import Beans.Taxi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -69,7 +70,7 @@ public class TaxiDAO
     */
     public Taxi buscarTaxi(Taxi objTaxi)
     {
-        consulta = "SELECT * FROM taxista where idTaxista = ? OR curp = ? OR folio = ? OR numeroLicencia = ?";
+        consulta = "SELECT * FROM taxista WHERE idTaxista = ? OR curp = ? OR folio = ? OR numeroLicencia = ?";
 
         try
         {

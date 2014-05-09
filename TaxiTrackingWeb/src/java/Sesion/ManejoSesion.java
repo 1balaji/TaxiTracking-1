@@ -35,14 +35,19 @@ public class ManejoSesion extends HttpServlet
                 int respuesta = getLogin(request);
                 switch(respuesta)
                 {
-                    case 0: 
+                    case 0: //Usuario normal
                         response.sendRedirect("bienvenido.jsp");
                         break;
-                    case 1:
+                    case 1: //Administrador
                         response.sendRedirect("bienvenidoAdministrador.jsp");
                         break;
+                    case 2: //Cuenta bloqueada
+                        session.setAttribute("error", "2");
+                        response.sendRedirect("index.jsp");
+                        break;
                     default:
-                        response.sendRedirect("index.jsp?error=1");
+                        session.setAttribute("error", "1");
+                        response.sendRedirect("index.jsp");
                 }
                 break;
             case 2: //Iniciar sesion movil
@@ -57,13 +62,30 @@ public class ManejoSesion extends HttpServlet
                     session.setAttribute("errorRecuperarContrasena", "Se ha enviado una nueva contraseña al correo");
                 response.sendRedirect("recuperarContrasena.jsp");
                 break;
+            case 5: //Activar cuenta
+                if(activarCuenta(request))
+                {
+                    PrintWriter out = response.getWriter();
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Cuenta activada</title>");
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<p align = 'center'><h1>La cuenta se ha activado correctamente</h1></p>");
+                    out.println("<p align = 'center'><h1><a href = 'index.jsp'>Presione aqui para ir a la pagina de inicio</a></h1></p>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
+                else
+                    response.sendRedirect("index.jsp");
+                break;
             default:
                 response.sendRedirect("index.jsp");
         }
     }
     
     /*
-     * Metodo para accesar al sistema. 
+     * Metodo para accesar al sistema desde web.
      * Crea la sesion correspondiente subiendo el rol y nombre del usuario
      * Retorna -1 en caso de error, 1 si es administrador y 0 si es usuario
      */
@@ -77,8 +99,8 @@ public class ManejoSesion extends HttpServlet
         
         usuarioDAO = new UsuarioDAO();
         
-        //Se hace la consulta a la BD
-        rol = usuarioDAO.getLogin(user, pwd);
+        //Se hace la consulta a la BD. Aqui no nos importa el status
+        rol = usuarioDAO.getLogin(user, pwd, false);
         
         //Si el usuario es valido
         if(rol != -1)
@@ -97,6 +119,7 @@ public class ManejoSesion extends HttpServlet
      * Se imprime la respuesta en el siguiente formato
      * [{"respuesta":0}] -> "logueo invalido"
      * [{"respuesta":1}] -> "logueo valido"
+     * [{"respuesta":2}] -> "cuenta bloqueada"
     */
     private void getLogin(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -112,11 +135,14 @@ public class ManejoSesion extends HttpServlet
 
         usuarioDAO = new UsuarioDAO();
 
-        //Si es correcto el login
-        if (usuarioDAO.getLogin(user, pwd) != -1)
-            respuesta.add(new Respuesta(1));
-        else
+        //Si es correcto el login. Aqui si nos importa verificar el status
+        int respuestaLogin = usuarioDAO.getLogin(user, pwd, true);
+        if (respuestaLogin == -1)
             respuesta.add(new Respuesta(0));
+        else if (respuestaLogin == 0 || respuestaLogin == 1)
+            respuesta.add(new Respuesta(1));
+        else if (respuestaLogin == 2)
+            respuesta.add(new Respuesta(2));
 
         out.println(gson.toJson(respuesta));
         out.close();
@@ -151,11 +177,20 @@ public class ManejoSesion extends HttpServlet
             if(b)
             {
                 Email serverEmail = new Email();
-                b = serverEmail.enviar(email, "Su nueva contraseña es " + nuevaContrasena);
+                b = serverEmail.enviar(email, "Reestablecimiento de contraseña", "Su nueva contraseña es " + nuevaContrasena);
             }
         }
         else
             session.setAttribute("errorRecuperarContrasena", "El email no existe");
+        return b;
+    }
+    
+    private boolean activarCuenta(HttpServletRequest request)
+    {
+        boolean b;
+        String nombreUsuario = request.getParameter("nombreUsuario");
+        usuarioDAO = new UsuarioDAO();
+        b = usuarioDAO.activarCuenta(nombreUsuario);
         return b;
     }
 
