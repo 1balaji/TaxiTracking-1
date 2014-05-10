@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Validacion
 {
-    private static final Pattern esCadena = Pattern.compile("[a-zA-Záéíóúñ][a-zA-Záéíóúñ\\s]*");
+    private static final Pattern esCadena = Pattern.compile("[a-zA-ZÁÉÍÓÚÑáéíóúñ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]*");
     private static final Pattern esNumero = Pattern.compile("\\d+");
     private static final Pattern esFecha = Pattern.compile("\\d{4}/(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])");
     private static final Pattern esHora = Pattern.compile("([0-1][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9]");

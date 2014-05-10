@@ -94,6 +94,23 @@ public class Taxi_Negocio extends HttpServlet
                     if(respuesta)
                     {
                         session.setAttribute("objTaxi", objTaxi);
+                        
+                        session.removeAttribute("valorIdTaxista");
+                        session.removeAttribute("valorNombre");
+                        session.removeAttribute("valorApellidoPaterno");
+                        session.removeAttribute("valorApellidoMaterno");
+                        session.removeAttribute("valorCurp");
+                        session.removeAttribute("valorMatricula");
+                        session.removeAttribute("valorFolio");
+                        session.removeAttribute("valorNumeroLicencia");
+                        session.removeAttribute("valorVigencia");
+                        session.removeAttribute("valorFechaExpedicion");
+                        session.removeAttribute("valorHoraExpedicion");
+                        session.removeAttribute("errorIdTaxista");
+                        session.removeAttribute("errorCurp");
+                        session.removeAttribute("errorFolio");
+                        session.removeAttribute("errorNumeroLicencia");
+                        
                         response.sendRedirect("busquedaTaxista.jsp");
                     }
                     else
@@ -164,7 +181,7 @@ public class Taxi_Negocio extends HttpServlet
             b = false;
         }
         
-        String curp = request.getParameter("TBCURP");
+        String curp = new String(request.getParameter("TBCURP").getBytes("ISO-8859-1"),"UTF-8").toUpperCase();
         if(!Validacion.esCURP(curp))
         {
             session.setAttribute("errorCurp", "Error el curp es incorrecto");
@@ -277,7 +294,7 @@ public class Taxi_Negocio extends HttpServlet
             }
         }
         //Regresamos los valores
-        else
+        if(b == false || objTaxi != null)
         {
             session.setAttribute("valorIdTaxista", idTaxista);
             session.setAttribute("valorNombre", nombre);
