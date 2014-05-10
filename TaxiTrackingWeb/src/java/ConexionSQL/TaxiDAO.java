@@ -1,6 +1,6 @@
 package ConexionSQL;
 
-import Beans.Comentario;
+import Beans.Evaluacion;
 import Beans.Taxi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

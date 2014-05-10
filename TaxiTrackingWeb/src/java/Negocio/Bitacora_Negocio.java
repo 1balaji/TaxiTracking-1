@@ -17,8 +17,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +92,7 @@ public class Bitacora_Negocio extends HttpServlet
                     
                     //Recuperamos los comentarios asociados al taxista
                     bitacoraDAO = new BitacoraDAO();
-                    respuestaALaPeticion.add(bitacoraDAO.getComentariosTaxi(objTaxi));
+                    respuestaALaPeticion.add(bitacoraDAO.getEvaluacionesTaxi(objTaxi));
                 }
                 
                 //Mandamos la respuesta
@@ -282,28 +280,28 @@ public class Bitacora_Negocio extends HttpServlet
         objUsuario = new Usuario();
         
         //Obtenemos los datos del formulario
-        String nombreUsuario = request.getParameter("TBNombreUsuario");
+        String datos = request.getParameter("TBDatos");
         
         //Validamos cada entrada con una expresion regular
-        if(!Validacion.esAlfanumerico(nombreUsuario))
+        /*if(!Validacion.esAlfanumerico(nombreUsuario))
         {
             //En caso de que no sea valida la entrada, asignamos el atributo como error
             objUsuario.setNombreUsuario("error");
             b = false;
-        }
+        }*/
         
         //Si no hubo error y los datos son validos
         if(b)
         {
-            try { objAlerta = new Alerta(); } 
-            catch (TwitterException e) { /*System.out.println("Error al enviar la alerta D:\n" + e); */}
-            /*
+            try { objAlerta = new Alerta(request.getServletContext().getRealPath("/") + "\\autenticacion\\"); } 
+            catch (TwitterException e) { System.out.println("Error al enviar la alerta D:\n" + e); }
+            
             //Publicamos el mensaje
-            b = objAlerta.publicarMensajeAlerta("El usuario " + nombreUsuario + "esta en peligro");
+            b = objAlerta.publicarMensajeAlerta(datos);
             
             if(b)
-                b = objAlerta.enviarMensajeAlerta("TaxiTracking", "El usuario " + nombreUsuario + "esta en peligro");
-        */}
+                b = objAlerta.enviarMensajeAlerta("krlosyop", datos);
+        }
         return b;
     }
 

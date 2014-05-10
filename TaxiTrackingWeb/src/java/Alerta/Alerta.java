@@ -18,9 +18,9 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Alerta 
 {
-    private final String CONSUMERKEY = "gKRYZvEqq1Zhs2QTW6VPimayc";
-    private final String CONSUMERSECRET = "NbXMtvWA0TRujkgn6UgvRgom6dGl07Xn0sFWYsptD8VRZxbPOP";
-    private final String AUTHFILE = "auth_file.txt";
+    private final String CONSUMERKEY = "Cv9rHmBtAnxl3ESWsP5pJ97Po";
+    private final String CONSUMERSECRET = "mDj5yk4yOZgR8Ane4xgZKNu8QKGGwgpjOdQi0csJODIAbq97aB";
+    private String AUTHFILE = "auth_file.txt";
     
     private ConfigurationBuilder configBuilder;
     private Twitter twitter;
@@ -47,8 +47,11 @@ public class Alerta
     //Variable para guardar el OAuthAccessTokenSecret que este en el archivo
     private String tokenSecret;
     
-    public Alerta() throws IOException, TwitterException 
+    public Alerta(String rutaFichero) throws IOException, TwitterException 
     {
+        AUTHFILE = rutaFichero + AUTHFILE;
+        System.out.println(AUTHFILE);
+        
         configBuilder = new ConfigurationBuilder();
         configBuilder.setDebugEnabled(true)
             .setOAuthConsumerKey(CONSUMERKEY)

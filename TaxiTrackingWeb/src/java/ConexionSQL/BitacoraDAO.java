@@ -1,6 +1,6 @@
 package ConexionSQL;
 
-import Beans.Comentario;
+import Beans.Evaluacion;
 import Beans.Taxi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,8 +17,8 @@ public class BitacoraDAO
     //Variable que contendra la consulta
     private String consulta;
     
-    private Comentario objComentario;
-    private Comentario objComentarios[];
+    private Evaluacion objComentario;
+    private Evaluacion[] objEvaluaciones;
     
     public BitacoraDAO()
     {
@@ -29,18 +29,18 @@ public class BitacoraDAO
     }
     
     /*
-    * Metodo para buscar los comentarios asociados a un taxista. 
+    * Metodo para buscar las evaluaciones asociadas a un taxista. 
     * Recibe un objeto taxi con el id del taxi del que se buscaran los comentarios.
-    * Retorna un arreglo de comentarios.
+    * Retorna un arreglo de 5 evaluaciones.
     */
-    public Comentario[] getComentariosTaxi(Taxi objTaxi)
+    public Evaluacion[] getEvaluacionesTaxi(Taxi objTaxi)
     {
         //Iniciamos el arreglo
-        objComentarios = new Comentario[5];
+        objEvaluaciones = new Evaluacion[5];
         for(int i = 0; i < 5; i++)
-            objComentarios[i] = new Comentario();
+            objEvaluaciones[i] = new Evaluacion();
             
-        consulta = "SELECT descripcion, idComentario FROM comentario WHERE idTaxista = ? ORDER BY idComentario DESC LIMIT 5";
+        consulta = "SELECT comentario, SUM(calificacion) AS totalEstrellas, COUNT(*) AS totalRegistros, idBitacora FROM bitacora WHERE idTaxista = ? ORDER BY idBitacora DESC LIMIT 5";
 
         try
         {
@@ -49,15 +49,22 @@ public class BitacoraDAO
             pst.setString(1, objTaxi.getIdTaxista());
             rs = pst.executeQuery();
             
-            //Llenamos el arreglo
-            for(int i = 0; rs.next(); i++)
-                objComentarios[i].setComentario(rs.getString("descripcion"));
+            if(rs.next())
+            {
+                objEvaluaciones[0].setComentario(rs.getString("comentario"));
+                objEvaluaciones[0].setCalificacion(rs.getInt("totalEstrellas"));
+                objEvaluaciones[1].setCalificacion(rs.getInt("totalRegistros"));
+            }
             
-            pst.close();            
+            //Llenamos resto del arreglo
+            for(int i = 1; rs.next(); i++)
+                objEvaluaciones[i].setComentario(rs.getString("comentario"));
+            
+            pst.close();
         }
         catch (SQLException e) { System.out.println("Error al buscar los comentarios D:\n" + e); }
         finally { Conexion.closeConexion(); }
         
-        return objComentarios;
+        return objEvaluaciones;
     }
 }

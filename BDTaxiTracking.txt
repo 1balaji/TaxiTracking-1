@@ -43,17 +43,20 @@ create table taxista(
 	tipo int not null
 );
 
-create table comentario(
-	idComentario int not null primary key auto_increment,
-	descripcion varchar(150) not null,
+create table bitacora(
+	idBitacora int not null primary key auto_increment,
+	posicionInicial varchar(100) not null,
+	posicionFinal varchar(100) not null,
+	comentario varchar(250) not null,
+	calificacion float not null,
 	nombre_usuario varchar(30) not null,
 	idTaxista varchar(15) not null,
-	constraint fkUsuarioComentario
+	constraint fkUsuarioBitacora
 		foreign key (nombre_usuario)
 		references usuario(nombre_usuario)
 		on delete cascade
 		on update cascade,
-	constraint fkTaxistaComentario
+	constraint fkTaxistaBitacora
 		foreign key (idTaxista)
 		references taxista(idTaxista)
 		on delete cascade
