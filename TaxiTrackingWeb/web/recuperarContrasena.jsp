@@ -73,7 +73,7 @@
                             <input type="email" name="TBEmail" id="TBEmail" class="form-control largo" placeholder="ejemplo@dominio.mx" required="required"/>
                         </div>
                     <div class="centrado">
-                        <button type="submit" name="BTEnviar" id="BTEnviar">
+                        <button class="aceptar" type="submit" name="BTEnviar" id="BTEnviar">
                             <i class="fa fa-sign-in fa-fw"></i>Enviar
                         </button>
                     </div>

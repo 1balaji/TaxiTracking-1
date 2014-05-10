@@ -76,13 +76,13 @@
             <div class="holder_content">
                 <section class="gestion">
                     <div class="agregar">
-                        <button id="agregarTaxiToggle">
+                        <button class="aceptar" id="agregarTaxiToggle">
                             <i class="fa fa-plus-circle fa-fw"></i>Agregar Taxi
                         </button>
                     </div>
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
-                            <input type="search" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
+                            <input class="busqueda" type="search" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
                             <button type="submit" id="BTBusquedaTaxi" name="BTBusquedaTaxi">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
@@ -156,7 +156,7 @@
                                 </select>
                             </div>
                             <div class="centrado">
-                                <button type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
+                                <button class="aceptar" type="submit" id="BTAgregarTaxi" name="BTAgregarTaxi">
                                     <i class="fa fa-plus-circle fa-fw"></i>Agregar
                                 </button>
                             </div>

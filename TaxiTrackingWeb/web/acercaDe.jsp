@@ -63,7 +63,7 @@
             <section class="group_bannner_left">
                 <hgroup>
                     <h1>Acerca De</h1>
-                    <h2>Acerca de nosotros.</h2>
+                    <h2 class="index">Acerca de nosotros.</h2>
                 </hgroup>
             </section>
             <!--end intro-->

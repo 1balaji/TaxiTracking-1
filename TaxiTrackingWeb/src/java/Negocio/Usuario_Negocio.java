@@ -119,15 +119,15 @@ public class Usuario_Negocio extends HttpServlet
                             //Checamos que tipo de peticion es para poner el control correspondiente
                             if(objUsuarios[i].getPeticion().getTipo() == 0) //Bloquear
                                 out.println("<td>\n" +
-                                                "<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
+                                                "<button class='bloquear' id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n" +
                                             "</td>");
                             else if(objUsuarios[i].getPeticion().getTipo() == 1)    //Desbloquear
                                 out.println("<td>\n" +
-                                                "<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
+                                                "<button class='desbloquear' id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n" +
                                             "</td>");
                             else    //Eliminar
                                 out.println("<td>\n" +
-                                                "<button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
+                                                "<button class=\"eliminar\" id='BTEliminarUsuario' name='BTEliminarUsuario' onClick='gestionar(\"" + objUsuarios[i].getNombreUsuario() + "\",4)'><i class=\"fa fa-times fa-fw\"></i>Eliminar</button>\n" +
                                             "</td>");
                             out.println("</tr>");
                         }
@@ -160,7 +160,7 @@ public class Usuario_Negocio extends HttpServlet
     "                            <input type=\"text\" id=\"TBApellidoMaterno\" name=\"TBApellidoMaterno\" class=\"form-control largo\" value=\"" + objUsuario.getApellidoMaterno() + "\" required=\"required\" maxlength=\"30\" placeholder=\"Apellido Materno\" />\n" +
     "                        </div>\n" +
     "                        <div class=\"centrado\">\n" +
-    "                            <button type=\"submit\" id=\"BTEditarPerfil\" name=\"BTEditarPerfil\">\n" +
+    "                            <button class=\"aceptar\" type=\"submit\" id=\"BTEditarPerfil\" name=\"BTEditarPerfil\">\n" +
     "                                <i class=\"fa fa-pencil-square-o\"></i>Actualizar\n" +
     "                            </button>\n" +
     "                        </div>\n" +
@@ -213,8 +213,8 @@ public class Usuario_Negocio extends HttpServlet
     "                                <textarea id=\"TBDescripcion\" readonly=\"readonly\" rows=\"4\" cols=\"50\">" + objUsuario.getPeticion().getComentario() + "</textarea>\n" +
     "                            </div>\n" +
     "                            <div class=\"centrado\">\n" +
-    "                                <button type=\"submit\" id=\"BTCancelarPeticion\" name=\"BTCancelarPeticion\" onclick=\"gestionar(12)\">\n" +
-    "                                    <i class=\"fa fa-times fa-fw\"></i>Cancelar Peticion\n" +
+    "                                <button class=\"eliminar\" type=\"submit\" id=\"BTCancelarPeticion\" name=\"BTCancelarPeticion\" onclick=\"gestionar(12)\">\n" +
+    "                                    <i class=\"fa fa-times fa-fw\"></i>Cancelar Petici&oacute;n\n" +
     "                                </button>\n" +
     "                            </div>\n" +
     "                        </form>");

@@ -80,6 +80,7 @@ function creaFormulario(data)
                 var divControl = $("<div>").attr("id", "divControl")
                                             .addClass("centrado");
                 var button = $("<button>").attr("id", "BTEditarEmail")
+                                          .addClass("aceptar")
                                           .html("<i class=\"fa fa-fw fa-pencil-square-o\"></i>Editar");
                 var reset = $("<button>").attr("id", "BTResetEmail")
                                          .attr("type", "button")
@@ -157,6 +158,7 @@ function editarContrasena()
                                             .addClass("centrado");
                 
                 var button = $("<button>").attr("id", "BTEditarContrasena")
+                                          .addClass("aceptar")
                                           .html("<i class=\"fa fa-fw fa-pencil-square-o\"></i>Editar");
                 
                 var reset = $("<button>").attr("id", "BTResetEmail")

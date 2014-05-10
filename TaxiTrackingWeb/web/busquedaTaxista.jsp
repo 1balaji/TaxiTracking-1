@@ -89,7 +89,7 @@
                 <section class="gestion">
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Taxi_Negocio?q=1" method="POST">
-                            <input type="search" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
+                            <input class="busqueda" type="search" name="TBBuscarTaxista" id="TBBuscarTaxista" placeholder="Buscar" />
                             <button type="submit" id="BTBusquedaTaxista" name="BTBusquedaTaxista">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
@@ -163,13 +163,13 @@
                                 <div class="centrado">
                                     <%if(objTaxi.getStatus() == 0)   //Si esta bloqueado
                                     {
-                                        out.println("<button type='button' id='BTDesbloquearTaxista' name='BTDesbloquearTaxista' onClick='gestionar(5)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
+                                        out.println("<button class='desbloquear' type='button' id='BTDesbloquearTaxista' name='BTDesbloquearTaxista' onClick='gestionar(5)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
                                     }
                                     else
                                     {
-                                        out.println("<button type='button' id='BTBloquearTaxista' name='BTBloquearTaxista' onClick='gestionar(4)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
+                                        out.println("<button class='bloquear' type='button' id='BTBloquearTaxista' name='BTBloquearTaxista' onClick='gestionar(4)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
                                     }%>
-                                    <button type="button" id="BTEliminarTaxi" name="BTEliminarUsuario" onClick="gestionar(6)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                    <button class="eliminar" type="button" id="BTEliminarTaxi" name="BTEliminarUsuario" onClick="gestionar(6)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
                                     <button type="button" id="BTGenerarQR" name="BTGenerarQR" onClick="gestionar(3)"><i class="fa fa-qrcode fa-fw"></i>Generar QR</button>
                                 </div>
                             </form>

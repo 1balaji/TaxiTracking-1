@@ -70,6 +70,10 @@ insert into usuario values ("otro", "carlos", "Carlos", "Jimenez", "Lopez", "cji
 
 insert into peticion values (null, 0, "Bloqueame", "usuario");
 insert into peticion values (null, 1, "Desbloqueame", "otro");
-insert into peticion values (null, 2,"Eliminame", "carlos");
+insert into peticion values (null, 2,"Eliminameeeeeeeeeeeeeeeeeeeeeeeeeeeee eeeeeeeeeeeeee eeeeeeeeeee", "carlos");
 
 insert into taxista values("TX","CA","JI","LO","CA", 1234, 1234, 1234, "2014-04-13", "2013-04-12", "16:09:01", 1, 1);
+
+insert into bitacora values(null, "", "", "Es bueno", 3.5, "carlos", "TX");
+insert into bitacora values(null, "", "", "Es malo", 2.0, "carlos", "TX");
+insert into bitacora values(null, "", "", "Es malo", 5.0, "carlos", "TX");

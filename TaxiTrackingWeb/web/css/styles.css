@@ -68,6 +68,10 @@ h2 {
 	width:430px;
 }
 
+h2.index {
+	margin-left: 40px;
+}
+
 h3 {
 	font-size:28px;
 	line-height:1.6;
@@ -356,8 +360,6 @@ div.contenedorTabla {
 
 #tabla th.ajustado {width:200px;}
 
-#tabla th.control {width:110px;}
-
 #tabla tr.alt td {
 	color:#000000;
 	background-color:#EAF2D3;
@@ -387,7 +389,7 @@ label.input-group-label {
     padding: 6px 12px;
     background-color: #fff;
     border: 1px solid #ccc;
-    vertical-align: middle;    
+    vertical-align: middle;
     border-left: 0;
     display: table-cell;
     height:25px;
@@ -417,4 +419,47 @@ label.input-group-label {
 {
     height: 37px;
     width: 275px;
+}
+
+button
+{
+    width: 160px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 4px;
+}
+
+.busqueda
+{
+    width: 220px;
+    height: 25px;
+    border-radius: 4px;
+}
+
+.eliminar
+{
+    background-color: #be1931;
+    border: 1px solid #a0041e;
+    color: #fff;
+}
+
+.aceptar
+{
+    background-color: #00753E;
+    border: 1px solid #01562E;
+    color: #fff;
+}
+
+.desbloquear
+{
+    background-color: #197DC0;
+    border: 1px solid #034DA1;
+    color: #fff;
+}
+
+.bloquear
+{
+    background-color: #F58019;
+    border: 1px solid #DD6A05;
+    color: #fff;
 }

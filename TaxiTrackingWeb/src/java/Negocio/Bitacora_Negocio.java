@@ -2,6 +2,7 @@ package Negocio;
 
 import Alerta.Alerta;
 import Beans.CodigoQR;
+import Beans.Evaluacion;
 import Beans.Respuesta;
 import Beans.Taxi;
 import Beans.Usuario;
@@ -30,6 +31,7 @@ public class Bitacora_Negocio extends HttpServlet
     private Usuario objUsuario;
     private CodigoQR objCodigoQR;
     private Respuesta objRespuesta;
+    private Evaluacion objEvaluacion;
     
     //Variable para la conexion con la BD
     private TaxiDAO taxiDAO;
@@ -124,6 +126,19 @@ public class Bitacora_Negocio extends HttpServlet
                 break;
             case 3: //Mandar alerta
                 resultado = enviarAlerta(request);
+                
+                //Si el envio fue correcto
+                if(resultado)
+                    //Mandamos un 1 como respuesta
+                    objRespuesta = new Respuesta(1);
+                else
+                    //Mandamos un 0 como respuesta
+                    objRespuesta = new Respuesta(0);
+                respuestaALaPeticion.add(objRespuesta);
+                out.println(gson.toJson(respuestaALaPeticion));
+                break;
+            case 4: //Enviar evaluacion
+                resultado = enviarEvaluacion(request);
                 
                 //Si el envio fue correcto
                 if(resultado)
@@ -301,6 +316,41 @@ public class Bitacora_Negocio extends HttpServlet
             
             if(b)
                 b = objAlerta.enviarMensajeAlerta("krlosyop", datos);
+        }
+        return b;
+    }
+    
+    private boolean enviarEvaluacion(HttpServletRequest request)
+    {
+        //Variable de respuesta
+        boolean b = true;
+        
+        objEvaluacion = new Evaluacion();
+        
+        //Obtenemos los datos del formulario
+        String s = request.getParameter("TBCalificacion");
+        float calificacion = 0.0f;
+        try { calificacion = Float.parseFloat(s); }
+        catch(NumberFormatException e){ objEvaluacion.setCalificacion(-1); }
+        
+        String comentario = request.getParameter("TBComentario");
+        
+        //Validamos cada entrada con una expresion regular
+        if(!Validacion.esAlfanumerico(comentario))
+        {
+            //En caso de que no sea valida la entrada, asignamos el atributo como error
+            objEvaluacion.setComentario("error");
+            b = false;
+        }
+        
+        objUsuario = new Usuario(request.getParameter("TBNombreUsuario"));
+        objTaxi = new Taxi(request.getParameter("TBIdTaxista"));
+        
+        //Si no hubo error y los datos son validos
+        if(b)
+        {
+            bitacoraDAO = new BitacoraDAO();
+            b = bitacoraDAO.enviarEvaluacion(objEvaluacion, objUsuario, objTaxi);
         }
         return b;
     }

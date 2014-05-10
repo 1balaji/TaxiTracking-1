@@ -79,6 +79,9 @@ public class ManejoSesion extends HttpServlet
                 else
                     response.sendRedirect("index.jsp");
                 break;
+            case 6: //Recuperar contraseña movil
+                recuperarContrasena(request, response);
+                break;
             default:
                 response.sendRedirect("index.jsp");
         }
@@ -192,6 +195,56 @@ public class ManejoSesion extends HttpServlet
         usuarioDAO = new UsuarioDAO();
         b = usuarioDAO.activarCuenta(nombreUsuario);
         return b;
+    }
+    
+    /*
+     * Metodo para recuperar la contraseña de una sesion desde un movil. 
+     * Manda un correo con una nueva contraseña generada aleatoriamente.
+     * No retorna nada pero envia un correo e imprime una respuesta "0" en caso de error o "1" en caso de exito.
+     */
+    private void recuperarContrasena(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        //Configuramos el tipo de respuesta
+        response.setContentType("application/json");
+        
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        List<Respuesta> respuesta = new ArrayList<Respuesta>();
+
+        boolean b;
+        
+        //Recuperamos los valores de los campos
+        String email = request.getParameter("TBEmail");
+        
+        usuarioDAO = new UsuarioDAO();
+        
+        //Se hace la consulta a la BD
+        b = usuarioDAO.existeEmail(email);
+        
+        //Si el mail es valido
+        if(b)
+        {
+            //Se genera una nueva contraseña
+            String nuevaContrasena = Password.getCadenaAlfanumAleatoria(8);
+            
+            b = usuarioDAO.setNuevaContrasena(email, nuevaContrasena);
+            
+            //Si se cambio correctamente la contraseña
+            if(b)
+            {
+                Email serverEmail = new Email();
+                b = serverEmail.enviar(email, "Reestablecimiento de contraseña", "Su nueva contraseña es " + nuevaContrasena);
+                
+                //Si se envio correctamente el email
+                if(b)
+                    respuesta.add(new Respuesta(1));
+            }
+        }
+        else
+            respuesta.add(new Respuesta(0));
+
+        out.println(gson.toJson(respuesta));
+        out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

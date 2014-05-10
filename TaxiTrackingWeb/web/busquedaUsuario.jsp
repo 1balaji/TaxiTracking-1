@@ -89,7 +89,7 @@
                 <section class="gestion">
                     <div class="search">
                         <form action="<%=request.getContextPath()%>/Usuario_Negocio?q=1" method="POST">
-                            <input type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
+                            <input class="busqueda" type="text" name="TBBuscarUsuario" id="TBBuscarUsuario" placeholder="Usuario" />
                             <button type="submit" id="BTBusquedaUsuario" name="BTBusquedaUsuario">
                                 <i class="fa fa-search fa-fw"></i>Buscar
                             </button>
@@ -116,15 +116,15 @@
                                     <td>
                                         <%if(objUsuario.getStatus() == 0)   //Si esta bloqueado
                                         {
-                                            out.println("<button id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
+                                            out.println("<button class='desbloquear' id='BTDesbloquearUsuario' name='BTDesbloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",3)'><i class=\"fa fa-unlock fa-fw\"></i>Desbloquear</button>\n");
                                         }
                                         else
                                         {
-                                            out.println("<button id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
+                                            out.println("<button class='bloquear' id='BTBloquearUsuario' name='BTBloquearUsuario' onClick='gestionar(\"" + objUsuario.getNombreUsuario() + "\",2)'><i class=\"fa fa-lock fa-fw\"></i>Bloquear</button>\n");
                                         }%>
                                     </td>
                                     <td>
-                                        <button id='BTEliminarUsuario' name='BTEliminarUsuario' onClick="gestionar('<%=objUsuario.getNombreUsuario()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
+                                        <button class='eliminar' id='BTEliminarUsuario' name='BTEliminarUsuario' onClick="gestionar('<%=objUsuario.getNombreUsuario()%>',4)"><i class="fa fa-times fa-fw"></i>Eliminar</button>
                                     </td>
                                 <%}%>
                             </tr>

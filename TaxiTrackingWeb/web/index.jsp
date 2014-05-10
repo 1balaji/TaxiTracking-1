@@ -58,7 +58,7 @@
             <section class="group_bannner_left">
                 <hgroup>
                     <h1>Taxi Tracking</h1>
-                    <h2>TT2013-A022</h2>
+                    <h2 class="index">TT2013-A022</h2>
                 </hgroup>
             </section>
             <!--end intro-->
