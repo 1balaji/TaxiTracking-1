@@ -241,7 +241,7 @@ public class Usuario_Negocio extends HttpServlet
     "                                <textarea id=\"TBDescripcion\" name=\"TBDescripcion\" placeholder=\"Descripci&oacute;n\" rows=\"4\" cols=\"50\" maxlength=\"150\" wrap=\"hard\" required=\"required\"></textarea>\n" +
     "                            </div>\n" +
     "                            <div class=\"centrado\">\n" +
-    "                                <button type=\"submit\" id=\"BTEnviarPeticion\" name=\"BTEnviarPeticion\" onclick=\"gestionar(13)\">\n" +
+    "                                <button class=\"aceptar\" type=\"submit\" id=\"BTEnviarPeticion\" name=\"BTEnviarPeticion\" onclick=\"gestionar(13)\">\n" +
     "                                    <i class=\"fa fa-plus-circle fa-fw\"></i>Enviar Peticion\n" +
     "                                </button>\n" +
     "                            </div>\n" +

@@ -65,7 +65,7 @@ public class ManejoSesion extends HttpServlet
             case 5: //Activar cuenta
                 if(activarCuenta(request))
                 {
-                    session.setAttribute("nombre_usuario", request.getParameter("nombreUsuario"));
+                    session.setAttribute("nombreUsuarioConfirmacion", request.getParameter("nombreUsuario"));
                     response.sendRedirect("confirmacionExitosa.jsp");
                 }
                 else

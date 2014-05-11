@@ -2,7 +2,6 @@ package ConexionSQL;
 
 import Beans.Evaluacion;
 import Beans.Taxi;
-import Beans.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -84,7 +83,7 @@ public class BitacoraDAO
     {
         boolean b = false;
         
-        consulta = "INSERT INTO Bitacora VALUES(null, ?, ?, ?, ?, ?, ?)";
+        consulta = "INSERT INTO bitacora VALUES(null, ?, ?, ?, ?, ?, ?)";
 
         try
         {

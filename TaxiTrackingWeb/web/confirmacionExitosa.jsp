@@ -3,11 +3,13 @@
     String usuario = null;
     
     //Checamos que exista la sesion
-    if(session != null && session.getAttribute("nombre_usuario") != null)
+    if(session != null && session.getAttribute("nombreUsuarioConfirmacion") != null)
     {
-        usuario = (String)session.getAttribute("nombre_usuario");
-        session.removeAttribute("nombre_usuario");
+        usuario = (String)session.getAttribute("nombreUsuarioConfirmacion");
+        session.removeAttribute("nombreUsuarioConfirmacion");
     }
+    else
+        response.sendRedirect("index.jsp");
 %>
 <!DOCTYPE html>
 <html lang="es">

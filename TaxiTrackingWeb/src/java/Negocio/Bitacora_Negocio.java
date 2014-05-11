@@ -246,6 +246,7 @@ public class Bitacora_Negocio extends HttpServlet
                 //Llenamos el objeto con todos los datos
                 objUsuario.setNombreUsuario(nombreUsuario);
                 objUsuario.setContrasena(contrasena);
+                objUsuario.setNombre(nombre);
                 objUsuario.setApellidoPaterno(apellido_paterno);
                 objUsuario.setApellidoMaterno(apellido_materno);
                 objUsuario.setEmail(email);
@@ -297,18 +298,10 @@ public class Bitacora_Negocio extends HttpServlet
         //Obtenemos los datos del formulario
         String datos = request.getParameter("TBDatos");
         
-        //Validamos cada entrada con una expresion regular
-        /*if(!Validacion.esAlfanumerico(nombreUsuario))
-        {
-            //En caso de que no sea valida la entrada, asignamos el atributo como error
-            objUsuario.setNombreUsuario("error");
-            b = false;
-        }*/
-        
         //Si no hubo error y los datos son validos
         if(b)
         {
-            try { objAlerta = new Alerta(request.getServletContext().getRealPath("/") + "\\autenticacion\\"); } 
+            try { objAlerta = new Alerta(request.getServletContext().getRealPath("/")); } 
             catch (TwitterException e) { System.out.println("Error al enviar la alerta D:\n" + e); }
             
             //Publicamos el mensaje
@@ -323,7 +316,7 @@ public class Bitacora_Negocio extends HttpServlet
     private boolean enviarEvaluacion(HttpServletRequest request)
     {
         //Variable de respuesta
-        boolean b = true;
+        boolean b;
         
         //Obtenemos los datos
         String posicionInicial = request.getParameter("posicionInicial");
@@ -340,12 +333,9 @@ public class Bitacora_Negocio extends HttpServlet
         String nombreUsuario = request.getParameter("TBNombreUsuario");
         String idTaxista = request.getParameter("TBIdTaxista");
         
-        //Si no hubo error y los datos son validos
-        if(b)
-        {
-            bitacoraDAO = new BitacoraDAO();
-            b = bitacoraDAO.enviarEvaluacion(posicionInicial, posicionFinal, objEvaluacion, nombreUsuario, idTaxista);
-        }
+        bitacoraDAO = new BitacoraDAO();
+        b = bitacoraDAO.enviarEvaluacion(posicionInicial, posicionFinal, objEvaluacion, nombreUsuario, idTaxista);
+        
         return b;
     }
 

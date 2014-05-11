@@ -20,7 +20,7 @@ public class Alerta
 {
     private final String CONSUMERKEY = "Cv9rHmBtAnxl3ESWsP5pJ97Po";
     private final String CONSUMERSECRET = "mDj5yk4yOZgR8Ane4xgZKNu8QKGGwgpjOdQi0csJODIAbq97aB";
-    private String AUTHFILE = "auth_file.txt";
+    private String AUTHFILE = "/autenticacion/auth_file.txt";
     
     private ConfigurationBuilder configBuilder;
     private Twitter twitter;
@@ -56,7 +56,7 @@ public class Alerta
         configBuilder.setDebugEnabled(true)
             .setOAuthConsumerKey(CONSUMERKEY)
             .setOAuthConsumerSecret(CONSUMERSECRET);
-        
+ 
         //Checamos si ya hay un archivo de autenticado para no tener que pedir un nuevo codigo
         try 
         {
@@ -82,13 +82,13 @@ public class Alerta
             
             System.out.println("Access Tokens obtenidos con éxito.");
             
-            twitter = new TwitterFactory(configBuilder.build()).getInstance();            
+        twitter = new TwitterFactory(configBuilder.build()).getInstance();
         }
         //Si no hay un archivo, tenemos que pedir un nuevo codigo
         catch (IOException e) 
         {
             twitter = new TwitterFactory(configBuilder.build()).getInstance();
-
+    
             do 
             {
                 try 
