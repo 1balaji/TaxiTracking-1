@@ -45,8 +45,8 @@ create table taxista(
 
 create table bitacora(
 	idBitacora int not null primary key auto_increment,
-	posicionInicial varchar(100) not null,
-	posicionFinal varchar(100) not null,
+	posicionInicial varchar(50) not null,
+	posicionFinal varchar(50) not null,
 	comentario varchar(250) not null,
 	calificacion float not null,
 	nombre_usuario varchar(30) not null,

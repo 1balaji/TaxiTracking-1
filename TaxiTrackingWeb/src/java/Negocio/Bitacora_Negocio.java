@@ -258,7 +258,7 @@ public class Bitacora_Negocio extends HttpServlet
                 if(b)
                 {
                     Email serverEmail = new Email();
-                    b = serverEmail.enviar(email, "Activación de cuenta", "Por favor ingrese al siguiente link para activar su cuenta: http://192.168.0.8:8084/TaxiTrackingWeb/ManejoSesion?q=5&nombreUsuario=" + nombreUsuario);
+                    b = serverEmail.enviar(email, "Activación de cuenta", "Por favor ingrese al siguiente link para activar su cuenta: http://http://taxitracking.s156.eatj.com/TaxiTrackingWeb/ManejoSesion?q=5&nombreUsuario=" + nombreUsuario);
                 }
             }
             //Hay datos repetidos
@@ -325,32 +325,26 @@ public class Bitacora_Negocio extends HttpServlet
         //Variable de respuesta
         boolean b = true;
         
-        objEvaluacion = new Evaluacion();
+        //Obtenemos los datos
+        String posicionInicial = request.getParameter("posicionInicial");
+        String posicionFinal = request.getParameter("posicionFinal");
+        String comentario = request.getParameter("TBComentario");
         
-        //Obtenemos los datos del formulario
         String s = request.getParameter("TBCalificacion");
         float calificacion = 0.0f;
         try { calificacion = Float.parseFloat(s); }
-        catch(NumberFormatException e){ objEvaluacion.setCalificacion(-1); }
+        catch(NumberFormatException e){ objEvaluacion.setCalificacion(0); }
         
-        String comentario = request.getParameter("TBComentario");
+        objEvaluacion = new Evaluacion(comentario, calificacion);
         
-        //Validamos cada entrada con una expresion regular
-        if(!Validacion.esAlfanumerico(comentario))
-        {
-            //En caso de que no sea valida la entrada, asignamos el atributo como error
-            objEvaluacion.setComentario("error");
-            b = false;
-        }
-        
-        objUsuario = new Usuario(request.getParameter("TBNombreUsuario"));
-        objTaxi = new Taxi(request.getParameter("TBIdTaxista"));
+        String nombreUsuario = request.getParameter("TBNombreUsuario");
+        String idTaxista = request.getParameter("TBIdTaxista");
         
         //Si no hubo error y los datos son validos
         if(b)
         {
             bitacoraDAO = new BitacoraDAO();
-            b = bitacoraDAO.enviarEvaluacion(objEvaluacion, objUsuario, objTaxi);
+            b = bitacoraDAO.enviarEvaluacion(posicionInicial, posicionFinal, objEvaluacion, nombreUsuario, idTaxista);
         }
         return b;
     }

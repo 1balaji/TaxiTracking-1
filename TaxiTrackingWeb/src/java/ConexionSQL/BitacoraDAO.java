@@ -77,36 +77,32 @@ public class BitacoraDAO
     
     /*
     * Metodo para registrar una evaluacion a un taxista. 
-    * Recibe un objeto evaluacion con los datos que se van a registrar, un objeto usuario con el nombre del usuario y un objeto taxista con el idtaxista.
+    * Recibe la posicion inicial y final del viaje, un objeto evaluacion, el nombre del usuario y el id del taxista
     * Retorna true en caso de exito y false en caso de error.
     */
-    public boolean enviarEvaluacion(Evaluacion objEvaluacion, Usuario objUsuario, Taxi objTaxi)
+    public boolean enviarEvaluacion(String posicionInicial, String posicionFinal, Evaluacion objEvaluacion, String nombreUsuario, String idTaxista)
     {
         boolean b = false;
         
-        consulta = "INSERT INTO Bitacora () VALUES( ?)";
+        consulta = "INSERT INTO Bitacora VALUES(null, ?, ?, ?, ?, ?, ?)";
 
         try
         {
             con = Conexion.getConexion();
             pst = con.prepareStatement(consulta);
-            pst.setString(1, objTaxi.getIdTaxista());
-            rs = pst.executeQuery();
+            pst.setString(1, posicionInicial);
+            pst.setString(2, posicionFinal);
+            pst.setString(3, objEvaluacion.getComentario());
+            pst.setFloat(4, objEvaluacion.getCalificacion());
+            pst.setString(5, nombreUsuario);
+            pst.setString(6, idTaxista);
+            pst.execute();
             
-            if(rs.next())
-            {
-                objEvaluaciones[0].setComentario(rs.getString("comentario"));
-                objEvaluaciones[0].setCalificacion(rs.getInt("totalEstrellas"));
-                objEvaluaciones[1].setCalificacion(rs.getInt("totalRegistros"));
-            }
-            
-            //Llenamos resto del arreglo
-            for(int i = 1; rs.next(); i++)
-                objEvaluaciones[i].setComentario(rs.getString("comentario"));
+            b = true;
             
             pst.close();
         }
-        catch (SQLException e) { System.out.println("Error al buscar los comentarios D:\n" + e); }
+        catch (SQLException e) { System.out.println("Error al agregar la evaluacion D:\n" + e); }
         finally { Conexion.closeConexion(); }
         
         return b;

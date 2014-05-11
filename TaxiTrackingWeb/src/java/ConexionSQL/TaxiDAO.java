@@ -1,6 +1,5 @@
 package ConexionSQL;
 
-import Beans.Evaluacion;
 import Beans.Taxi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -100,6 +99,7 @@ public class TaxiDAO
                 objTaxi.setFechaExpedicion(rs.getString("fechaExpedicion"));
                 objTaxi.setHoraExpedicion(rs.getString("horaExpedicion"));
                 objTaxi.setStatus(rs.getInt("status"));
+                objTaxi.setTipo(rs.getInt("tipo"));
             }
             pst.close();            
         }

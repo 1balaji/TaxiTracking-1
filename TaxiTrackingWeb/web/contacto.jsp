@@ -155,7 +155,7 @@
         <footer>
             <div class="container">
                 <div id="FooterLeft">Desarrollado por Carlos Jim&eacute;nez y Francisco Negrete / 2014</div>
-                <div id="FooterRight">Â© TT2013-A022</div>
+                <div id="FooterRight">© TT2013-A022</div>
             </div>
         </footer>
         <!--end footer-->

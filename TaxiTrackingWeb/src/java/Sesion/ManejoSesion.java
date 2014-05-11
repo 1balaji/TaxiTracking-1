@@ -65,16 +65,8 @@ public class ManejoSesion extends HttpServlet
             case 5: //Activar cuenta
                 if(activarCuenta(request))
                 {
-                    PrintWriter out = response.getWriter();
-                    out.println("<html>");
-                    out.println("<head>");
-                    out.println("<title>Cuenta activada</title>");
-                    out.println("</head>");
-                    out.println("<body>");
-                    out.println("<p align = 'center'><h1>La cuenta se ha activado correctamente</h1></p>");
-                    out.println("<p align = 'center'><h1><a href = 'index.jsp'>Presione aqui para ir a la pagina de inicio</a></h1></p>");
-                    out.println("</body>");
-                    out.println("</html>");
+                    session.setAttribute("nombre_usuario", request.getParameter("nombreUsuario"));
+                    response.sendRedirect("confirmacionExitosa.jsp");
                 }
                 else
                     response.sendRedirect("index.jsp");
