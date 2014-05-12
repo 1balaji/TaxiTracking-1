@@ -25,6 +25,7 @@ public class Email
             authentication = new PasswordAuthentication(login, password);
         }
 
+        @Override
         protected PasswordAuthentication getPasswordAuthentication() {
             return authentication;
         }

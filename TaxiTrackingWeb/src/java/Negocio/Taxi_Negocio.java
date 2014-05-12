@@ -3,7 +3,6 @@ package Negocio;
 import Beans.CodigoQR;
 import Beans.Taxi;
 import ConexionSQL.TaxiDAO;
-import Serializacion.Serializacion;
 import Validacion.Validacion;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import java.awt.Color;

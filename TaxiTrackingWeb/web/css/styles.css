@@ -91,6 +91,12 @@ h4 {
 	margin-bottom:12px;
 }
 
+h5 {
+    font-size:14px;
+    margin-left: 50px;
+    display: inline-block;
+}
+
 /***************************************************
                 Main containers
 ***************************************************/
@@ -199,15 +205,15 @@ nav ul li a.current {
 ***************************************************/
 
 #intro {
-	width:960px;
+	width:950px;
 	position:relative;
 	float:left;
-	height:318px;
-	padding:10px;
-	background:#EAEAEA;
+	height:300px;
+	background: #ffffff;
 	margin-top:17px;
 	-webkit-border-radius:0.5em;
 	-moz-border-radius:0.5em;
+        border:10px solid  #EAEAEA;
 	border-radius:0.5em;
 }
 
@@ -415,51 +421,46 @@ label.input-group-label {
     cursor:pointer;
 }
 
-.select 
-{
+.select {
     height: 37px;
     width: 275px;
 }
 
-button
-{
+button {
     width: 160px;
     padding: 5px;
     margin: 5px;
     border-radius: 4px;
 }
 
-.busqueda
-{
+.busqueda {
     width: 220px;
     height: 25px;
     border-radius: 4px;
 }
 
-.eliminar
-{
+.eliminar {
     background-color: #be1931;
     border: 1px solid #a0041e;
     color: #fff;
 }
 
-.aceptar
-{
+.aceptar {
     background-color: #00753E;
     border: 1px solid #01562E;
     color: #fff;
 }
 
-.desbloquear
-{
+.desbloquear {
     background-color: #197DC0;
     border: 1px solid #034DA1;
     color: #fff;
 }
 
-.bloquear
-{
+.bloquear {
     background-color: #F58019;
     border: 1px solid #DD6A05;
     color: #fff;
 }
+
+.contacto { margin-top: 50px; }

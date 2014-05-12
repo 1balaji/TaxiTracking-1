@@ -22,7 +22,7 @@ public class Alerta
     private final String CONSUMERSECRET = "mDj5yk4yOZgR8Ane4xgZKNu8QKGGwgpjOdQi0csJODIAbq97aB";
     private String AUTHFILE = "/autenticacion/auth_file.txt";
     
-    private ConfigurationBuilder configBuilder;
+    private final ConfigurationBuilder configBuilder;
     private Twitter twitter;
     
     //Token para hacer la peticion de un nuevo PIN para la autorizacion del programa

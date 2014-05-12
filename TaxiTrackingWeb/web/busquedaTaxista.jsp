@@ -77,7 +77,22 @@
 
             <!--start intro-->
             <div id="intro">
-                <img src="images/banner.png" alt="baner"/>
+                <object classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000 codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,2,0 width="600" height="300">
+                    <param name=movie value=triplechar.swf>
+                    <param name=quality value=high>
+                    <param name="wmode" value="transparent">
+
+                    <embed src=triplechar.swf
+                           quality=high
+                           pluginspage=http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash type=application/x-shockwave-flash
+                           width=950
+                           height=300
+                           bgcolor=#FFFFFF
+                           scale=showall
+                           menu="false"
+                           wmode="transparent">
+                    </embed>
+                </object>
             </div>
             <section class="group_bannner_left">
                 <h1>B&uacute;squeda de Taxi</h1>

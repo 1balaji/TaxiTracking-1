@@ -9,7 +9,6 @@ import Beans.Usuario;
 import ConexionSQL.BitacoraDAO;
 import ConexionSQL.TaxiDAO;
 import ConexionSQL.UsuarioDAO;
-import Serializacion.Serializacion;
 import Sesion.Email;
 import Validacion.Validacion;
 import com.google.gson.Gson;
@@ -259,7 +258,7 @@ public class Bitacora_Negocio extends HttpServlet
                 if(b)
                 {
                     Email serverEmail = new Email();
-                    b = serverEmail.enviar(email, "Activación de cuenta", "Por favor ingrese al siguiente link para activar su cuenta: http://http://taxitracking.s156.eatj.com/TaxiTrackingWeb/ManejoSesion?q=5&nombreUsuario=" + nombreUsuario);
+                    b = serverEmail.enviar(email, "Activación de cuenta", "Por favor ingrese al siguiente link para activar su cuenta: http://taxitracking.s156.eatj.com/TaxiTrackingWeb/ManejoSesion?q=5&nombreUsuario=" + nombreUsuario);
                 }
             }
             //Hay datos repetidos

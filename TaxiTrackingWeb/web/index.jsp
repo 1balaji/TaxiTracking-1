@@ -53,7 +53,22 @@
 
             <!--start intro-->
             <div id="intro">
-                <img src="images/banner.png" alt="baner"/>
+                <object classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000 codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,2,0 width="600" height="300">
+                    <param name=movie value=triplechar.swf>
+                    <param name=quality value=high>
+                    <param name="wmode" value="transparent">
+
+                    <embed src=triplechar.swf
+                           quality=high
+                           pluginspage=http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash type=application/x-shockwave-flash
+                           width=950
+                           height=300
+                           bgcolor=#FFFFFF
+                           scale=showall
+                           menu="false"
+                           wmode="transparent">
+                    </embed>
+                </object>
             </div>
             <section class="group_bannner_left">
                 <hgroup>
@@ -73,50 +88,44 @@
                     <p>A continuaci&oacute;n se enlistan las caracter&iacute;sticas que permiten a Taxi Tracking llevar a cabo su prop&oacute;sito.</p>
 
                     <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture2.jpg" width="150" height="115" alt="picture1"/></a>
+                        <a class="photo_hover" href="images/seguimiento.png"><img src="images/seguimiento.png" width="150" height="200" alt="seguimiento"/></a>
                         <h2>Seguimiento</h2>
                         <p>Taxi Tracking da seguimiento al viaje del usuario mediante la tecnolog&iacute;a GPS y API's de Google.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
 
                     <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture4.jpg" width="150" height="115" alt="picture1"/></a>
+                        <a class="photo_hover" href="images/panico.png"><img src="images/panico.png" width="150" height="200" alt="panico"/></a>
                         <h2>Env&iacute;o de alertas</h2>
                         <p>Taxi Tracking realiza denuncias en l&iacute;nea en la red social <a href="https://twitter.com/CASPOLICIA_CDMX" target="_blank">
                                 <i>Twitter</i></a> de el <a href="http://www.ssp.df.gob.mx/Emergencias/Pages/CAS.aspx" target="_blank">Centro de Atenci&oacute;n del Secretario de 
                                 Seguridad P&uacute;blica del D.F.</a> El cual promete una respuesta de patrullas	o elementos en un m&aacute;ximo de 10 minutos.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
 
                     <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
+                        <a class="photo_hover" href="images/rutas.png"><img src="images/rutas.png" width="150" height="200" alt="sugerencia rutas"/></a>
                         <h2>Sugerencia de rutas</h2>
                         <p>Para un servicio m&aacute;s completo, Taxi Tracking puede sugerir una ruta para el viaje del usuario.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
 
                     <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
+                        <a class="photo_hover" href="images/costo.png"><img src="images/costo.png" width="150" height="200" alt="estimacion costo"/></a>
                         <h2>Estimaci&oacute;n de costo y distancia</h2>
                         <p>Con la finalidad de evitar los abusos en el cobro del viaje, Taxi Tracking cuenta con un tax&iacute;metro virtual que te da un
                             estimado del costo de tu viaje.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
 
                     <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
+                        <a class="photo_hover" href="images/codigoQR.png"><img src="images/codigoQR.png" width="150" height="200" alt="codigo QR"/></a>
                         <h2>Identificaci&oacute;n de taxis por QR</h2>
                         <p>Con la intenci&oacute;n de mantener un control de los taxis leg&iacute;timos y evitar los taxis piratas,
                             Taxi Tracking genera un c&oacute;digo QR &uacute;nico para cada unidad.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
 
                     <article class="holder_gallery">
-                        <a class="photo_hover" href="#"><img src="images/picture5.jpg" width="150" height="115" alt="picture1"/></a>
+                        <a class="photo_hover" href="images/ranking.png"><img src="images/ranking.png" width="150" height="200" alt="ranking"/></a>
                         <h2>Ranking de taxis</h2>
                         <p>Para una informaci&oacute;n m&aacute;s espec&iacute;fica acerca de la unidad, Taxi Tracking permite a los usuarios evaluar
                             al taxi y con base en esto se realiza un promedio del servicio brindado.</p>
-                        <span class="readmore"><a href="#">Ver im&aacute;genes...</a></span>
                     </article>
                 </section>
 
@@ -170,7 +179,6 @@
                                 los delitos en taxis.
                                 <span class="readmore"><a href="http://www.eluniversal.com.mx/ciudad/105264.html">Leer m&aacute;s...</a></span></p>
                         </article>
-                        <a class="photo_hover" href="#"><img src="images/picture3.jpg" width="257" height="295" alt="picture"/></a>
                     </section>
                 </aside>
             </div>

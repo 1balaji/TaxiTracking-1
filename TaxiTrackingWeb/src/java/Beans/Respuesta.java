@@ -6,7 +6,7 @@ package Beans;
 
 public class Respuesta 
 {
-    private int respuesta;
+    private final int respuesta;
     
     public Respuesta(int respuesta)
     {
